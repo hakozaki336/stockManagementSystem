@@ -16,3 +16,6 @@ laravelにおいて、デフォルトで作成される値(idやcreate_atなど)
   - 企業id
   - 注文数
   - 出荷フラグ
+ 
+# 画面イメージ
+![IMG_4527 2](https://github.com/user-attachments/assets/c795312f-0af1-41de-b630-5d06ecbcf4e7)
