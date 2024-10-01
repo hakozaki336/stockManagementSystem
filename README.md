@@ -19,4 +19,3 @@ laravelにおいて、デフォルトで作成される値(idやcreate_atなど)
  
 # 画面イメージ
 
-![layout](https://github.com/user-attachments/assets/da7e345d-6568-4e76-9b6d-1c1b8bda2b1d)
