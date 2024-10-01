@@ -2,7 +2,8 @@
 - 商品の在庫を管理するアプリケーション
 - nextjs + laravelAPIを使って作成する
 - nextjsには`https://github.com/laravel/breeze-next.git`を使用
-    - `breeze-next.git`: laravelのbreezeをそのまま使うことができるライブラリ 
+    - `breeze-next.git`: laravelのbreezeをそのまま使うことができるライブラリ
+- フロントエンドのスタイルにはテールウィンド cssを使用する
 
 # DB
 DBの構成情報を記述する。
