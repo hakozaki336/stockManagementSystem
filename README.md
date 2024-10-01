@@ -18,4 +18,4 @@ laravelにおいて、デフォルトで作成される値(idやcreate_atなど)
   - 出荷フラグ
  
 # 画面イメージ
-![Uploading IMG_4527.jpeg…]()
+![IMG_4527](https://github.com/user-attachments/assets/a8f676c7-4611-43b8-84a3-d809da9886dc)
