@@ -21,8 +21,9 @@ laravelにおいて、デフォルトで作成される値(idやcreate_atなど)
 ![IMG_4527](https://github.com/user-attachments/assets/a8f676c7-4611-43b8-84a3-d809da9886dc)
 
 # 機能改修や機能作成の流れ
-- issueに目的を記入する
-- レビュワーに起案者を選択する
+- issueに目的や機能の概要、要件を記入する
+- reviewerに起案者を選択する
+※実装者からレビュー依頼が来たら問題なく実装できているか確認し、問題なければアプルーブする
 
 # issue実装の流れ
 - issueのasigneeに実装者を選択する
