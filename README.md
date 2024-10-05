@@ -37,3 +37,11 @@ laravelにおいて、デフォルトで作成される値(idやcreate_atなど)
 - pushしたらPRにissueのリンクを貼り付ける
 - 実装が完了したら起案者にレビューを依頼する
 - アプルーブが完了したら、mainへマージする
+
+# メモ
+- データを取得時には、`with`を使用して関連モデルも一緒に取得することにする。
+- また、関連モデルを取得すは標準の挙動とするためメソッド名に`with`を明記しない。
+  - 例 :`Order`モデルを取得する時に、`Product`、`Company`も`with`で一緒に取得する。
+  - メソッド命名の例:
+    - O: getProducts
+    - X: getProductsWithRelations
