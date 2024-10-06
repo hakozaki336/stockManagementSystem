@@ -41,8 +41,8 @@ laravelにおいて、デフォルトで作成される値(idやcreate_atなど)
 # メモ
 ## コーディング規約と命名のガイドライン
 ### with
-- また、関連モデルを取得すは標準の挙動とするためメソッド名に`with`を明記しない。
+- 関連モデルを取得は標準の挙動とするためメソッド名に`with`を明記しない。
   - 例 :`Order`モデルを取得する時に、`Product`、`Company`も`with`で一緒に取得する。
   - メソッド命名の例:
-    - O: getProducts
-    - X: getProductsWithRelations
+    - O: `getProducts`
+    - X: `getProductsWithRelations`
