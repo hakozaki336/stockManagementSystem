@@ -19,7 +19,10 @@ laravelにおいて、デフォルトで作成される値(idやcreate_atなど)
     - 企業id
     - 注文数
     - 出荷フラグ
- 
+ # 環境構築方法
+ - `php artisan db:seed`を実行
+# フォルダ構成
+
 # 画面イメージ
 ![IMG_4527](https://github.com/user-attachments/assets/a8f676c7-4611-43b8-84a3-d809da9886dc)
 
