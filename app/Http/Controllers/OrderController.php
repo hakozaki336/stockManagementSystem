@@ -28,7 +28,7 @@ class OrderController extends Controller
             return response()->json(['message' => 'サーバー側でエラーが発生しました'], 500);
         }
 
-        return OrderResource::collection($paginatedOrders);
+        return response()->json(OrderResource::collection($paginatedOrders));
     }
 
     /**
