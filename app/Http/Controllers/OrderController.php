@@ -28,7 +28,15 @@ class OrderController extends Controller
             return response()->json(['message' => 'サーバー側でエラーが発生しました'], 500);
         }
 
-        return response()->json(OrderResource::collection($paginatedOrders));
+        return response()->json(
+            [
+                'data' => OrderResource::collection($paginatedOrders),
+                'links' => [
+                    'prev' => $paginatedOrders->previousPageUrl(),
+                    'next' => $paginatedOrders->nextPageUrl(),
+                    'current' => $paginatedOrders->url($paginatedOrders->currentPage()),
+            ],
+        ]);
     }
 
     /**
@@ -74,7 +82,11 @@ class OrderController extends Controller
      */
     public function destroy(Order $order): JsonResponse
     {
-        $this->orderService->delete($order);
+        try {
+            $this->orderService->delete($order);
+        } catch (Exception) {
+            return response()->json(['message' => 'サーバー側でエラーが発生しました'], 500);
+        }
 
         return response()->json([], 204);
     }
