@@ -3,9 +3,7 @@
 namespace App\Services;
 
 use App\Models\Order;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Pagination\Paginator;
 
 class OrderService
 {
@@ -25,6 +23,9 @@ class OrderService
      */
     public function delete(Order $order): void
     {
+        $product = new ProductService($order->product_id);
+        $product->increaseStock($order->order_count);
+
         $order->delete();
     }
 }
