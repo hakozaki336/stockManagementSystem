@@ -4,15 +4,15 @@ axios.defaults.withCredentials = true;
 import React, { useEffect, useState } from 'react'
 
 
-const Products = () => {
-    const [products, setProducts] = useState([]);
+const Orders = () => {
+    const [orders, setOrders] = useState([]);
     const [nextPage, setNextPage] = useState('');
     const [previousPage, setPreviousPage] = useState('');
     const [currentPage, setCurrentPage] = useState('');
     const [errorMessages, setErrorMessages] = useState('');
     const defaultUrl = 'http://localhost:8000/api/orders';
 
-    const fetchProducts = async (url) => {
+    const fetchOrders = async (url) => {
       if (!url) {
           url = defaultUrl;
       }
@@ -20,7 +20,7 @@ const Products = () => {
         const response = await axios.get(url);
         const responseData = response.data;
 
-        setProducts(responseData.data);
+        setOrders(responseData.data);
         setCurrentPage(responseData.links.current);
         setPreviousPage(responseData.links.prev);
         setNextPage(responseData.links.next);
@@ -31,11 +31,11 @@ const Products = () => {
     }
 
     const clickPreivousPage = () => {
-        fetchProducts(previousPage);
+        fetchOrders(previousPage);
     }
 
     const clickNextPage = () => {
-        fetchProducts(nextPage);
+        fetchOrders(nextPage);
     }
 
     const clickDelete = async (id) => {
@@ -46,14 +46,14 @@ const Products = () => {
         try {
             await axios.delete(`http://localhost:8000/api/orders/${id}`);
 
-            // productの数が1つだった場合、前のページに戻る
-            if (products.length === 1) {
-                fetchProducts(previousPage);
+            // orderの数が1つだった場合、前のページに戻る
+            if (orders.length === 1) {
+                fetchOrders(previousPage);
                 return;
             }
 
             // 一つ以上なら、そのままのページにとどまる
-            fetchProducts(currentPage);
+            fetchOrders(currentPage);
         } catch (error) {
             const message = error.response.data.message
             setErrorMessages(message);
@@ -61,7 +61,7 @@ const Products = () => {
     }
 
     useEffect(() => {
-        fetchProducts();
+        fetchOrders();
     } ,[]);
 
     return (
@@ -83,19 +83,19 @@ const Products = () => {
                     </tr>
                 </thead>
                 <tbody className="bg-white">
-                    {products && products.map((product) => (
-                        <tr key={product.id} className="text-center border">
-                            <td>{product.id}</td>
-                            <td>{product.company_name}</td>
-                            <td>{product.product_name}</td>
-                            <td>{product.price}</td>
-                            <td>{product.order_count}</td>
-                            <td>{product.order_date}</td>
-                            <td>{product.dispatched}</td>
+                    {orders && orders.map((order) => (
+                        <tr key={order.id} className="text-center border">
+                            <td>{order.id}</td>
+                            <td>{order.company_name}</td>
+                            <td>{order.product_name}</td>
+                            <td>{order.price}</td>
+                            <td>{order.order_count}</td>
+                            <td>{order.order_date}</td>
+                            <td>{order.dispatched}</td>
                             <td>
                                 <button className="bg-blue-700 hover:bg-blue-800 text-white font-medium px-3 py-1 my-2 mx-1 font-semibold rounded">編集</button>
                                 <button
-                                    onClick={() => clickDelete(product.id)}
+                                    onClick={() => clickDelete(order.id)}
                                     className="bg-red-700 hover:bg-red-800 text-white font-medium px-3 py-1 my-2 mx-1 font-semibold rounded"
                                 >削除</button>
                             </td>
@@ -131,4 +131,4 @@ const Products = () => {
     )
 }
 
-export default Products
+export default Orders
