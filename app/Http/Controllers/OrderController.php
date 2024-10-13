@@ -6,6 +6,7 @@ use App\Http\Resources\OrderResource;
 use App\Models\Order;
 use App\Services\OrderService;
 use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -84,6 +85,8 @@ class OrderController extends Controller
     {
         try {
             $this->orderService->delete($order);
+        } catch (ModelNotFoundException) {
+            return response()->json(['message' => '指定されたIDのデータが存在しません'], 404);
         } catch (Exception) {
             return response()->json(['message' => 'サーバー側でエラーが発生しました'], 500);
         }

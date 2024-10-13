@@ -23,6 +23,7 @@ class OrderService
      */
     public function delete(Order $order): void
     {
+        // TODO: DIできないか検討する
         $product = new ProductService($order->product_id);
         $product->increaseStock($order->order_count);
 
