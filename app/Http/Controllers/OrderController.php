@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\StockNotAvailableException;
+use App\Http\Requests\OrderStoreRequest;
 use App\Http\Resources\OrderResource;
 use App\Models\Order;
 use App\Services\OrderService;
 use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -42,16 +45,17 @@ class OrderController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request): JsonResponse
+    public function store(OrderStoreRequest $request): JsonResponse
     {
-        // TODO: 後のissueで正式な対応を行う
+        try {
+            $this->orderService->store($request->validated());
+        } catch (StockNotAvailableException) {
+            return response()->json(['message' => '商品の在庫が足りません'], 400);
+        } catch (Exception) {
+            return response()->json(['message' => 'サーバー側でエラーが発生しました'], 500);
+        }
 
-        // リクエストのデータを取得
-        $data = $request->validated();
-        // データを保存
-        $order = Order::create($data);
-        // 保存したデータを返す
-        return response()->json($order);
+        return response()->json(null, 201);
     }
 
     /**
@@ -84,6 +88,8 @@ class OrderController extends Controller
     {
         try {
             $this->orderService->delete($order);
+        } catch (ModelNotFoundException) {
+            return response()->json(['message' => '指定されたIDのデータが存在しません'], 404);
         } catch (Exception) {
             return response()->json(['message' => 'サーバー側でエラーが発生しました'], 500);
         }
