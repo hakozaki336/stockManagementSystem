@@ -11,6 +11,11 @@ class Order extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'product_id',
+        'company_id',
+        'order_count',
+    ];
     /**
      * @return BelongsTo<Product>
      */

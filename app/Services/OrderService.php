@@ -29,4 +29,15 @@ class OrderService
 
         $order->delete();
     }
+
+    /**
+     * Orderを作成する
+     */
+    public function store(array $orderParam): void
+    {
+        $product = new ProductService($orderParam['product_id']);
+        $product->decreaseStock($orderParam['order_count']);
+
+        Order::create($orderParam);
+    }
 }

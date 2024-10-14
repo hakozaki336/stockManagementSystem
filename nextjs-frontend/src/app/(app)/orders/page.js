@@ -1,10 +1,12 @@
 "use client";
 import axios from 'axios';
 axios.defaults.withCredentials = true;
+import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react'
 
 
 const Orders = () => {
+    const router = useRouter();
     const [orders, setOrders] = useState([]);
     const [nextPage, setNextPage] = useState('');
     const [previousPage, setPreviousPage] = useState('');
@@ -79,7 +81,13 @@ const Orders = () => {
                         <th>注文数</th>
                         <th>注文日</th>
                         <th>出荷・未出荷</th>
-                        <th><button className="bg-blue-500 hover:bg-blue-600 text-white font-medium px-3 py-1 my-2 mx-1 font-semibold rounded my-5">新規登録</button></th>
+                        <th><button 
+                                className="bg-blue-500 hover:bg-blue-600 text-white font-medium px-3 py-1 mx-1 font-semibold rounded my-5"
+                                onClick={() => router.push(`/orders/create`)}
+                            >
+                                新規登録
+                            </button>
+                        </th>
                     </tr>
                 </thead>
                 <tbody className="bg-white">
