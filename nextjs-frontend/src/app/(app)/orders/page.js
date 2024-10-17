@@ -61,6 +61,16 @@ const Orders = () => {
             setErrorMessages(message);
         }
     }
+    const dispatchOrder = async (id) => {
+        try {
+            await axios.patch(`http://localhost:8000/api/orders/${id}/dispatch`);
+
+            fetchOrders(currentPage);
+        } catch (error) {
+            const message = error.response.data.message
+            setErrorMessages(message);
+        }
+    }
 
     useEffect(() => {
         fetchOrders();
@@ -99,12 +109,22 @@ const Orders = () => {
                             <td>{order.price}</td>
                             <td>{order.order_count}</td>
                             <td>{order.order_date}</td>
-                            <td>{order.dispatched}</td>
+                            {/* 未出荷であればボタンを表示、出荷済みであれば「出荷済み」と表示 */}
+                            <td>{order.dispatched ? (
+                                    "出荷済み"
+                                ) : (
+                                    <button className="bg-green-500 hover:bg-green-600 text-white font-medium px-3 py-1 my-2 mx-1 font-semibold rounded"
+                                        onClick={() => dispatchOrder(order.id)}
+                                    >
+                                        出荷
+                                    </button>
+                                )}
+                            </td>
                             <td>
-                                <button className="bg-blue-700 hover:bg-blue-800 text-white font-medium px-3 py-1 my-2 mx-1 font-semibold rounded">編集</button>
+                                <button className="bg-blue-500 hover:bg-blue-600 text-white font-medium px-3 py-1 my-2 mx-1 font-semibold rounded">編集</button>
                                 <button
                                     onClick={() => clickDelete(order.id)}
-                                    className="bg-red-700 hover:bg-red-800 text-white font-medium px-3 py-1 my-2 mx-1 font-semibold rounded"
+                                    className="bg-red-500 hover:bg-red-600 text-white font-medium px-3 py-1 my-2 mx-1 font-semibold rounded"
                                 >削除</button>
                             </td>
                         </tr>
