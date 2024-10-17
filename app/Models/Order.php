@@ -33,14 +33,6 @@ class Order extends Model
     }
 
     /**
-     * true: 出荷済み, false: 未出荷 を返す
-     */
-    public function getDispatchedAttribute(): string
-    {
-        return $this->attributes['dispatched'] ? '出荷済み' : '未出荷';
-    }
-
-    /**
      * created_atを日本時間のフォーマットで返す
      *
      * @return string

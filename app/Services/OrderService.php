@@ -40,4 +40,13 @@ class OrderService
 
         Order::create($orderParam);
     }
+
+    /**
+     * Order.dispatchを割り当て済みにする
+     */
+    public function dispatch(Order $order): void
+    {
+        $order->dispatched = true;
+        $order->save();
+    }
 }
