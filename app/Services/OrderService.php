@@ -13,7 +13,9 @@ class OrderService
     public function getPaginatedOrders(int $perPage): LengthAwarePaginator
     {
         // TODO: リポジトリを使ってみるのも良いかもしれない
-        $paginatedOrders = Order::with('product', 'company')->paginate($perPage);
+        $paginatedOrders = Order::with('product', 'company')
+            ->orderBy('dispatched', 'asc')
+            ->paginate($perPage);
 
         return $paginatedOrders;
     }
