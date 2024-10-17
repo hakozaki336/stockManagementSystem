@@ -25,7 +25,6 @@ const Create = () => {
 
     const isButtonDisabled = shouldDisableSubmitButton(company, product, stock);
 
-
     const fetchCompanies = async () => {
         try {
             const response = await axios.get('http://localhost:8000/api/companies');
@@ -79,7 +78,6 @@ const Create = () => {
         setCurrentStock(targetProduct.stock);
     }
 
-    // これをやって、メイン画面に返したら返したらフロントエンドの実装は終わり
     const createOrder = async () => {
         try {
             await axios.post('http://localhost:8000/api/orders', 
