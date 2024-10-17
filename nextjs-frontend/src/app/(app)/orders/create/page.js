@@ -9,6 +9,7 @@ const Create = () => {
     const router = useRouter();
     const [companies, setCompanies] = useState([]);
     const [products, setProducts] = useState([]);
+    const [errorMessages, setErrorMessages] = useState('');
     const [currentStock, setCurrentStock] = useState(0);
     const [product, setProduct] = useState('');
     const [company, setCompany] = useState('');
