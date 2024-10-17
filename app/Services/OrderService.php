@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Order;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\DB;
 
 class OrderService
 {
@@ -25,11 +26,13 @@ class OrderService
      */
     public function delete(Order $order): void
     {
-        // TODO: DIできないか検討する
-        $product = new ProductService($order->product_id);
-        $product->increaseStock($order->order_count);
+        DB::transaction(function () use ($order) {
+            // TODO: DIできないか検討する
+            $product = new ProductService($order->product_id);
+            $product->increaseStock($order->order_count);
 
-        $order->delete();
+            $order->delete();
+        });
     }
 
     /**
@@ -37,10 +40,12 @@ class OrderService
      */
     public function store(array $orderParam): void
     {
-        $product = new ProductService($orderParam['product_id']);
-        $product->decreaseStock($orderParam['order_count']);
-
-        Order::create($orderParam);
+        DB::transaction(function () use ($orderParam) {
+            $product = new ProductService($orderParam['product_id']);
+            $product->decreaseStock($orderParam['order_count']);
+    
+            Order::create($orderParam);
+        });
     }
 
     /**
