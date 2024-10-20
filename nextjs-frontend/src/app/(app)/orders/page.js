@@ -136,7 +136,10 @@ const Orders = () => {
                                 )}
                             </td>
                             <td>
-                                <button className="bg-blue-500 hover:bg-blue-600 text-white font-medium px-3 py-1 my-2 mx-1 font-semibold rounded">編集</button>
+                                <button
+                                    onClick={() => router.push(`/orders/edit/${order.id}`)}
+                                    className="bg-blue-500 hover:bg-blue-600 text-white font-medium px-3 py-1 my-2 mx-1 font-semibold rounded"
+                                >編集</button>
                                 <button
                                     onClick={() => clickDelete(order.id)}
                                     className="bg-red-500 hover:bg-red-600 text-white font-medium px-3 py-1 my-2 mx-1 font-semibold rounded"
