@@ -49,15 +49,6 @@ class OrderService
     }
 
     /**
-     * Order.dispatchを割り当て済みにする
-     */
-    public function dispatch(Order $order): void
-    {
-        $order->dispatched = true;
-        $order->save();
-    }
-
-    /**
      * Orderを更新する
      */
     public function update(Order $order, array $orderParam): void
@@ -71,5 +62,23 @@ class OrderService
 
             $order->update($orderParam);
         });
+    }
+
+    /**
+     * Order.dispatchを割り当て済みにする
+     */
+    public function dispatch(Order $order): void
+    {
+        $order->dispatched = true;
+        $order->save();
+    }
+
+    /**
+     * Order.dispatchを未割り当てにする
+     */
+    public function undispatch(Order $order): void
+    {
+        $order->dispatched = false;
+        $order->save();
     }
 }

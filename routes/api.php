@@ -15,4 +15,5 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 Route::apiResource('orders', OrderController::class);
 Route::apiResource('products', ProductController::class);
 Route::patch('/orders/{order}/dispatch', [OrderController::class, 'dispatch']);
+Route::patch('/orders/{order}/undispatch', [OrderController::class, 'undispatch']);
 Route::apiResource('companies', CompanyController::class);

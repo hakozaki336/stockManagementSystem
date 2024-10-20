@@ -72,6 +72,17 @@ const Orders = () => {
         }
     }
 
+    const undispatchOrder = async (id) => {
+        try {
+            await axios.patch(`http://localhost:8000/api/orders/${id}/undispatch`);
+
+            fetchOrders(currentPage);
+        } catch (error) {
+            const message = error.response.data.message
+            setErrorMessages(message);
+        }
+    }
+
     useEffect(() => {
         fetchOrders();
     } ,[]);
@@ -111,7 +122,11 @@ const Orders = () => {
                             <td>{order.order_date}</td>
                             {/* 未出荷であればボタンを表示、出荷済みであれば「出荷済み」と表示 */}
                             <td>{order.dispatched ? (
-                                    "出荷済み"
+                                    <button className="bg-gray-200 hover:bg-gray-300 text-white font-medium px-3 py-1 my-2 mx-1 font-semibold rounded"
+                                        onClick={() => undispatchOrder(order.id)}
+                                    >
+                                        未出荷
+                                    </button>
                                 ) : (
                                     <button className="bg-green-500 hover:bg-green-600 text-white font-medium px-3 py-1 my-2 mx-1 font-semibold rounded"
                                         onClick={() => dispatchOrder(order.id)}
