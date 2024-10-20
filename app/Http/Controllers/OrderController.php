@@ -109,4 +109,17 @@ class OrderController extends Controller
 
         return response()->json(null, 204);
     }
+
+    public function undispatch(Order $order): JsonResponse
+    {
+        try {
+            $this->orderService->undispatch($order);
+        } catch (ModelNotFoundException) {
+            return response()->json(['message' => '指定されたIDのデータが存在しません'], 404);
+        } catch (Exception $e) {
+            return response()->json(['message' => 'サーバー側でエラーが発生しました'], 500);
+        }
+
+        return response()->json(null, 204);
+    }
 }

@@ -56,4 +56,13 @@ class OrderService
         $order->dispatched = true;
         $order->save();
     }
+
+    /**
+     * Order.dispatchを未割り当てにする
+     */
+    public function undispatch(Order $order): void
+    {
+        $order->dispatched = false;
+        $order->save();
+    }
 }
