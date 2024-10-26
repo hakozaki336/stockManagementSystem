@@ -40,6 +40,16 @@ const Navigation = ({ user }) => {
                                 active={usePathname() === '/orders'}>
                                 Orders
                             </NavLink>
+                            <NavLink
+                                href="/products"
+                                active={usePathname() === '/products'}>
+                                Products
+                            </NavLink>
+                            <NavLink
+                                href="/companies"
+                                active={usePathname() === '/companies'}>
+                                Companies
+                            </NavLink>
                         </div>
                     </div>
 

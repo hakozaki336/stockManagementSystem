@@ -4,24 +4,32 @@ namespace App\Services;
 
 use App\Exceptions\StockNotAvailableException;
 use App\Models\Product;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class ProductService
 {
     private Product $product;
 
+    // TODO: IDで振る舞いを固定してしまうと、テストがしにくくなるので、IDではなくProductを受け取るようにするのが良いかもしれない
     public function __construct(int $id)
     {
         $this->product = Product::findOrFail($id);
     }
 
-    public static function getAll(): Collection
+    /**
+     * ページネーションされたOrderを取得する
+     */
+    public static function getPaginatedProducts(int $perPage): LengthAwarePaginator
     {
-        return Product::all();
+        // TODO: リポジトリを使ってみるのも良いかもしれない
+        $paginatedProducts = Product::paginate($perPage);
+
+        return $paginatedProducts;
     }
 
-    public function create(array $param): void
+    public static function create(array $param): void
     {
+        // TODO: 自身を返すようにするのも良いかもしれない
         Product::create($param);
     }
 
@@ -48,4 +56,18 @@ class ProductService
         }
     }
 
+    public function delete(): void
+    {
+        $this->product->delete();
+    }
+
+    public function getProduct(): Product
+    {
+        return $this->product;
+    }
+
+    public function update(array $param): void
+    {
+        $this->product->update($param);
+    }
 }

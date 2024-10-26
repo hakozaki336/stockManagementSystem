@@ -20,6 +20,7 @@ class OrderController extends Controller
     {
         $this->orderService = $orderService;
     }
+
     /**
      * Display a listing of the resource.
      */
