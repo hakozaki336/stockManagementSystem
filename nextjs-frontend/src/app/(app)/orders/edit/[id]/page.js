@@ -49,7 +49,7 @@ const Edit = ({ params }) => {
 
     const fetchOrder = async () => {
         try {
-            const response = await axios.get(`http://localhost:8000/api/orders/${params.id}`);
+            const response = await axios.get(`http://localhost:8000/api/products/${params.id}`);
             setCompany(response.data.company_id);
             setProduct(response.data.product_id);
             setStock(response.data.order_count);
@@ -170,7 +170,7 @@ const Edit = ({ params }) => {
                 onClick={EditOrder}
                 disabled={isButtonDisabled}
             >
-                追加
+                更新
             </button>
         </div>
     </div>

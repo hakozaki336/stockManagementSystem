@@ -5,16 +5,16 @@ import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react'
 
 
-const Orders = () => {
+const Products = () => {
     const router = useRouter();
-    const [orders, setOrders] = useState([]);
+    const [products, setProducts] = useState([]);
     const [nextPage, setNextPage] = useState('');
     const [previousPage, setPreviousPage] = useState('');
     const [currentPage, setCurrentPage] = useState('');
     const [errorMessages, setErrorMessages] = useState('');
-    const defaultUrl = 'http://localhost:8000/api/orders';
+    const defaultUrl = 'http://localhost:8000/api/products';
 
-    const fetchOrders = async (url) => {
+    const fetchProducts = async (url) => {
         if (!url) {
             url = defaultUrl;
         }
@@ -22,7 +22,7 @@ const Orders = () => {
             const response = await axios.get(url);
             const responseData = response.data;
 
-            setOrders(responseData.data);
+            setProducts(responseData.data);
             setCurrentPage(responseData.links.current);
             setPreviousPage(responseData.links.prev);
             setNextPage(responseData.links.next);
@@ -33,11 +33,11 @@ const Orders = () => {
     }
 
     const clickPreivousPage = () => {
-        fetchOrders(previousPage);
+        fetchProducts(previousPage);
     }
 
     const clickNextPage = () => {
-        fetchOrders(nextPage);
+        fetchProducts(nextPage);
     }
 
     const clickDelete = async (id) => {
@@ -46,37 +46,16 @@ const Orders = () => {
         }
 
         try {
-            await axios.delete(`http://localhost:8000/api/orders/${id}`);
+            await axios.delete(`http://localhost:8000/api/products/${id}`);
 
-            // orderの数が1つだった場合、前のページに戻る
-            if (orders.length === 1) {
-                fetchOrders(previousPage);
+            // productsの数が1つだった場合、前のページに戻る
+            if (products.length === 1) {
+                fetchProducts(previousPage);
                 return;
             }
 
             // 一つ以上なら、そのままのページにとどまる
-            fetchOrders(currentPage);
-        } catch (error) {
-            const message = error.response.data.message
-            setErrorMessages(message);
-        }
-    }
-    const dispatchOrder = async (id) => {
-        try {
-            await axios.patch(`http://localhost:8000/api/orders/${id}/dispatch`);
-
-            fetchOrders(currentPage);
-        } catch (error) {
-            const message = error.response.data.message
-            setErrorMessages(message);
-        }
-    }
-
-    const undispatchOrder = async (id) => {
-        try {
-            await axios.patch(`http://localhost:8000/api/orders/${id}/undispatch`);
-
-            fetchOrders(currentPage);
+            fetchProducts(currentPage);
         } catch (error) {
             const message = error.response.data.message
             setErrorMessages(message);
@@ -84,7 +63,7 @@ const Orders = () => {
     }
 
     useEffect(() => {
-        fetchOrders();
+        fetchProducts();
     } ,[]);
 
     return (
@@ -96,15 +75,12 @@ const Orders = () => {
                 <thead className="">
                     <tr className="">
                         <th>ID</th>
-                        <th>企業名</th>
                         <th>商品名</th>
                         <th>価格</th>
-                        <th>注文数</th>
-                        <th>注文日</th>
-                        <th>出荷・未出荷</th>
+                        <th>在庫数</th>
                         <th><button 
                                 className="bg-blue-500 hover:bg-blue-600 text-white font-medium px-3 py-1 mx-1 font-semibold rounded my-5"
-                                onClick={() => router.push(`/orders/create`)}
+                                onClick={() => router.push(`/products/create`)}
                             >
                                 新規登録
                             </button>
@@ -112,36 +88,19 @@ const Orders = () => {
                     </tr>
                 </thead>
                 <tbody className="bg-white">
-                    {orders && orders.map((order) => (
-                        <tr key={order.id} className="text-center border">
-                            <td>{order.id}</td>
-                            <td>{order.company_name}</td>
-                            <td>{order.product_name}</td>
-                            <td>{order.price}</td>
-                            <td>{order.order_count}</td>
-                            <td>{order.order_date}</td>
-                            {/* 未出荷であればボタンを表示、出荷済みであれば「出荷済み」と表示 */}
-                            <td>{order.dispatched ? (
-                                    <button className="bg-gray-200 hover:bg-gray-300 text-white font-medium px-3 py-1 my-2 mx-1 font-semibold rounded"
-                                        onClick={() => undispatchOrder(order.id)}
-                                    >
-                                        未出荷
-                                    </button>
-                                ) : (
-                                    <button className="bg-green-500 hover:bg-green-600 text-white font-medium px-3 py-1 my-2 mx-1 font-semibold rounded"
-                                        onClick={() => dispatchOrder(order.id)}
-                                    >
-                                        出荷
-                                    </button>
-                                )}
-                            </td>
+                    {products && products.map((product) => (
+                        <tr key={product.id} className="text-center border">
+                            <td>{product.id}</td>
+                            <td>{product.name}</td>
+                            <td>{product.price}</td>
+                            <td>{product.stock}</td>
                             <td>
                                 <button
-                                    onClick={() => router.push(`/orders/edit/${order.id}`)}
+                                    onClick={() => router.push(`/products/edit/${product.id}`)}
                                     className="bg-blue-500 hover:bg-blue-600 text-white font-medium px-3 py-1 my-2 mx-1 font-semibold rounded"
                                 >編集</button>
                                 <button
-                                    onClick={() => clickDelete(order.id)}
+                                    onClick={() => clickDelete(product.id)}
                                     className="bg-red-500 hover:bg-red-600 text-white font-medium px-3 py-1 my-2 mx-1 font-semibold rounded"
                                 >削除</button>
                             </td>
@@ -177,4 +136,4 @@ const Orders = () => {
     )
 }
 
-export default Orders
+export default Products
