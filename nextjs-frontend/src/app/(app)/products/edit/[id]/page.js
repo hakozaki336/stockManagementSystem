@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 axios.defaults.withCredentials = true;
 import { useState, useEffect } from "react";
 
-const Create = ({ params }) => {
+const Edit = ({ params }) => {
     const router = useRouter();
     const [errorMessages, setErrorMessages] = useState('');
     const [name, setName] = useState('');
@@ -76,7 +76,7 @@ const Create = ({ params }) => {
             {errorMessages && (
                 <div className="bg-red-500 text-white text-sm font-bold p-2 rounded">{errorMessages}</div>
             )}
-        <h1 className="p-3 text-2xl font-semibold border-b">商品を登録してください</h1>
+        <h1 className="p-3 text-2xl font-semibold border-b">商品を編集してください</h1>
         <div className="px-3 ">
             <div className="my-5">
                 <div className="flex m-3">
@@ -118,4 +118,4 @@ const Create = ({ params }) => {
   )
 }
 
-export default Create
+export default Edit
