@@ -5,14 +5,14 @@ import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react'
 
 
-const Inventories = () => {
+const Inventories = ({ params }) => {
     const router = useRouter();
     const [inventories, setInventories] = useState([]);
     const [nextPage, setNextPage] = useState('');
     const [previousPage, setPreviousPage] = useState('');
     const [currentPage, setCurrentPage] = useState('');
     const [errorMessages, setErrorMessages] = useState('');
-    const defaultUrl = 'http://localhost:8000/api/product_inventories';
+    const defaultUrl = `http://localhost:8000/api/product_inventories/${params.id}`;
 
     const fetchInventories = async (url) => {
         if (!url) {
@@ -64,7 +64,7 @@ const Inventories = () => {
 
     useEffect(() => {
         fetchInventories();
-    } ,[]);
+    } ,[params]);
 
     return (
         <div className="m-5">

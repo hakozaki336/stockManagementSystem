@@ -10,10 +10,11 @@ class ProductInventoryService
     /**
      * ページネーションされたProductInventoriesを取得する
      */
-    public function getPaginatedProductInventories(int $perPage): LengthAwarePaginator
+    public function getPaginatedProductInventories(int $perPage, int $product_id): LengthAwarePaginator
     {
         // TODO: リポジトリを使ってみるのも良いかもしれない
         $paginatedProductInventory = ProductInventory::with('product')
+            ->where('product_id', $product_id)
             ->orderBy('dispatched', 'asc')
             ->paginate($perPage);
 

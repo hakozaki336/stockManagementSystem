@@ -7,11 +7,13 @@ use App\Models\ProductInventory;
 use App\Services\ProductInventoryService;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class ProductInventoryController extends Controller
 {
     private $productInventoryService;
+    private const PERPAGE = 5;
 
     public function __construct()
     {
@@ -21,10 +23,10 @@ class ProductInventoryController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(int $product_id): JsonResponse
     {
         try {
-            $productInventories = $this->productInventoryService->getPaginatedProductInventories(5);
+            $productInventories = $this->productInventoryService->getPaginatedProductInventories(self::PERPAGE, $product_id);
         } catch (Exception) {
             return response()->json(['message' => 'サーバー側でエラーが発生しました'], 500);
         }
