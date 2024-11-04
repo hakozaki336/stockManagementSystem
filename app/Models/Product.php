@@ -23,4 +23,12 @@ class Product extends Model
     {
         return $this->hasMany(Order::class);
     }
+
+    /**
+     * @return HasMany<ProductInventory>
+     */
+    public function productInventories(): HasMany
+    {
+        return $this->hasMany(ProductInventory::class);
+    }
 }

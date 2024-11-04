@@ -3,6 +3,7 @@
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProductInventoryController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -17,3 +18,4 @@ Route::apiResource('products', ProductController::class);
 Route::patch('/orders/{order}/dispatch', [OrderController::class, 'dispatch']);
 Route::patch('/orders/{order}/undispatch', [OrderController::class, 'undispatch']);
 Route::apiResource('companies', CompanyController::class);
+Route::apiResource('product_inventories', ProductInventoryController::class);
