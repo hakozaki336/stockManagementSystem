@@ -97,7 +97,7 @@ const Products = () => {
                             <td>{product.stock}</td>
                             <td>
                                 <button
-                                        onClick={() => router.push(`/products/${product.id}/inventory`)}
+                                        onClick={() => router.push(`/products/${product.id}/inventories`)}
                                         className="bg-green-500 hover:bg-green-600 text-white font-medium px-3 py-1 my-2 mx-1 font-semibold rounded"
                                 >
                                     在庫管理

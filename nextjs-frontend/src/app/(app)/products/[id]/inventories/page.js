@@ -81,7 +81,7 @@ const Inventories = ({ params }) => {
                         <th>割り当て済み</th>
                         <th><button 
                                 className="bg-blue-500 hover:bg-blue-600 text-white font-medium px-3 py-1 mx-1 font-semibold rounded my-5"
-                                onClick={() => router.push(`/inventories/create`)}
+                                onClick={() => router.push(`inventories/create`)}
                             >
                                 新規登録
                             </button>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ProductInventoryStoreRequest;
 use App\Http\Resources\ProductInventoryResource;
 use App\Models\ProductInventory;
 use App\Services\ProductInventoryService;
@@ -42,19 +43,19 @@ class ProductInventoryController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(ProductInventoryStoreRequest $request): JsonResponse
     {
-        //
+        try {
+            $this->productInventoryService->store($request->all());
+        } catch (ModelNotFoundException) {
+            return response()->json(['message' => '指定されたIDのデータが存在しません'], 404);
+        } catch (Exception) {
+            return response()->json(['message' => 'サーバー側でエラーが発生しました'], 500);
+        }
+
+        return response()->json(null, 201);
     }
 
     /**
