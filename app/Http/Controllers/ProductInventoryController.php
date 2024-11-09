@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProductInventoryStoreRequest;
+use App\Http\Requests\ProductInventoryUpdateRequest;
+use App\Http\Requests\ProductUpdateRequest;
 use App\Http\Resources\ProductInventoryResource;
 use App\Models\ProductInventory;
 use App\Services\ProductInventoryService;
@@ -67,19 +69,19 @@ class ProductInventoryController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(ProductInventory $productInventory)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, ProductInventory $productInventory)
+    public function update(ProductInventoryUpdateRequest $request, ProductInventory $productInventory)
     {
-        //
+        try {
+            $this->productInventoryService->update($productInventory, $request->all());
+        } catch (ModelNotFoundException) {
+            return response()->json(['message' => '指定されたIDのデータが存在しません'], 404);
+        } catch (Exception) {
+            return response()->json(['message' => 'サーバー側でエラーが発生しました'], 500);
+        }
+
+        return response()->json(null, 204);
     }
 
     /**

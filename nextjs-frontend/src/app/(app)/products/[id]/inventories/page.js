@@ -12,7 +12,7 @@ const Inventories = ({ params }) => {
     const [previousPage, setPreviousPage] = useState('');
     const [currentPage, setCurrentPage] = useState('');
     const [errorMessages, setErrorMessages] = useState('');
-    const defaultUrl = `http://localhost:8000/api/product_inventories/${params.id}`;
+    const defaultUrl = `http://localhost:8000/api/product_inventories/${params.id}/all`;
 
     const fetchInventories = async (url) => {
         if (!url) {
@@ -98,7 +98,7 @@ const Inventories = ({ params }) => {
                             <td>{inventory.dispatched ? '割り当て済み' : '未割り当て'}</td>
                             <td>
                                 <button
-                                    onClick={() => router.push(`/inventories/edit/${inventory.id}`)}
+                                    onClick={() => router.push(`inventories/edit/${inventory.id}`)}
                                     className="bg-blue-500 hover:bg-blue-600 text-white font-medium px-3 py-1 my-2 mx-1 font-semibold rounded"
                                 >編集</button>
                                 <button

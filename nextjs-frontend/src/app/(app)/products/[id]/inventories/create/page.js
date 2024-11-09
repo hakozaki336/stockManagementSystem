@@ -9,7 +9,7 @@ const Create = ({ params }) => {
     const router = useRouter();
     const [product, setProduct] = useState('');
     const [errorMessages, setErrorMessages] = useState('');
-    const [serial_number, setSerialNumber] = useState('');
+    const [serialNumber, setSerialNumber] = useState('');
     const [location, setLocation] = useState('');
     const [expirationDate, setExpirationDate] = useState('');
 
@@ -21,7 +21,7 @@ const Create = ({ params }) => {
         return (isSerialNumberEmpty || isLocationEmpty || isExpirationDateEmpty);
     }
 
-    const isButtonDisabled = shouldDisableSubmitButton(serial_number, location, expirationDate);
+    const isButtonDisabled = shouldDisableSubmitButton(serialNumber, location, expirationDate);
 
     const changeSerialNumber = (event) => {
         setSerialNumber(event.target.value);
@@ -54,7 +54,7 @@ const Create = ({ params }) => {
             await axios.post(`http://localhost:8000/api/product_inventories`, 
                 {
                     product_id: params.id,
-                    serial_number: serial_number,
+                    serial_number: serialNumber,
                     location: location,
                     expiration_date: expirationDate
                 }
@@ -80,21 +80,21 @@ const Create = ({ params }) => {
             <div className="my-5">
                 <div className="flex m-3">
                     <label className="text-xl mr-3">シリアルナンバー :</label>
-                    <input type="text" name="price"
+                    <input type="text" name="serialNumber"
                         className="w-64"
                         onChange={changeSerialNumber}
                     />
                 </div>
                 <div className="flex m-3">
                     <label className="text-xl mr-3">保管場所　　　　:</label>
-                    <input type="text" name="price"
+                    <input type="text" name="location"
                         className="w-64"
                         onChange={changeLocation}
                     />
                 </div>
                 <div className="flex m-3">
                     <label className="text-xl mr-3">有効期限　　　　:</label>
-                    <input type="date" name="price"
+                    <input type="date" name="expirationDate"
                         className="w-64"
                         onChange={changeExpirationDate}
                     />
