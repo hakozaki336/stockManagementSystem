@@ -51,7 +51,7 @@ const Create = ({ params }) => {
 
     const createInventory = async () => {
         try {
-            await axios.post(`http://localhost:8000/api/product_inventories`, 
+            await axios.post(`http://localhost:8000/api/product_inventories`,
                 {
                     product_id: params.id,
                     serial_number: serialNumber,

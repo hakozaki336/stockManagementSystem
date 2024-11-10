@@ -77,7 +77,9 @@ const Products = () => {
                         <th>ID</th>
                         <th>商品名</th>
                         <th>価格</th>
-                        <th>在庫数</th>
+                        <th>保管数</th>
+                        <th>保管場所</th>
+                        <th>在庫管理方法</th>
                         <th>詳細</th>
                         <th><button 
                                 className="bg-blue-500 hover:bg-blue-600 text-white font-medium px-3 py-1 mx-1 font-semibold rounded my-5"
@@ -95,6 +97,8 @@ const Products = () => {
                             <td>{product.name}</td>
                             <td>{product.price}</td>
                             <td>{product.stock}</td>
+                            <td>{product.area}</td>
+                            <td>{product.stock_management_type}</td>
                             <td>
                                 <button
                                         onClick={() => router.push(`/products/${product.id}/inventories`)}

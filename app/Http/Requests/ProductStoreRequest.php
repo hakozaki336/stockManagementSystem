@@ -36,6 +36,14 @@ class ProductStoreRequest extends FormRequest
                 'integer',
                 'min:0',
             ],
+            'area' => [
+                'required',
+                'string',
+            ],
+            'stock_management_type' => [
+                'required',
+                'string',
+            ],
         ];
     }
 }

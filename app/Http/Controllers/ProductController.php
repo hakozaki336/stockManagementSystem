@@ -9,8 +9,6 @@ use App\Services\ProductService;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 
 class ProductController extends Controller
 {
@@ -40,7 +38,6 @@ class ProductController extends Controller
      */
     public function store(ProductStoreRequest $request)
     {
-        Log::info($request->validated());
         try {
             ProductService::create($request->validated());
         } catch (Exception) {
