@@ -5,16 +5,16 @@ import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react'
 
 
-const Products = () => {
+const Inventories = ({ params }) => {
     const router = useRouter();
-    const [products, setProducts] = useState([]);
+    const [inventories, setInventories] = useState([]);
     const [nextPage, setNextPage] = useState('');
     const [previousPage, setPreviousPage] = useState('');
     const [currentPage, setCurrentPage] = useState('');
     const [errorMessages, setErrorMessages] = useState('');
-    const defaultUrl = 'http://localhost:8000/api/products';
+    const defaultUrl = `http://localhost:8000/api/product_inventories/${params.id}/all`;
 
-    const fetchProducts = async (url) => {
+    const fetchInventories = async (url) => {
         if (!url) {
             url = defaultUrl;
         }
@@ -22,7 +22,7 @@ const Products = () => {
             const response = await axios.get(url);
             const responseData = response.data;
 
-            setProducts(responseData.data);
+            setInventories(responseData.data);
             setCurrentPage(responseData.links.current);
             setPreviousPage(responseData.links.prev);
             setNextPage(responseData.links.next);
@@ -33,11 +33,11 @@ const Products = () => {
     }
 
     const clickPreivousPage = () => {
-        fetchProducts(previousPage);
+        fetchInventories(previousPage);
     }
 
     const clickNextPage = () => {
-        fetchProducts(nextPage);
+        fetchInventories(nextPage);
     }
 
     const clickDelete = async (id) => {
@@ -46,16 +46,16 @@ const Products = () => {
         }
 
         try {
-            await axios.delete(`http://localhost:8000/api/products/${id}`);
+            await axios.delete(`http://localhost:8000/api/product_inventories/${id}`);
 
-            // productsの数が1つだった場合、前のページに戻る
-            if (products.length === 1) {
-                fetchProducts(previousPage);
+            // inventoriesの数が1つだった場合、前のページに戻る
+            if (inventories.length === 1) {
+                fetchInventories(previousPage);
                 return;
             }
 
             // 一つ以上なら、そのままのページにとどまる
-            fetchProducts(currentPage);
+            fetchInventories(currentPage);
         } catch (error) {
             const message = error.response.data.message
             setErrorMessages(message);
@@ -63,8 +63,8 @@ const Products = () => {
     }
 
     useEffect(() => {
-        fetchProducts();
-    } ,[]);
+        fetchInventories();
+    } ,[params]);
 
     return (
         <div className="m-5">
@@ -75,15 +75,13 @@ const Products = () => {
                 <thead className="">
                     <tr className="">
                         <th>ID</th>
-                        <th>商品名</th>
-                        <th>価格</th>
-                        <th>保管数</th>
+                        <th>シリアルナンバー</th>
                         <th>保管場所</th>
-                        <th>在庫管理方法</th>
-                        <th>詳細</th>
+                        <th>有効期限</th>
+                        <th>割り当て済み</th>
                         <th><button 
                                 className="bg-blue-500 hover:bg-blue-600 text-white font-medium px-3 py-1 mx-1 font-semibold rounded my-5"
-                                onClick={() => router.push(`/products/create`)}
+                                onClick={() => router.push(`inventories/create`)}
                             >
                                 新規登録
                             </button>
@@ -91,29 +89,20 @@ const Products = () => {
                     </tr>
                 </thead>
                 <tbody className="bg-white">
-                    {products && products.map((product) => (
-                        <tr key={product.id} className="text-center border">
-                            <td>{product.id}</td>
-                            <td>{product.name}</td>
-                            <td>{product.price}</td>
-                            <td>{product.stock}</td>
-                            <td>{product.area}</td>
-                            <td>{product.stock_management_type}</td>
+                    {inventories && inventories.map((inventory) => (
+                        <tr key={inventory.id} className="text-center border">
+                            <td>{inventory.id}</td>
+                            <td>{inventory.serial_number}</td>
+                            <td>{inventory.location}</td>
+                            <td>{inventory.expiration_date}</td>
+                            <td>{inventory.dispatched ? '割り当て済み' : '未割り当て'}</td>
                             <td>
                                 <button
-                                        onClick={() => router.push(`/products/${product.id}/inventories`)}
-                                        className="bg-green-500 hover:bg-green-600 text-white font-medium px-3 py-1 my-2 mx-1 font-semibold rounded"
-                                >
-                                    在庫管理
-                                </button>
-                            </td>
-                            <td>
-                                <button
-                                    onClick={() => router.push(`/products/edit/${product.id}`)}
+                                    onClick={() => router.push(`inventories/edit/${inventory.id}`)}
                                     className="bg-blue-500 hover:bg-blue-600 text-white font-medium px-3 py-1 my-2 mx-1 font-semibold rounded"
                                 >編集</button>
                                 <button
-                                    onClick={() => clickDelete(product.id)}
+                                    onClick={() => clickDelete(inventory.id)}
                                     className="bg-red-500 hover:bg-red-600 text-white font-medium px-3 py-1 my-2 mx-1 font-semibold rounded"
                                 >削除</button>
                             </td>
@@ -149,4 +138,4 @@ const Products = () => {
     )
 }
 
-export default Products
+export default Inventories

@@ -11,16 +11,20 @@ const Create = () => {
     const [name, setName] = useState('');
     const [price, setPrice] = useState(0);
     const [stock, setStock] = useState(0);
+    const [area, setArea] = useState('');
+    const [stockManagemntType, setStockManagemntType] = useState('');
 
-    const shouldDisableSubmitButton = (name, price, stock) => {
+    const shouldDisableSubmitButton = (name, price, stock, area, stockManagemntType) => {
         const isCompanyEmpty = !name;
         const isProductEmpty = !price;
         const isStockInvalid = stock === '' || parseInt(stock) < 1;
+        const isAreaEmpty = !area;
+        const isStockManagemntTypeEmpty = !stockManagemntType;
 
-        return (isCompanyEmpty || isProductEmpty || isStockInvalid);
+        return (isCompanyEmpty || isProductEmpty || isStockInvalid || isAreaEmpty || isStockManagemntTypeEmpty);
     }
 
-    const isButtonDisabled = shouldDisableSubmitButton(name, price, stock);
+    const isButtonDisabled = shouldDisableSubmitButton(name, price, stock, area, stockManagemntType);
 
     const changeName = (event) => {
         setName(event.target.value);
@@ -35,7 +39,16 @@ const Create = () => {
     const changeStock = (event) => {
         setStock(event.target.value);
         shouldDisableSubmitButton();
+    }
 
+    const changeArea = (event) => {
+        setArea(event.target.value);
+        shouldDisableSubmitButton();
+    }
+
+    const changeStockManagemntType = (event) => {
+        setStockManagemntType(event.target.value);
+        shouldDisableSubmitButton();
     }
 
     const createProduct = async () => {
@@ -44,7 +57,9 @@ const Create = () => {
                 {
                     name: name,
                     price: price,
-                    stock: stock
+                    stock: stock,
+                    area: area,
+                    stock_management_type: stockManagemntType,
                 }
             );
             router.push(`/products`)
@@ -63,14 +78,14 @@ const Create = () => {
         <div className="px-3 ">
             <div className="my-5">
                 <div className="flex m-3">
-                    <label className="text-xl mr-3 ">商品名:</label>
+                    <label className="text-xl mr-3 ">商品名　　　:</label>
                     <input type="text" name="name"
                         className="w-64"
                         onChange={changeName}
                     />
                 </div>
                 <div className="flex m-3">
-                    <label className="text-xl mr-3">値段　:</label>
+                    <label className="text-xl mr-3">値段　　　　:</label>
                     <input type="number" name="price"
                         className="w-64"
                         onChange={changePrice}
@@ -78,12 +93,29 @@ const Create = () => {
                     />
                 </div>
                 <div className="flex m-3">
-                    <label className="text-xl mr-3">在庫数:</label>
+                    <label className="text-xl mr-3">在庫数　　　:</label>
                     <input type="number" name="price"
                         className="w-64"
                         onChange={changeStock}
                         min="1"
                     />
+                </div>
+                <div className="flex m-3">
+                    <label className="text-xl mr-3 ">保存エリア　:</label>
+                    <input type="text" name="area"
+                        className="w-64"
+                        onChange={changeArea} 
+                    />
+                </div>
+                <div className="flex m-3">
+                    <label className="text-xl mr-3 ">在庫管理方法:</label>
+                    <select name="company_name" className="w-64"
+                        onChange={changeStockManagemntType}
+                    >
+                        <option value="">選択してください</option>
+                        <option value="FIFO">FIFO</option>
+                        <option value="LIFO">LIFO</option>
+                    </select>
                 </div>
             </div>
             <button

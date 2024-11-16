@@ -14,6 +14,8 @@ class Product extends Model
         'name',
         'price',
         'stock',
+        'area',
+        'stock_management_type',
     ];
 
     /**
@@ -22,5 +24,13 @@ class Product extends Model
     public function orders(): HasMany
     {
         return $this->hasMany(Order::class);
+    }
+
+    /**
+     * @return HasMany<ProductInventory>
+     */
+    public function productInventories(): HasMany
+    {
+        return $this->hasMany(ProductInventory::class);
     }
 }
