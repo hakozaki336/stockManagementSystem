@@ -42,8 +42,9 @@ class OrderService
     {
         DB::transaction(function () use ($orderParam) {
             $product = new ProductService($orderParam['product_id']);
-            $product->decreaseStock($orderParam['order_count']);
-    
+            $productInventory = new ProductInventoryService($product->getProduct());
+            $productInventory->reduceStockList($orderParam['order_count']);
+
             Order::create($orderParam);
         });
     }
