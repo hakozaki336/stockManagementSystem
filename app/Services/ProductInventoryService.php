@@ -27,7 +27,7 @@ class ProductInventoryService
             throw new \Exception('在庫管理タイプが不正です');
         }
         // TODO: 主キーを読み出すメソッドやが、laravelになかったっけ？
-        $this->productInventoryList = $this->loadProductInventories($product->id);
+        $this->productInventoryList = $this->getProductInventories($product->id);
     }
     /**
      * ページネーションされたProductInventoriesを取得する
@@ -70,7 +70,7 @@ class ProductInventoryService
     /**
      * productに紐づく複数のproductInventoryを取得する
      */
-    private function loadProductInventories(int $product_id): Collection
+    private function getProductInventories(int $product_id): Collection
     {
         return ProductInventory::where('product_id', $product_id)->get();
     }
