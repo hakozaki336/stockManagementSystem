@@ -2,19 +2,20 @@
 
 namespace App\UseCases;
 
+use App\Exceptions\OutOfStockException;
 use Illuminate\Database\Eloquent\Collection;
 
 class LifoStockManagement
 {
-        /**
+    /**
      * 在庫を割り当て済みにする
      */
     public function reduceStock(Collection $productInventoryList, int $count): void
     {
         // 作成日を基準にして昇順にソート
-        $productInventoryList = $productInventoryList->sortBy('created_at', SORT_REGULAR, false);
+        $productInventoryList = $productInventoryList->sortBy('created_at', SORT_REGULAR, true);
 
-        // カウント分割り当て済みにする
+        $assignedCount = 0;
         foreach ($productInventoryList as $productInventory) {
             if ($count <= 0) {
                 break;
@@ -23,8 +24,13 @@ class LifoStockManagement
             if ($productInventory->dispatched === false) {
                 $productInventory->dispatched = true;
                 $productInventory->save();
+                $assignedCount++;
                 $count--;
             }
+        }
+
+        if ($assignedCount < $count) {
+            throw new OutOfStockException();
         }
     }
 
@@ -36,7 +42,7 @@ class LifoStockManagement
         // 作成日を基準にして昇順にソート
         $productInventoryList = $productInventoryList->sortBy('created_at', SORT_REGULAR, false);
 
-        // カウント分非割り当てにする
+        $assignedCount = 0;
         foreach ($productInventoryList as $productInventory) {
             if ($count <= 0) {
                 break;
@@ -45,8 +51,13 @@ class LifoStockManagement
             if ($productInventory->dispatched === true) {
                 $productInventory->dispatched = false;
                 $productInventory->save();
+                $assignedCount++;
                 $count--;
             }
+        }
+
+        if ($assignedCount < $count) {
+            throw new OutOfStockException();
         }
     }
 }

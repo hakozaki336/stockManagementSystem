@@ -19,9 +19,9 @@ class ProductInventoryService
     {
         // NOTE: ハードコードしているのでファクトリーにしたい
         if ($product->stock_management_type === 'FIFO') {
-            $this->stockManagement = new FifoStockManagement($product->id);
+            $this->stockManagement = new FifoStockManagement();
         } elseif ($product->stock_management_type === 'LIFO') {
-            $this->stockManagement = new LifoStockManagement($product->id);
+            $this->stockManagement = new LifoStockManagement();
         } else {
             // いいね！例外を投げるのは良い
             throw new \Exception('在庫管理タイプが不正です');
@@ -78,7 +78,7 @@ class ProductInventoryService
     /**
      * カウント数だけ,productInventoryを割り当て済みにする
      */
-    public function reduceStockList(int $count): void
+    public function reduceStock(int $count): void
     {
         $this->stockManagement->reduceStock($this->productInventoryList, $count);
     }
