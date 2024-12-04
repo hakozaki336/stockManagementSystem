@@ -6,6 +6,7 @@ use App\Models\Product;
 use App\Models\ProductInventory;
 use App\UseCases\FifoStockManagement;
 use App\UseCases\LifoStockManagement;
+use App\UseCases\StockManagementFactory;
 use App\UseCases\StockManagementInterface;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -17,16 +18,7 @@ class ProductInventoryService
 
     public function __construct(Product $product)
     {
-        // NOTE: ハードコードしているのでファクトリーにしたい
-        if ($product->stock_management_type === 'FIFO') {
-            $this->stockManagement = new FifoStockManagement();
-        } elseif ($product->stock_management_type === 'LIFO') {
-            $this->stockManagement = new LifoStockManagement();
-        } else {
-            // いいね！例外を投げるのは良い
-            throw new \Exception('在庫管理タイプが不正です');
-        }
-        // TODO: 主キーを読み出すメソッドやが、laravelになかったっけ？
+        $this->stockManagement = StockManagementFactory::create($product->stock_management_type);
         $this->productInventoryList = $this->getProductInventories($product->id);
     }
     /**

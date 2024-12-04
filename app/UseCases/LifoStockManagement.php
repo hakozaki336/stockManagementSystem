@@ -5,7 +5,7 @@ namespace App\UseCases;
 use App\Exceptions\OutOfStockException;
 use Illuminate\Database\Eloquent\Collection;
 
-class LifoStockManagement
+class LifoStockManagement implements StockManagementInterface
 {
     /**
      * 在庫を割り当て済みにする
