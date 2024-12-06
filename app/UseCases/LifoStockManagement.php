@@ -10,7 +10,7 @@ class LifoStockManagement implements StockManagementInterface
     /**
      * 在庫を割り当て済みにする
      */
-    public function reduceStock(Collection $productInventoryList, int $count): void
+    public function dispatchStock(Collection $productInventoryList, int $count): void
     {
         // 作成日を基準にして昇順にソート
         $productInventoryList = $productInventoryList->sortBy('created_at', SORT_REGULAR, true);
@@ -37,7 +37,7 @@ class LifoStockManagement implements StockManagementInterface
     /**
      * 在庫を非割り当てにする
      */
-    public function increaseStock(Collection $productInventoryList, int $count): void
+    public function undispatchStock(Collection $productInventoryList, int $count): void
     {
         // 作成日を基準にして昇順にソート
         $productInventoryList = $productInventoryList->sortBy('created_at', SORT_REGULAR, false);

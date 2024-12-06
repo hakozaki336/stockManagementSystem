@@ -70,8 +70,8 @@ class ProductInventoryService
     /**
      * カウント数だけ,productInventoryを割り当て済みにする
      */
-    public function reduceStock(int $count): void
+    public function dispatchStock(int $count): void
     {
-        $this->stockManagement->reduceStock($this->productInventoryList, $count);
+        $this->stockManagement->dispatchStock($this->productInventoryList, $count);
     }
 }
