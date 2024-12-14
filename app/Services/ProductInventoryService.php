@@ -2,11 +2,25 @@
 
 namespace App\Services;
 
+use App\Models\Product;
 use App\Models\ProductInventory;
+use App\UseCases\FifoStockManagement;
+use App\UseCases\LifoStockManagement;
+use App\UseCases\StockManagementFactory;
+use App\UseCases\StockManagementInterface;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 class ProductInventoryService
 {
+    private StockManagementInterface $stockManagement;
+    private Collection $productInventoryList;
+
+    public function __construct(Product $product)
+    {
+        $this->stockManagement = StockManagementFactory::create($product->stock_management_type);
+        $this->productInventoryList = $this->getProductInventories($product->id);
+    }
     /**
      * ページネーションされたProductInventoriesを取得する
      */
@@ -43,5 +57,29 @@ class ProductInventoryService
     public function update(ProductInventory $productInventory, array $productInventoryParam): void
     {
         $productInventory->update($productInventoryParam);
+    }
+
+    /**
+     * productに紐づく複数のproductInventoryを取得する
+     */
+    private function getProductInventories(int $product_id): Collection
+    {
+        return ProductInventory::where('product_id', $product_id)->get();
+    }
+
+    /**
+     * カウント数だけ,productInventoryを割り当て済みにする
+     */
+    public function dispatchStock(int $count): void
+    {
+        $this->stockManagement->dispatchStock($this->productInventoryList, $count);
+    }
+
+    /**
+     * カウント数だけ,productInventoryを非割り当てにする
+     */
+    public function undispatchStock(int $count): void
+    {
+        $this->stockManagement->undispatchStock($this->productInventoryList, $count);
     }
 }
