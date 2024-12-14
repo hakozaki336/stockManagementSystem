@@ -28,10 +28,11 @@ class OrderService
     {
         DB::transaction(function () use ($order) {
             // TODO: DIできないか検討する
-            $product = new ProductService($order->product_id);
-            $product->increaseStock($order->order_count);
+            $product = new ProductService($order['product_id']);
+            $productInventory = new ProductInventoryService($product->getProduct());
 
             $order->delete();
+            $productInventory->undispatchStock($order['order_count']);
         });
     }
 

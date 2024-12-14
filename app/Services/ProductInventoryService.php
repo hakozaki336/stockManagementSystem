@@ -74,4 +74,12 @@ class ProductInventoryService
     {
         $this->stockManagement->dispatchStock($this->productInventoryList, $count);
     }
+
+    /**
+     * カウント数だけ,productInventoryを非割り当てにする
+     */
+    public function undispatchStock(int $count): void
+    {
+        $this->stockManagement->undispatchStock($this->productInventoryList, $count);
+    }
 }

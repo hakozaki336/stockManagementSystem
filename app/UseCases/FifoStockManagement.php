@@ -15,8 +15,7 @@ class FifoStockManagement implements StockManagementInterface
         // 作成日を基準にして降順にソート
         $productInventoryList = $productInventoryList->sortBy('created_at', SORT_REGULAR, false);
 
-        $assignedCount = 0;
-        // カウント分割り当て済みにする
+        $unassignedCount = 0;
         foreach ($productInventoryList as $productInventory) {
             if ($count <= 0) {
                 break;
@@ -25,12 +24,12 @@ class FifoStockManagement implements StockManagementInterface
             if ($productInventory->dispatched === false) {
                 $productInventory->dispatched = true;
                 $productInventory->save();
-                $assignedCount++;
+                $unassignedCount++;
                 $count--;
             }
         }
 
-        if ($assignedCount < $count) {
+        if ($unassignedCount === $count) {
             throw new OutOfStockException();
         }
     }
@@ -44,7 +43,6 @@ class FifoStockManagement implements StockManagementInterface
         $productInventoryList = $productInventoryList->sortBy('created_at', SORT_REGULAR, true);
 
         $assignedCount = 0;
-        // カウント分非割り当てにする
         foreach ($productInventoryList as $productInventory) {
             if ($count <= 0) {
                 break;
