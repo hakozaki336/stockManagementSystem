@@ -2,9 +2,10 @@
 
 namespace App\Services;
 
-use App\Exceptions\StockNotAvailableException;
+use App\Exceptions\OutOfStockException;
 use App\Models\Product;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Log;
 
 class ProductService
 {
@@ -21,8 +22,11 @@ class ProductService
      */
     public static function getPaginatedProducts(int $perPage): LengthAwarePaginator
     {
-        // TODO: リポジトリを使ってみるのも良いかもしれない
-        $paginatedProducts = Product::paginate($perPage);
+        $paginatedProducts = Product::with(['productInventories' => function ($query) {
+            $query->where('dispatched', false);
+        }])->paginate($perPage);
+
+        Log::info($paginatedProducts);
 
         return $paginatedProducts;
     }
@@ -52,7 +56,7 @@ class ProductService
     private function checkStock(int $count): void
     {
         if ($this->product->stock < $count) {
-            throw new StockNotAvailableException('在庫が足りません');
+            throw new OutOfStockException('在庫が足りません');
         }
     }
 

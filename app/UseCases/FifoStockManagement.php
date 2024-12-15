@@ -3,7 +3,9 @@
 namespace App\UseCases;
 
 use App\Exceptions\OutOfStockException;
+use App\Exceptions\StockLogicException;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Log;
 
 class FifoStockManagement implements StockManagementInterface
 {
@@ -15,7 +17,6 @@ class FifoStockManagement implements StockManagementInterface
         // 作成日を基準にして降順にソート
         $productInventoryList = $productInventoryList->sortBy('created_at', SORT_REGULAR, false);
 
-        $unassignedCount = 0;
         foreach ($productInventoryList as $productInventory) {
             if ($count <= 0) {
                 break;
@@ -24,12 +25,11 @@ class FifoStockManagement implements StockManagementInterface
             if ($productInventory->dispatched === false) {
                 $productInventory->dispatched = true;
                 $productInventory->save();
-                $unassignedCount++;
                 $count--;
             }
         }
 
-        if ($unassignedCount === $count) {
+        if ($count > 0) {
             throw new OutOfStockException();
         }
     }
@@ -42,7 +42,6 @@ class FifoStockManagement implements StockManagementInterface
         // 作成日を基準にして降順にソート
         $productInventoryList = $productInventoryList->sortBy('created_at', SORT_REGULAR, true);
 
-        $assignedCount = 0;
         foreach ($productInventoryList as $productInventory) {
             if ($count <= 0) {
                 break;
@@ -51,13 +50,12 @@ class FifoStockManagement implements StockManagementInterface
             if ($productInventory->dispatched === true) {
                 $productInventory->dispatched = false;
                 $productInventory->save();
-                $assignedCount++;
                 $count--;
             }
         }
 
-        if ($assignedCount < $count) {
-            throw new OutOfStockException();
+        if ($count > 0) {
+            throw new StockLogicException();
         }
     }
 }
