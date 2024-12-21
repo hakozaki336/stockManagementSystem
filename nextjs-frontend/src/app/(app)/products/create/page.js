@@ -10,21 +10,19 @@ const Create = () => {
     const [errorMessages, setErrorMessages] = useState('');
     const [name, setName] = useState('');
     const [price, setPrice] = useState(0);
-    const [stock, setStock] = useState(0);
     const [area, setArea] = useState('');
     const [stockManagemntType, setStockManagemntType] = useState('');
 
-    const shouldDisableSubmitButton = (name, price, stock, area, stockManagemntType) => {
+    const shouldDisableSubmitButton = (name, price, area, stockManagemntType) => {
         const isCompanyEmpty = !name;
         const isProductEmpty = !price;
-        const isStockInvalid = stock === '' || parseInt(stock) < 1;
         const isAreaEmpty = !area;
         const isStockManagemntTypeEmpty = !stockManagemntType;
 
-        return (isCompanyEmpty || isProductEmpty || isStockInvalid || isAreaEmpty || isStockManagemntTypeEmpty);
+        return (isCompanyEmpty || isProductEmpty || isAreaEmpty || isStockManagemntTypeEmpty);
     }
 
-    const isButtonDisabled = shouldDisableSubmitButton(name, price, stock, area, stockManagemntType);
+    const isButtonDisabled = shouldDisableSubmitButton(name, price, area, stockManagemntType);
 
     const changeName = (event) => {
         setName(event.target.value);
@@ -33,11 +31,6 @@ const Create = () => {
 
     const changePrice = (event) => {
         setPrice(event.target.value);
-        shouldDisableSubmitButton();
-    }
-
-    const changeStock = (event) => {
-        setStock(event.target.value);
         shouldDisableSubmitButton();
     }
 
@@ -57,7 +50,6 @@ const Create = () => {
                 {
                     name: name,
                     price: price,
-                    stock: stock,
                     area: area,
                     stock_management_type: stockManagemntType,
                 }
@@ -89,14 +81,6 @@ const Create = () => {
                     <input type="number" name="price"
                         className="w-64"
                         onChange={changePrice}
-                        min="1"
-                    />
-                </div>
-                <div className="flex m-3">
-                    <label className="text-xl mr-3">在庫数　　　:</label>
-                    <input type="number" name="price"
-                        className="w-64"
-                        onChange={changeStock}
                         min="1"
                     />
                 </div>

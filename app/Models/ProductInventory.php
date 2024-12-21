@@ -17,6 +17,10 @@ class ProductInventory extends Model
         'dispatched',
     ];
 
+    protected $casts = [
+        'dispatched' => 'boolean',
+    ];
+
     /**
      * @return BelongsTo<Product>
      */

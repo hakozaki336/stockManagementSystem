@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Exceptions\StockNotAvailableException;
+use App\Exceptions\OutOfStockException;
 use App\Http\Requests\OrderStoreRequest;
 use App\Http\Requests\OrderUpdateReqeust;
 use App\Http\Resources\OrderResource;
@@ -50,8 +50,8 @@ class OrderController extends Controller
     {
         try {
             $this->orderService->store($request->validated());
-        } catch (StockNotAvailableException) {
-            return response()->json(['message' => '商品の在庫が足りません'], 400);
+        } catch (OutOfStockException $e) {
+            return response()->json(['message' => $e->getMessage()], 400);
         } catch (Exception) {
             return response()->json(['message' => 'サーバー側でエラーが発生しました'], 500);
         }
@@ -76,8 +76,8 @@ class OrderController extends Controller
 
         try {
             $this->orderService->update($order, $updateParams);
-        } catch (StockNotAvailableException) {
-            return response()->json(['message' => '商品の在庫が足りません'], 400);
+        } catch (OutOfStockException $e) {
+            return response()->json(['message' => $e->getMessage()], 400);
         } catch (ModelNotFoundException) {
             return response()->json(['message' => '指定されたIDのデータが存在しません'], 404);
         } catch (Exception) {
