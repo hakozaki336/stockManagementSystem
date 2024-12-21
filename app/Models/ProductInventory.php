@@ -14,11 +14,7 @@ class ProductInventory extends Model
         'serial_number',
         'location',
         'expiration_date',
-        'dispatched',
-    ];
-
-    protected $casts = [
-        'dispatched' => 'boolean',
+        'order_id',
     ];
 
     /**

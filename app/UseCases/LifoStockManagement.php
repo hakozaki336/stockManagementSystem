@@ -14,7 +14,7 @@ class LifoStockManagement implements StockManagementInterface
     /**
      * 在庫を割り当て済みにする
      */
-    public function dispatchStock(Collection $productInventoryList, int $count): void
+    public function dispatchStock(Collection $productInventoryList, int $count, int $orderId): void
     {
         // 作成日を基準にして昇順にソート
         $productInventoryList = $productInventoryList->sortBy('created_at', SORT_REGULAR, true);
@@ -24,8 +24,8 @@ class LifoStockManagement implements StockManagementInterface
                 break;
             }
 
-            if ($productInventory->dispatched === false) {
-                $productInventory->dispatched = true;
+            if ($productInventory->order_id === null) {
+                $productInventory->order_id = $orderId;
                 $productInventory->save();
                 $count--;
             }
@@ -39,9 +39,10 @@ class LifoStockManagement implements StockManagementInterface
     /**
      * 在庫を非割り当てにする
      */
-    public function undispatchStock(Collection $productInventoryList, int $count): void
+    public function undispatchStock(Collection $productInventoryList, int $count, int $orderId): void
     {
         // 作成日を基準にして昇順にソート
+        // NOTE: そもそもnullのみを取得すれば良いのでは？
         $productInventoryList = $productInventoryList->sortBy('created_at', SORT_REGULAR, false);
 
         foreach ($productInventoryList as $productInventory) {
@@ -49,8 +50,8 @@ class LifoStockManagement implements StockManagementInterface
                 break;
             }
 
-            if ($productInventory->dispatched === true) {
-                $productInventory->dispatched = false;
+            if ($productInventory->order_id === $orderId) {
+                $productInventory->order_id = null;
                 $productInventory->save();
                 $count--;
             }

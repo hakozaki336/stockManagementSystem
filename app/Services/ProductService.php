@@ -23,10 +23,8 @@ class ProductService
     public static function getPaginatedProducts(int $perPage): LengthAwarePaginator
     {
         $paginatedProducts = Product::with(['productInventories' => function ($query) {
-            $query->where('dispatched', false);
+            $query->where('order_id', null);
         }])->paginate($perPage);
-
-        Log::info($paginatedProducts);
 
         return $paginatedProducts;
     }
