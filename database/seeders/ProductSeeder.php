@@ -17,17 +17,20 @@ class ProductSeeder extends Seeder
             [
                 'name' => 'Product A',
                 'price' => 1000,
-                'stock' => 10,
+                'area' => 'A',
+                'stock_management_type' => 'FIFO',
             ],
             [
                 'name' => 'Product B',
                 'price' => 2000,
-                'stock' => 20,
+                'area' => 'B',
+                'stock_management_type' => 'FIFO',
             ],
             [
                 'name' => 'Product C',
                 'price' => 3000,
-                'stock' => 30,
+                'area' => 'C',
+                'stock_management_type' => 'LIFO',
             ],
         ];
 

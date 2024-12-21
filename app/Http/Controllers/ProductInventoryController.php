@@ -6,6 +6,7 @@ use App\Http\Requests\ProductInventoryStoreRequest;
 use App\Http\Requests\ProductInventoryUpdateRequest;
 use App\Http\Requests\ProductUpdateRequest;
 use App\Http\Resources\ProductInventoryResource;
+use App\Models\Product;
 use App\Models\ProductInventory;
 use App\Services\ProductInventoryService;
 use Exception;
@@ -15,13 +16,7 @@ use Illuminate\Http\Request;
 
 class ProductInventoryController extends Controller
 {
-    private $productInventoryService;
     private const PERPAGE = 5;
-
-    public function __construct()
-    {
-        $this->productInventoryService = new ProductInventoryService();
-    }
 
     /**
      * Display a listing of the resource.
@@ -29,7 +24,7 @@ class ProductInventoryController extends Controller
     public function index(int $product_id): JsonResponse
     {
         try {
-            $productInventories = $this->productInventoryService->getPaginatedProductInventories(self::PERPAGE, $product_id);
+            $productInventories = ProductInventoryService::getPaginatedProductInventories(self::PERPAGE, $product_id);
         } catch (Exception) {
             return response()->json(['message' => 'サーバー側でエラーが発生しました'], 500);
         }
@@ -50,7 +45,7 @@ class ProductInventoryController extends Controller
     public function store(ProductInventoryStoreRequest $request): JsonResponse
     {
         try {
-            $this->productInventoryService->store($request->all());
+            productInventoryService::store($request->all());
         } catch (ModelNotFoundException) {
             return response()->json(['message' => '指定されたIDのデータが存在しません'], 404);
         } catch (Exception) {
@@ -74,7 +69,7 @@ class ProductInventoryController extends Controller
     public function update(ProductInventoryUpdateRequest $request, ProductInventory $productInventory)
     {
         try {
-            $this->productInventoryService->update($productInventory, $request->all());
+            productInventoryService::update($productInventory, $request->all());
         } catch (ModelNotFoundException) {
             return response()->json(['message' => '指定されたIDのデータが存在しません'], 404);
         } catch (Exception) {
@@ -90,7 +85,7 @@ class ProductInventoryController extends Controller
     public function destroy(ProductInventory $productInventory)
     {
         try {
-            $this->productInventoryService->delete($productInventory);
+            productInventoryService::delete($productInventory);
         } catch (ModelNotFoundException) {
             return response()->json(['message' => '指定されたIDのデータが存在しません'], 404);
         } catch (Exception) {

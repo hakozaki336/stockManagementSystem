@@ -90,8 +90,8 @@ class ProductController extends Controller
             $productService->delete();
         } catch (ModelNotFoundException) {
             return response()->json(['message' => '指定された商品が見つかりませんでした'], 404);
-        } catch (Exception) {
-            return response()->json(['message' => 'サーバー側でエラーが発生しました'], 500);
+        } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 500);
         }
 
         return response()->json(null, 204);
