@@ -102,6 +102,7 @@ const Orders = () => {
                         <th>注文数</th>
                         <th>注文日</th>
                         <th>出荷・未出荷</th>
+                        <th>操作</th>
                         <th><button 
                                 className="bg-blue-500 hover:bg-blue-600 text-white font-medium px-3 py-1 mx-1 font-semibold rounded my-5"
                                 onClick={() => router.push(`/orders/create`)}
@@ -134,6 +135,12 @@ const Orders = () => {
                                         出荷
                                     </button>
                                 )}
+                            </td>
+                            <td>
+                                <button
+                                    onClick={() => router.push(`/orders/${order.id}/inventories`)}
+                                    className="bg-blue-500 hover:bg-blue-600 text-white font-medium px-3 py-1 my-2 mx-1 font-semibold rounded"
+                                >在庫一覧</button>
                             </td>
                             <td>
                                 <button

@@ -85,4 +85,21 @@ class ProductInventoryService
     {
         $this->stockManagement->undispatchStock($this->productInventoryList, $count, $orderId);
     }
+
+    /**
+     * productに紐づくproductInventoriesを取得する
+     */
+    public static function getPaginateProductInventoryByProducts(int $product_id): LengthAwarePaginator
+    {
+        return ProductInventory::where('product_id', $product_id)->paginate();
+    }
+
+    /**
+     * ordersに紐づくproductInventoriesを取得する
+     */
+    public static function getPaginateProductInventoryByOrders(int $order_id): LengthAwarePaginator
+    {
+        return ProductInventory::where('order_id', $order_id)->paginate();
+    }
+
 }

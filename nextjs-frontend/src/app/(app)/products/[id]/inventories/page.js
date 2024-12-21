@@ -12,7 +12,7 @@ const Inventories = ({ params }) => {
     const [previousPage, setPreviousPage] = useState('');
     const [currentPage, setCurrentPage] = useState('');
     const [errorMessages, setErrorMessages] = useState('');
-    const defaultUrl = `http://localhost:8000/api/product_inventories/${params.id}/all`;
+    const defaultUrl = `http://localhost:8000/api/products/${params.id}/inventories`;
 
     const fetchInventories = async (url) => {
         if (!url) {
