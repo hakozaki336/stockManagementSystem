@@ -31,7 +31,6 @@ class ProductInventoryService
         // TODO: リポジトリを使ってみるのも良いかもしれない
         $paginatedProductInventory = ProductInventory::with('product')
             ->where('product_id', $product_id)
-            ->orderBy('dispatched', 'asc')
             ->paginate($perPage);
 
         return $paginatedProductInventory;
@@ -74,16 +73,16 @@ class ProductInventoryService
     /**
      * カウント数だけ,productInventoryを割り当て済みにする
      */
-    public function dispatchStock(int $count): void
+    public function dispatchStock(int $count, int $orderId): void
     {
-        $this->stockManagement->dispatchStock($this->productInventoryList, $count);
+        $this->stockManagement->dispatchStock($this->productInventoryList, $count , $orderId);
     }
 
     /**
      * カウント数だけ,productInventoryを非割り当てにする
      */
-    public function undispatchStock(int $count): void
+    public function undispatchStock(int $count, int $orderId): void
     {
-        $this->stockManagement->undispatchStock($this->productInventoryList, $count);
+        $this->stockManagement->undispatchStock($this->productInventoryList, $count, $orderId);
     }
 }

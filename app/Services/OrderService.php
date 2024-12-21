@@ -31,8 +31,8 @@ class OrderService
             $product = new ProductService($order['product_id']);
             $productInventory = new ProductInventoryService($product->getProduct());
 
+            $productInventory->undispatchStock($order['order_count'], $order->id);
             $order->delete();
-            $productInventory->undispatchStock($order['order_count']);
         });
     }
 
@@ -44,9 +44,10 @@ class OrderService
         DB::transaction(function () use ($orderParam) {
             $product = new ProductService($orderParam['product_id']);
             $productInventory = new ProductInventoryService($product->getProduct());
-            $productInventory->dispatchStock($orderParam['order_count']);
 
-            Order::create($orderParam);
+            $order = Order::create($orderParam);
+            $productInventory->dispatchStock($orderParam['order_count'], $order->id);
+
         });
     }
 

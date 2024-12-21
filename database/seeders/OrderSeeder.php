@@ -18,19 +18,19 @@ class OrderSeeder extends Seeder
                 'product_id' => 1,
                 'company_id' => 1,
                 'order_count' => 1,
-                'dispatched' => false,
+                'order_id' => null,
             ],
             [
                 'product_id' => 2,
                 'company_id' => 2,
                 'order_count' => 1,
-                'dispatched' => false,
+                'order_id' => null,
             ],
             [
                 'product_id' => 3,
                 'company_id' => 3,
                 'order_count' => 1,
-                'dispatched' => false,
+                'order_id' => null,
             ],
         ];
 
