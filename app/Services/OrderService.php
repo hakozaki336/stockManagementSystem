@@ -49,22 +49,6 @@ class OrderService
     }
 
     /**
-     * Orderを更新する
-     */
-    public function update(Order $order, array $orderParam): void
-    {
-        $newProductService = new ProductService($orderParam['product_id']);
-        $oldProductService = new ProductService($order->product_id);
-        
-        DB::transaction(function () use ($order, $orderParam, $newProductService, $oldProductService) {
-            $newProductService->increaseStock($order->order_count);
-            $oldProductService->decreaseStock($orderParam['order_count']);
-
-            $order->update($orderParam);
-        });
-    }
-
-    /**
      * Order.dispatchを割り当て済みにする
      */
     public function dispatch(Order $order): void

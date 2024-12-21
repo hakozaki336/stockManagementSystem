@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Exceptions\StockNotAvailableException;
 use App\Http\Requests\OrderStoreRequest;
-use App\Http\Requests\OrderUpdateReqeust;
 use App\Http\Resources\OrderResource;
 use App\Models\Order;
 use App\Services\OrderService;
@@ -65,27 +64,6 @@ class OrderController extends Controller
     public function show(Order $order): JsonResponse
     {
         return response()->json(new OrderResource($order));
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(OrderUpdateReqeust $request, Order $order): JsonResponse
-    {
-        $updateParams = $request->validated();
-
-        try {
-            $this->orderService->update($order, $updateParams);
-        } catch (StockNotAvailableException) {
-            return response()->json(['message' => '商品の在庫が足りません'], 400);
-        } catch (ModelNotFoundException) {
-            return response()->json(['message' => '指定されたIDのデータが存在しません'], 404);
-        } catch (Exception) {
-            return response()->json(['message' => 'サーバー側でエラーが発生しました'], 500);
-        }
-
-        // 更新したデータを返す
-        return response()->json([], 204);
     }
 
     /**
