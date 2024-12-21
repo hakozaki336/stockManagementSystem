@@ -18,55 +18,16 @@ class OrderSeeder extends Seeder
                 'product_id' => 1,
                 'company_id' => 1,
                 'order_count' => 1,
-                'dispatched' => false,
-            ],
-            [
-                'product_id' => 1,
-                'company_id' => 1,
-                'order_count' => 1,
-                'dispatched' => false,
-            ],
-            [
-                'product_id' => 1,
-                'company_id' => 1,
-                'order_count' => 1,
-                'dispatched' => false,
             ],
             [
                 'product_id' => 2,
                 'company_id' => 2,
                 'order_count' => 1,
-                'dispatched' => false,
             ],
             [
-                'product_id' => 2,
-                'company_id' => 2,
+                'product_id' => 3,
+                'company_id' => 3,
                 'order_count' => 1,
-                'dispatched' => false,
-            ],
-            [
-                'product_id' => 2,
-                'company_id' => 2,
-                'order_count' => 1,
-                'dispatched' => false,
-            ],
-            [
-                'product_id' => 3,
-                'company_id' => 3,
-                'order_count' => 3,
-                'dispatched' => false,
-            ],
-            [
-                'product_id' => 3,
-                'company_id' => 3,
-                'order_count' => 3,
-                'dispatched' => false,
-            ],
-            [
-                'product_id' => 3,
-                'company_id' => 3,
-                'order_count' => 3,
-                'dispatched' => false,
             ],
         ];
 

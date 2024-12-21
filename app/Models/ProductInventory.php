@@ -14,7 +14,7 @@ class ProductInventory extends Model
         'serial_number',
         'location',
         'expiration_date',
-        'dispatched',
+        'order_id',
     ];
 
     /**

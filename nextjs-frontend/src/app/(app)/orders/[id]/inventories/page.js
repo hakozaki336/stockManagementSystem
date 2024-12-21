@@ -12,7 +12,7 @@ const Inventories = ({ params }) => {
     const [previousPage, setPreviousPage] = useState('');
     const [currentPage, setCurrentPage] = useState('');
     const [errorMessages, setErrorMessages] = useState('');
-    const defaultUrl = `http://localhost:8000/api/products/${params.id}/inventories`;
+    const defaultUrl = `http://localhost:8000/api/orders/${params.id}/inventories`;
 
     const fetchInventories = async (url) => {
         if (!url) {
@@ -74,18 +74,11 @@ const Inventories = ({ params }) => {
             <table className="min-w-full mt-10">
                 <thead className="">
                     <tr className="">
-                        <th>ID</th>
+                        <th className='py-3 mx-1'>ID</th>
                         <th>シリアルナンバー</th>
                         <th>保管場所</th>
                         <th>有効期限</th>
                         <th>割り当て済み</th>
-                        <th><button 
-                                className="bg-blue-500 hover:bg-blue-600 text-white font-medium px-3 py-1 mx-1 font-semibold rounded my-5"
-                                onClick={() => router.push(`inventories/create`)}
-                            >
-                                新規登録
-                            </button>
-                        </th>
                     </tr>
                 </thead>
                 <tbody className="bg-white">
@@ -96,16 +89,6 @@ const Inventories = ({ params }) => {
                             <td>{inventory.location}</td>
                             <td>{inventory.expiration_date}</td>
                             <td>{inventory.dispatched ? '割り当て済み' : '未割り当て'}</td>
-                            <td>
-                                <button
-                                    onClick={() => router.push(`inventories/edit/${inventory.id}`)}
-                                    className="bg-blue-500 hover:bg-blue-600 text-white font-medium px-3 py-1 my-2 mx-1 font-semibold rounded"
-                                >編集</button>
-                                <button
-                                    onClick={() => clickDelete(inventory.id)}
-                                    className="bg-red-500 hover:bg-red-600 text-white font-medium px-3 py-1 my-2 mx-1 font-semibold rounded"
-                                >削除</button>
-                            </td>
                         </tr>
                     ))}
                 </tbody>

@@ -28,9 +28,10 @@ class OrderService
     {
         DB::transaction(function () use ($order) {
             // TODO: DIできないか検討する
-            $product = new ProductService($order->product_id);
-            $product->increaseStock($order->order_count);
+            $product = new ProductService($order['product_id']);
+            $productInventory = new ProductInventoryService($product->getProduct());
 
+            $productInventory->undispatchStock($order['order_count'], $order->id);
             $order->delete();
         });
     }
@@ -42,9 +43,11 @@ class OrderService
     {
         DB::transaction(function () use ($orderParam) {
             $product = new ProductService($orderParam['product_id']);
-            $product->decreaseStock($orderParam['order_count']);
-    
-            Order::create($orderParam);
+            $productInventory = new ProductInventoryService($product->getProduct());
+
+            $order = Order::create($orderParam);
+            $productInventory->dispatchStock($orderParam['order_count'], $order->id);
+
         });
     }
 

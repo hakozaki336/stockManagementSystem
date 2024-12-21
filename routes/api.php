@@ -19,4 +19,5 @@ Route::patch('/orders/{order}/dispatch', [OrderController::class, 'dispatch']);
 Route::patch('/orders/{order}/undispatch', [OrderController::class, 'undispatch']);
 Route::apiResource('companies', CompanyController::class);
 Route::apiResource('product_inventories', ProductInventoryController::class);
-Route::get('product_inventories/{product_id}/all', [ProductInventoryController::class, 'index']);
+Route::get('products/{product_id}/inventories', [ProductInventoryController::class, 'byProduct']);
+Route::get('orders/{order_id}/inventories', [ProductInventoryController::class, 'byOrder']);
