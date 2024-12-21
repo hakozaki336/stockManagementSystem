@@ -16,15 +16,17 @@ class ProductInventoryService
     private StockManagementInterface $stockManagement;
     private Collection $productInventoryList;
 
+    // NOTE: 無理やりコンストラクタにリストをぶち込んでいるが、一部メソッドでは使われていないのでゴミコードになっている
     public function __construct(Product $product)
     {
         $this->stockManagement = StockManagementFactory::create($product->stock_management_type);
         $this->productInventoryList = $this->getProductInventories($product->id);
     }
+
     /**
      * ページネーションされたProductInventoriesを取得する
      */
-    public function getPaginatedProductInventories(int $perPage, int $product_id): LengthAwarePaginator
+    public static function getPaginatedProductInventories(int $perPage, int $product_id): LengthAwarePaginator
     {
         // TODO: リポジトリを使ってみるのも良いかもしれない
         $paginatedProductInventory = ProductInventory::with('product')
@@ -37,8 +39,9 @@ class ProductInventoryService
 
     /**
      * ProductInventoryを削除する
+     * NOTE: 良くないと思うが、staticメソッドにしている
      */
-    public function delete(ProductInventory $productInventory): void
+    public static function delete(ProductInventory $productInventory): void
     {
         $productInventory->delete();
     }
@@ -46,15 +49,16 @@ class ProductInventoryService
     /**
      * ProductInventoryを作成する
      */
-    public function store(array $productInventoryParam): void
+    public static function store(array $productInventoryParam): void
     {
         ProductInventory::create($productInventoryParam);
     }
 
     /**
      * ProductInventoryを更新する
+     * NOTE: 良くないと思うが、staticメソッドにしている
      */
-    public function update(ProductInventory $productInventory, array $productInventoryParam): void
+    public static function update(ProductInventory $productInventory, array $productInventoryParam): void
     {
         $productInventory->update($productInventoryParam);
     }
