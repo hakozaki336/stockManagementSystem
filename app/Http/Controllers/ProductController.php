@@ -53,6 +53,7 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      */
+  
     public function update(ProductUpdateRequest $request, int $id): Response
     {
         $productService = new ProductService($id);
@@ -64,6 +65,7 @@ class ProductController extends Controller
     /**
      * Remove the specified resource from storage.
      */
+
     public function destroy(int $id): Response | JsonResponse
     {
         $productService = new ProductService($id);
