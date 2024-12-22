@@ -6,9 +6,8 @@ use App\Http\Requests\ProductStoreRequest;
 use App\Http\Requests\ProductUpdateRequest;
 use App\Http\Resources\ProductResource;
 use App\Services\ProductService;
-use Exception;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
 
 class ProductController extends Controller
 {
@@ -17,11 +16,7 @@ class ProductController extends Controller
      */
     public function index(): JsonResponse
     {
-        try {
-            $products = ProductService::getPaginatedProducts(5);
-        } catch (Exception) {
-            return response()->json(['message' => 'サーバー側でエラーが発生しました'], 500);
-        }
+        $products = ProductService::getPaginatedProducts(5);
 
         return response()->json([
             'data' => ProductResource::collection($products),
@@ -36,64 +31,42 @@ class ProductController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(ProductStoreRequest $request)
+    public function store(ProductStoreRequest $request): Response
     {
-        try {
-            ProductService::create($request->validated());
-        } catch (Exception) {
-            return response()->json(['message' => 'サーバー側でエラーが発生しました'], 500);
-        }
+        ProductService::create($request->validated());
 
-        return response()->json(null, 201);
+        return response()->noContent(Response::HTTP_CREATED);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(int $id)
+    public function show(int $id): ProductResource
     {
-        try {
-            $product = new ProductService($id);
-        } catch (ModelNotFoundException) {
-            return response()->json(['message' => '指定された商品が見つかりませんでした'], 404);
-        } catch (Exception) {
-            return response()->json(['message' => 'サーバー側でエラーが発生しました'], 500);
-        }
+        $product = new ProductService($id);
 
-        return response()->json(new ProductResource($product->getProduct()));
+        return new ProductResource($product);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(ProductUpdateRequest $request, string $id)
+    public function update(ProductUpdateRequest $request, string $id): Response
     {
-        try {
-            $productService = new ProductService($id);
-            $productService->update($request->all());
-        } catch (ModelNotFoundException) {
-            return response()->json(['message' => '指定された商品が見つかりませんでした'], 404);
-        } catch (Exception) {
-            return response()->json(['message' => 'サーバー側でエラーが発生しました'], 500);
-        }
+        $productService = new ProductService($id);
+        $productService->update($request->all());
 
-        return response()->json(null, 204);
+        return response()->noContent();
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(int $id)
+    public function destroy(int $id): Response
     {
-        try {
-            $productService = new ProductService($id);
-            $productService->delete();
-        } catch (ModelNotFoundException) {
-            return response()->json(['message' => '指定された商品が見つかりませんでした'], 404);
-        } catch (Exception $e) {
-            return response()->json(['message' => $e->getMessage()], 500);
-        }
+        $productService = new ProductService($id);
+        $productService->delete();
 
-        return response()->json(null, 204);
+        return response()->noContent();
     }
 }

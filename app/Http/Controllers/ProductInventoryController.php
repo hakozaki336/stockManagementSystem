@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ProductInventoryStoreRequest;
 use App\Http\Requests\ProductInventoryUpdateRequest;
-use App\Http\Requests\ProductUpdateRequest;
 use App\Http\Resources\ProductInventoryResource;
 use App\Models\Product;
 use App\Models\ProductInventory;
@@ -13,6 +12,7 @@ use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class ProductInventoryController extends Controller
 {
@@ -23,11 +23,7 @@ class ProductInventoryController extends Controller
      */
     public function index(int $product_id): JsonResponse
     {
-        try {
-            $productInventories = ProductInventoryService::getPaginatedProductInventories(self::PERPAGE, $product_id);
-        } catch (Exception) {
-            return response()->json(['message' => 'サーバー側でエラーが発生しました'], 500);
-        }
+        $productInventories = ProductInventoryService::getPaginatedProductInventories(self::PERPAGE, $product_id);
 
         return response()->json([
             'data' => ProductInventoryResource::collection($productInventories),
@@ -42,68 +38,44 @@ class ProductInventoryController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(ProductInventoryStoreRequest $request): JsonResponse
+    public function store(ProductInventoryStoreRequest $request): Response
     {
-        try {
-            productInventoryService::store($request->all());
-        } catch (ModelNotFoundException) {
-            return response()->json(['message' => '指定されたIDのデータが存在しません'], 404);
-        } catch (Exception) {
-            return response()->json(['message' => 'サーバー側でエラーが発生しました'], 500);
-        }
+        productInventoryService::store($request->all());
 
-        return response()->json(null, 201);
+        return response()->noContent(Response::HTTP_CREATED);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(ProductInventory $productInventory)
+    public function show(ProductInventory $productInventory): ProductInventoryResource
     {
-        return response()->json(new ProductInventoryResource($productInventory));
+        return new ProductInventoryResource($productInventory);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(ProductInventoryUpdateRequest $request, ProductInventory $productInventory)
+    public function update(ProductInventoryUpdateRequest $request, ProductInventory $productInventory): Response
     {
-        try {
-            productInventoryService::update($productInventory, $request->all());
-        } catch (ModelNotFoundException) {
-            return response()->json(['message' => '指定されたIDのデータが存在しません'], 404);
-        } catch (Exception) {
-            return response()->json(['message' => 'サーバー側でエラーが発生しました'], 500);
-        }
+        productInventoryService::update($productInventory, $request->all());
 
-        return response()->json(null, 204);
+        return response()->noContent();
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(ProductInventory $productInventory)
+    public function destroy(ProductInventory $productInventory): Response
     {
-        try {
-            productInventoryService::delete($productInventory);
-        } catch (ModelNotFoundException) {
-            return response()->json(['message' => '指定されたIDのデータが存在しません'], 404);
-        } catch (Exception) {
-            return response()->json(['message' => 'サーバー側でエラーが発生しました'], 500);
-        }
+        productInventoryService::delete($productInventory);
 
-        return response()->json(null, 204);
+        return response()->noContent();
     }
 
     public function byProduct(int $product_id): JsonResponse
     {
-        try {
-            $productInventories = ProductInventoryService::getPaginateProductInventoryByProducts($product_id);
-        } catch (ModelNotFoundException) {
-            return response()->json(['message' => '指定されたデータが存在しません'], 404);
-        } catch (Exception) {
-            return response()->json(['message' => 'サーバー側でエラーが発生しました'], 500);
-        }
+        $productInventories = ProductInventoryService::getPaginateProductInventoryByProducts($product_id);
 
         return response()->json([
             'data' => ProductInventoryResource::collection($productInventories),
@@ -112,17 +84,12 @@ class ProductInventoryController extends Controller
                 'next' => $productInventories->nextPageUrl(),
                 'current' => $productInventories->url($productInventories->currentPage()),
             ],
-        ]);    }
+        ]);
+    }
 
     public function byOrder(int $order_id): JsonResponse
     {
-        try {
-            $productInventories = ProductInventoryService::getPaginateProductInventoryByOrders($order_id);
-        } catch (ModelNotFoundException) {
-            return response()->json(['message' => '指定されたデータが存在しません'], 404);
-        } catch (Exception) {
-            return response()->json(['message' => 'サーバー側でエラーが発生しました'], 500);
-        }
+        $productInventories = ProductInventoryService::getPaginateProductInventoryByOrders($order_id);
 
         return response()->json([
             'data' => ProductInventoryResource::collection($productInventories),

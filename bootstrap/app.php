@@ -6,6 +6,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Support\Facades\Request;
+use Illuminate\Http\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -30,18 +31,25 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withExceptions(function (Exceptions $exceptions) {
         $exceptions->render(function (ModelNotFoundException $e, Request $request) {
             return response()->json([
-                'message' => '指定されたレコードが見つかりません。'
-            ], 404);
+                'message' => '指定されたリソースが見つかりません。'
+            ], Response::HTTP_NOT_FOUND);
         });
+        // NOTE: このエクセプションはモデルバインディング失敗時にもキャッチする
         $exceptions->render(function (NotFoundHttpException $e, $request) {
             return response()->json([
-                'message' => '指定されたレコードが見つかりません。',
-            ], 404);
+                'message' => '指定されたリソースが見つかりません。',
+            ], Response::HTTP_NOT_FOUND);
         });
 
         $exceptions->render(function (AccessDeniedHttpException $e, $request) {
             return response()->json([
                 'message' => 'このアクションは許可されていません。',
-            ], 403);
+            ], Response::HTTP_FORBIDDEN);
+        });
+
+        $exceptions->render(function (Exception $e, $request) {
+            return response()->json([
+                'message' => 'サーバー側でエラーが発生しました'
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
         });
     })->create();
