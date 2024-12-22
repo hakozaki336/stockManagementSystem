@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\CompanyHasOrdersException;
 use App\Http\Requests\CompanyStoreRequest;
 use App\Http\Requests\CompanyUpdateRequest;
 use App\Http\Resources\CompanyResource;
 use App\Models\Company;
 use App\Services\CompanyService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 
 class CompanyController extends Controller
@@ -68,9 +70,13 @@ class CompanyController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Company $company): Response
+    public function destroy(Company $company): Response | JsonResponse
     {
-        $this->companyService->delete($company);
+        try {
+            $this->companyService->delete($company);
+        } catch (CompanyHasOrdersException $e) {
+            return response()->json(['message' => $e->getMessage()], Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
 
         return response()->noContent();
     }

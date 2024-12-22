@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\ProductHasOrdersException;
 use App\Http\Requests\ProductStoreRequest;
 use App\Http\Requests\ProductUpdateRequest;
 use App\Http\Resources\ProductResource;
 use App\Services\ProductService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Log;
 
 class ProductController extends Controller
 {
@@ -45,13 +47,13 @@ class ProductController extends Controller
     {
         $product = new ProductService($id);
 
-        return new ProductResource($product);
+        return new ProductResource($product->getProduct());
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(ProductUpdateRequest $request, string $id): Response
+    public function update(ProductUpdateRequest $request, int $id): Response
     {
         $productService = new ProductService($id);
         $productService->update($request->all());
@@ -62,10 +64,14 @@ class ProductController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(int $id): Response
+    public function destroy(int $id): Response | JsonResponse
     {
         $productService = new ProductService($id);
-        $productService->delete();
+        try {
+            $productService->delete();
+        } catch (ProductHasOrdersException $e) {
+            return response()->json(['message' => $e->getMessage()], Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
 
         return response()->noContent();
     }

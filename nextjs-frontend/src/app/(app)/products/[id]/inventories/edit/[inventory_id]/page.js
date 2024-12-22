@@ -76,7 +76,7 @@ const Edit = ({ params }) => {
             {errorMessages && (
                 <div className="bg-red-500 text-white text-sm font-bold p-2 rounded">{errorMessages}</div>
             )}
-            <h1 className="p-3 text-2xl font-semibold border-b">会社を編集してください</h1>
+            <h1 className="p-3 text-2xl font-semibold border-b">在庫を編集してください</h1>
             <div className="px-3 ">
                 <div className="my-5">
                     <div className="flex m-3">

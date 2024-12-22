@@ -49,7 +49,7 @@ return Application::configure(basePath: dirname(__DIR__))
 
         $exceptions->render(function (Exception $e, $request) {
             return response()->json([
-                'message' => 'サーバー側でエラーが発生しました'
+                'message' => $e->getMessage(),
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         });
     })->create();

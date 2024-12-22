@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Exceptions\OutOfStockException;
+use App\Exceptions\ProductHasOrdersException;
 use App\Models\Product;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Log;
@@ -60,6 +61,7 @@ class ProductService
 
     public function delete(): void
     {
+        $this->validateDomainRuleForDelete($this->product);
         $this->product->delete();
     }
 
@@ -71,5 +73,23 @@ class ProductService
     public function update(array $param): void
     {
         $this->product->update($param);
+    }
+
+    /**
+     * 削除のためのドメインルールを検証する
+     */
+    private function validateDomainRuleForDelete(Product $product): void
+    {
+        if (self::hasReferenceFromOrders($product)) {
+            throw new ProductHasOrdersException();
+        }
+    }
+
+    /**
+     * ordersから参照があるか
+     */
+    private function hasReferenceFromOrders(Product $product): bool
+    {
+        return $product->orders()->exists();
     }
 }
