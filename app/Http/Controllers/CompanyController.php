@@ -7,9 +7,7 @@ use App\Http\Requests\CompanyUpdateRequest;
 use App\Http\Resources\CompanyResource;
 use App\Models\Company;
 use App\Services\CompanyService;
-use Exception;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
 
 class CompanyController extends Controller
 {
@@ -24,12 +22,9 @@ class CompanyController extends Controller
      */
     public function index()
     {
-        try {
-            $companies = CompanyService::getPaginatedCompaneis(5);
-        } catch (Exception) {
-            return response()->json(['message' => 'サーバー側でエラーが発生しました'], 500);
-        }
+        $companies = CompanyService::getPaginatedCompaneis(5);
 
+        // MEMO: リソースを直接返さないのはaddtionalでリンク情報を追加するとprevとnextがnullにならないため
         return response()->json([
             'data' => CompanyResource::collection($companies),
             'links' => [
@@ -43,64 +38,40 @@ class CompanyController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(CompanyStoreRequest $request): JsonResponse
+    public function store(CompanyStoreRequest $request): Response
     {
-        try {
-            $this->companyService->create($request->validated());
-        } catch (ModelNotFoundException) {
-            return response()->json(['message' => '会社が見つかりません'], 404);
-        } catch (Exception) {
-            return response()->json(['message' => 'サーバー側でエラーが発生しました'], 500);
-        }
+        $this->companyService->create($request->validated());
 
-        return response()->json(null, 201);
+        return response()->noContent(Response::HTTP_CREATED);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(int $id): JsonResponse
+    public function show(int $id): CompanyResource
     {
-        try {
-            $company = $this->companyService->getCompany($id);
-        } catch (ModelNotFoundException) {
-            return response()->json(['message' => '会社が見つかりません'], 404);
-        } catch (Exception) {
-            return response()->json(['message' => 'サーバー側でエラーが発生しました'], 500);
-        }
+        $company = $this->companyService->getCompany($id);
 
-        return response()->json(new CompanyResource($company));
+        return new CompanyResource($company);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(CompanyUpdateRequest $request, Company $company): JsonResponse
+    public function update(CompanyUpdateRequest $request, Company $company): Response
     {
-        try {
-            $this->companyService->update($company, $request->validated());
-        } catch (ModelNotFoundException) {
-            return response()->json(['message' => '会社が見つかりません'], 404);
-        } catch (Exception) {
-            return response()->json(['message' => 'サーバー側でエラーが発生しました'], 500);
-        }
+        $this->companyService->update($company, $request->validated());
 
-        return response()->json(null, 204);
+        return response()->noContent();
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Company $company): JsonResponse
+    public function destroy(Company $company): Response
     {
-        try {
-            $this->companyService->delete($company);
-        } catch (ModelNotFoundException) {
-            return response()->json(['message' => '会社が見つかりません'], 404);
-        } catch (Exception) {
-            return response()->json(['message' => 'サーバー側でエラーが発生しました'], 500);
-        }
+        $this->companyService->delete($company);
 
-        return response()->json(null, 204);
+        return response()->noContent();
     }
 }

@@ -3,13 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Exceptions\OutOfStockException;
+use App\Exceptions\StockLogicException;
 use App\Http\Requests\OrderStoreRequest;
 use App\Http\Resources\OrderResource;
 use App\Models\Order;
 use App\Services\OrderService;
-use Exception;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
 
 class OrderController extends Controller
 {
@@ -25,11 +25,7 @@ class OrderController extends Controller
      */
     public function index(): JsonResponse
     {
-        try {
-            $paginatedOrders = $this->orderService->getPaginatedOrders(5);
-        } catch (Exception) {
-            return response()->json(['message' => 'サーバー側でエラーが発生しました'], 500);
-        }
+        $paginatedOrders = $this->orderService->getPaginatedOrders(5);
 
         return response()->json(
             [
@@ -45,66 +41,50 @@ class OrderController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(OrderStoreRequest $request): JsonResponse
+    public function store(OrderStoreRequest $request): Response
     {
         try {
             $this->orderService->store($request->validated());
         } catch (OutOfStockException $e) {
-            return response()->json(['message' => $e->getMessage()], 400);
-        } catch (Exception) {
-            return response()->json(['message' => 'サーバー側でエラーが発生しました'], 500);
+            return response()->json(['message' => $e->getMessage(), Response::HTTP_UNPROCESSABLE_ENTITY]);
         }
 
-        return response()->json(null, 201);
+        return response()->noContent(Response::HTTP_CREATED);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Order $order): JsonResponse
+    public function show(Order $order): OrderResource
     {
-        return response()->json(new OrderResource($order));
+        return new OrderResource($order);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Order $order): JsonResponse
+    public function destroy(Order $order): Response
     {
         try {
             $this->orderService->delete($order);
-        } catch (ModelNotFoundException) {
-            return response()->json(['message' => '指定されたIDのデータが存在しません'], 404);
-        } catch (Exception) {
-            return response()->json(['message' => 'サーバー側でエラーが発生しました'], 500);
+        } catch (StockLogicException $e) {
+            return response()->json(['message' => $e->getMessage(), Response::HTTP_UNPROCESSABLE_ENTITY]);
         }
 
-        return response()->json([], 204);
+        return response()->noContent();
     }
 
-    public function dispatch(Order $order): JsonResponse
+    public function dispatch(Order $order): Response
     {
-        try {
-            $this->orderService->dispatch($order);
-        } catch (ModelNotFoundException) {
-            return response()->json(['message' => '指定されたIDのデータが存在しません'], 404);
-        } catch (Exception $e) {
-            return response()->json(['message' => 'サーバー側でエラーが発生しました'], 500);
-        }
+        $this->orderService->dispatch($order);
 
-        return response()->json(null, 204);
+        return response()->noContent();
     }
 
-    public function undispatch(Order $order): JsonResponse
+    public function undispatch(Order $order): Response
     {
-        try {
-            $this->orderService->undispatch($order);
-        } catch (ModelNotFoundException) {
-            return response()->json(['message' => '指定されたIDのデータが存在しません'], 404);
-        } catch (Exception $e) {
-            return response()->json(['message' => 'サーバー側でエラーが発生しました'], 500);
-        }
+        $this->orderService->undispatch($order);
 
-        return response()->json(null, 204);
+        return response()->noContent();
     }
 }
