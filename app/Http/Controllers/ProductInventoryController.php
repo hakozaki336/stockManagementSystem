@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\ProductInventoryHasOrdersException;
 use App\Http\Requests\ProductInventoryStoreRequest;
 use App\Http\Requests\ProductInventoryUpdateRequest;
 use App\Http\Resources\ProductInventoryResource;
@@ -66,9 +67,13 @@ class ProductInventoryController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(ProductInventory $productInventory): Response
+    public function destroy(ProductInventory $productInventory): Response | JsonResponse
     {
-        productInventoryService::delete($productInventory);
+        try {
+            productInventoryService::delete($productInventory);
+        } catch (ProductInventoryHasOrdersException $e) {
+            return response()->json(['message' => $e->getMessage()], Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
 
         return response()->noContent();
     }

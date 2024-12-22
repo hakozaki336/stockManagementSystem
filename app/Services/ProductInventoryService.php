@@ -2,14 +2,16 @@
 
 namespace App\Services;
 
+use App\Exceptions\ProductInventoryHasOrdersException;
 use App\Models\Product;
 use App\Models\ProductInventory;
-use App\UseCases\FifoStockManagement;
-use App\UseCases\LifoStockManagement;
 use App\UseCases\StockManagementFactory;
 use App\UseCases\StockManagementInterface;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Log;
+
+use function Illuminate\Log\log;
 
 class ProductInventoryService
 {
@@ -42,6 +44,8 @@ class ProductInventoryService
      */
     public static function delete(ProductInventory $productInventory): void
     {
+        self::validateDomainRuleForDelete($productInventory);
+
         $productInventory->delete();
     }
 
@@ -102,4 +106,21 @@ class ProductInventoryService
         return ProductInventory::where('order_id', $order_id)->paginate();
     }
 
+    /**
+     * 削除のためのドメインルールを検証する
+     */
+    private static function validateDomainRuleForDelete(ProductInventory $productInventory): void
+    {
+        if (self::hasReferenceFromOrders($productInventory)) {
+            throw new ProductInventoryHasOrdersException();
+        }
+    }
+
+    /**
+     * ordersから参照があるか
+     */
+    private static function hasReferenceFromOrders(ProductInventory $productInventory): bool
+    {
+        return $productInventory->order()->exists();
+    }
 }

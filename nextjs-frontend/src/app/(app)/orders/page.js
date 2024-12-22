@@ -142,11 +142,22 @@ const Orders = () => {
                                     className="bg-blue-500 hover:bg-blue-600 text-white font-medium px-3 py-1 my-2 mx-1 font-semibold rounded"
                                 >在庫一覧</button>
                             </td>
+                            <td>{order.dispatched ? (
+                                    <button
+                                        onClick={() => clickDelete(order.id)}
+                                        className="bg-gray-500 text-white font-medium px-3 py-1 my-2 mx-1 font-semibold rounded"
+                                        disabled={order.dispatched}
+                                    >削除</button>
+                                ) : (
+                                    <button
+                                        onClick={() => clickDelete(order.id)}
+                                        className="bg-red-600 hover:bg-red-600 text-white font-medium px-3 py-1 my-2 mx-1 font-semibold rounded"
+                                        disabled={order.dispatched}
+                                    >削除</button>
+                                )}
+                            </td>
                             <td>
-                                <button
-                                    onClick={() => clickDelete(order.id)}
-                                    className="bg-red-500 hover:bg-red-600 text-white font-medium px-3 py-1 my-2 mx-1 font-semibold rounded"
-                                >削除</button>
+
                             </td>
                         </tr>
                     ))}
