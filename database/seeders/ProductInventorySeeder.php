@@ -56,6 +56,62 @@ class ProductInventorySeeder extends Seeder
                 'expiration_date' => '2030-01-01',
                 'order_id' => null,
             ],
+            [
+                'product_id' => 1,
+                'serial_number' => 'SN007',
+                'location' => 'A3',
+                'expiration_date' => '2030-01-01',
+                'order_id' => null,
+            ],
+            [
+                'product_id' => 1,
+                'serial_number' => 'SN008',
+                'location' => 'A4',
+                'expiration_date' => '2030-01-01',
+                'order_id' => null,
+            ],
+            [
+                'product_id' => 1,
+                'serial_number' => 'SN009',
+                'location' => 'A5',
+                'expiration_date' => '2030-01-01',
+                'order_id' => null,
+            ],
+            [
+                'product_id' => 1,
+                'serial_number' => 'SN010',
+                'location' => 'A6',
+                'expiration_date' => '2030-01-01',
+                'order_id' => null,
+            ],
+            [
+                'product_id' => 1,
+                'serial_number' => 'SN011',
+                'location' => 'A7',
+                'expiration_date' => '2030-01-01',
+                'order_id' => null,
+            ],
+            [
+                'product_id' => 1,
+                'serial_number' => 'SN012',
+                'location' => 'A8',
+                'expiration_date' => '2030-01-01',
+                'order_id' => null,
+            ],
+            [
+                'product_id' => 1,
+                'serial_number' => 'SN013',
+                'location' => 'A9',
+                'expiration_date' => '2030-01-01',
+                'order_id' => null,
+            ],
+            [
+                'product_id' => 1,
+                'serial_number' => 'SN014',
+                'location' => 'A10',
+                'expiration_date' => '2030-01-01',
+                'order_id' => null,
+            ],
         ];
 
         foreach ($productInventories as $productInventory) {
