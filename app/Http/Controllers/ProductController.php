@@ -8,6 +8,7 @@ use App\Http\Requests\ProductUpdateRequest;
 use App\Http\Resources\ProductResource;
 use App\Services\ProductService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
 
@@ -76,5 +77,17 @@ class ProductController extends Controller
         }
 
         return response()->noContent();
+    }
+
+    /**
+     * selectOption用の商品データを返す
+     */
+    public function options(): JsonResponse
+    {
+       $products = ProductService::getProductsForSelectOption();
+
+       return response()->json([
+              'data' => ProductResource::collection($products),
+        ]);
     }
 }

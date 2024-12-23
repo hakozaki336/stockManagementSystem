@@ -27,7 +27,7 @@ const Create = () => {
 
     const fetchCompanies = async () => {
         try {
-            const response = await axios.get('http://localhost:8000/api/companies');
+            const response = await axios.get('http://localhost:8000/api/companies/options');
             const responseData = response.data;
 
             setCompanies(responseData.data);
@@ -38,7 +38,7 @@ const Create = () => {
 
     const fetchProducts = async () => {
         try {
-            const response = await axios.get('http://localhost:8000/api/products');
+            const response = await axios.get('http://localhost:8000/api/products/options');
             const responseData = response.data;
 
             setProducts(responseData.data);

@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Exceptions\CompanyHasOrdersException;
 use App\Models\Company;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 class CompanyService
@@ -53,5 +54,13 @@ class CompanyService
     private function hasReferenceFromOrders(Company $company): bool
     {
         return $company->orders()->exists();
+    }
+
+    /**
+     * selectOption用の商品データを取得する
+     */
+    public static function getCompaniesForSelectOption(): Collection
+    {
+        return Company::all();
     }
 }

@@ -81,4 +81,16 @@ class CompanyController extends Controller
 
         return response()->noContent();
     }
+
+    /**
+     * selectOption用の会社データを返す
+     */
+    public function options(): JsonResponse
+    {
+       $products = CompanyService::getCompaniesForSelectOption();
+
+       return response()->json([
+              'data' => CompanyResource::collection($products),
+        ]);
+    }
 }
