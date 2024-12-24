@@ -9,6 +9,7 @@ use App\Http\Resources\CompanyResource;
 use App\Models\Company;
 use App\Services\CompanyService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 
 class CompanyController extends Controller
@@ -19,21 +20,16 @@ class CompanyController extends Controller
     {
         $this->companyService = new CompanyService();
     }
+
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): JsonResponse
     {
-        $companies = CompanyService::getPaginatedCompaneis(5);
+        $companies = CompanyService::getAllCompanies();
 
-        // MEMO: リソースを直接返さないのはaddtionalでリンク情報を追加するとprevとnextがnullにならないため
         return response()->json([
             'data' => CompanyResource::collection($companies),
-            'links' => [
-                'prev' => $companies->previousPageUrl(),
-                'next' => $companies->nextPageUrl(),
-                'current' => $companies->url($companies->currentPage()),
-            ],
         ]);
     }
 
@@ -83,14 +79,20 @@ class CompanyController extends Controller
     }
 
     /**
-     * selectOption用の会社データを返す
+     * pagenateされた企業データを取得する
      */
-    public function options(): JsonResponse
+    public function pagenate(int $perpage = 5): JsonResponse
     {
-       $products = CompanyService::getCompaniesForSelectOption();
+        $companies = CompanyService::getPaginatedCompaneis($perpage);
 
-       return response()->json([
-              'data' => CompanyResource::collection($products),
+        // MEMO: リソースを直接返さないのはaddtionalでリンク情報を追加するとprevとnextがnullにならないため
+        return response()->json([
+            'data' => CompanyResource::collection($companies),
+            'links' => [
+                'prev' => $companies->previousPageUrl(),
+                'next' => $companies->nextPageUrl(),
+                'current' => $companies->url($companies->currentPage()),
+            ],
         ]);
     }
 }

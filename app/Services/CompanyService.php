@@ -57,9 +57,9 @@ class CompanyService
     }
 
     /**
-     * selectOption用の商品データを取得する
+     * すべてのCompanyを取得する
      */
-    public static function getCompaniesForSelectOption(): Collection
+    public static function getAllCompanies(): Collection
     {
         return Company::all();
     }

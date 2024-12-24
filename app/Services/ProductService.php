@@ -94,9 +94,9 @@ class ProductService
     }
 
     /**
-     * selectOption用の商品データを取得する
+     * すべてのProductを取得する
      */
-    public static function getProductsForSelectOption(): Collection
+    public static function getAll(): Collection
     {
         return Product::all();
     }
