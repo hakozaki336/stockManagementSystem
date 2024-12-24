@@ -6,25 +6,19 @@ use App\Exceptions\ProductInventoryHasOrdersException;
 use App\Http\Requests\ProductInventoryStoreRequest;
 use App\Http\Requests\ProductInventoryUpdateRequest;
 use App\Http\Resources\ProductInventoryResource;
-use App\Models\Product;
 use App\Models\ProductInventory;
 use App\Services\ProductInventoryService;
-use Exception;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 class ProductInventoryController extends Controller
 {
-    private const PERPAGE = 5;
-
     /**
      * Display a listing of the resource.
      */
-    public function index(int $product_id): JsonResponse
+    public function index(): JsonResponse
     {
-        $productInventories = ProductInventoryService::getPaginatedProductInventories(self::PERPAGE, $product_id);
+        $productInventories = ProductInventoryService::getAll();
 
         return response()->json([
             'data' => ProductInventoryResource::collection($productInventories),
@@ -95,6 +89,20 @@ class ProductInventoryController extends Controller
     public function byOrder(int $order_id): JsonResponse
     {
         $productInventories = ProductInventoryService::getPaginateProductInventoryByOrders($order_id);
+
+        return response()->json([
+            'data' => ProductInventoryResource::collection($productInventories),
+            'links' => [
+                'prev' => $productInventories->previousPageUrl(),
+                'next' => $productInventories->nextPageUrl(),
+                'current' => $productInventories->url($productInventories->currentPage()),
+            ],
+        ]);
+    }
+
+    public function pagenate(int $product_id, int $perpage = 5): JsonResponse
+    {
+        $productInventories = ProductInventoryService::getPaginatedProductInventories($perpage, $product_id);
 
         return response()->json([
             'data' => ProductInventoryResource::collection($productInventories),

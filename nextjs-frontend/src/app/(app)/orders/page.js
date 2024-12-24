@@ -12,7 +12,7 @@ const Orders = () => {
     const [previousPage, setPreviousPage] = useState('');
     const [currentPage, setCurrentPage] = useState('');
     const [errorMessages, setErrorMessages] = useState('');
-    const defaultUrl = 'http://localhost:8000/api/orders';
+    const defaultUrl = 'http://localhost:8000/api/orders/pagenate';
 
     const fetchOrders = async (url) => {
         if (!url) {

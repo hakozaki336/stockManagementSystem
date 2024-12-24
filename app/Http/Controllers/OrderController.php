@@ -25,16 +25,10 @@ class OrderController extends Controller
      */
     public function index(): JsonResponse
     {
-        $paginatedOrders = $this->orderService->getPaginatedOrders(5);
+        $orders = $this->orderService->getAll();
 
-        return response()->json(
-            [
-                'data' => OrderResource::collection($paginatedOrders),
-                'links' => [
-                    'prev' => $paginatedOrders->previousPageUrl(),
-                    'next' => $paginatedOrders->nextPageUrl(),
-                    'current' => $paginatedOrders->url($paginatedOrders->currentPage()),
-            ],
+        return response()->json([
+            'data' => OrderResource::collection($orders),
         ]);
     }
 
@@ -86,5 +80,19 @@ class OrderController extends Controller
         $this->orderService->undispatch($order);
 
         return response()->noContent();
+    }
+
+    public function pagenate(int $perpage = 5): JsonResponse
+    {
+        $orders = $this->orderService->getPaginatedOrders($perpage);
+
+        return response()->json([
+            'data' => OrderResource::collection($orders),
+            'links' => [
+                'prev' => $orders->previousPageUrl(),
+                'next' => $orders->nextPageUrl(),
+                'current' => $orders->url($orders->currentPage()),
+            ],
+        ]);
     }
 }

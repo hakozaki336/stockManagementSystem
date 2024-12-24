@@ -12,7 +12,7 @@ const Products = () => {
     const [previousPage, setPreviousPage] = useState('');
     const [currentPage, setCurrentPage] = useState('');
     const [errorMessages, setErrorMessages] = useState('');
-    const defaultUrl = 'http://localhost:8000/api/products';
+    const defaultUrl = 'http://localhost:8000/api/products/pagenate';
 
     const fetchProducts = async (url) => {
         if (!url) {
