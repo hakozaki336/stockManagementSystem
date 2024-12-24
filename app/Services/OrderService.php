@@ -70,6 +70,9 @@ class OrderService
         $order->save();
     }
 
+    /**
+     * すべてのOrderを取得する
+     */
     public function getAll(): Collection
     {
         return Order::all();
