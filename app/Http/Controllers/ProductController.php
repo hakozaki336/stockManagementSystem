@@ -8,8 +8,8 @@ use App\Http\Requests\ProductUpdateRequest;
 use App\Http\Resources\ProductResource;
 use App\Services\ProductService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Log;
 
 class ProductController extends Controller
 {
@@ -18,15 +18,10 @@ class ProductController extends Controller
      */
     public function index(): JsonResponse
     {
-        $products = ProductService::getPaginatedProducts(5);
+        $products = ProductService::getAll();
 
         return response()->json([
             'data' => ProductResource::collection($products),
-            'links' => [
-                'prev' => $products->previousPageUrl(),
-                'next' => $products->nextPageUrl(),
-                'current' => $products->url($products->currentPage()),
-            ],
         ]);
     }
 
@@ -76,5 +71,22 @@ class ProductController extends Controller
         }
 
         return response()->noContent();
+    }
+
+    /**
+     * pagenateされた企業データを取得する
+     */
+    public function pagenate($perPage = 5): JsonResponse
+    {
+        $products = ProductService::getPaginatedProducts($perPage);
+
+        return response()->json([
+            'data' => ProductResource::collection($products),
+            'links' => [
+                'prev' => $products->previousPageUrl(),
+                'next' => $products->nextPageUrl(),
+                'current' => $products->url($products->currentPage()),
+            ],
+        ]);
     }
 }

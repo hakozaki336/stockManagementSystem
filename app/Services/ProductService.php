@@ -5,8 +5,8 @@ namespace App\Services;
 use App\Exceptions\OutOfStockException;
 use App\Exceptions\ProductHasOrdersException;
 use App\Models\Product;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Facades\Log;
 
 class ProductService
 {
@@ -91,5 +91,13 @@ class ProductService
     private function hasReferenceFromOrders(Product $product): bool
     {
         return $product->orders()->exists();
+    }
+
+    /**
+     * すべてのProductを取得する
+     */
+    public static function getAll(): Collection
+    {
+        return Product::all();
     }
 }

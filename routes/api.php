@@ -12,12 +12,15 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 });
 
 // NOTE:　Laravelのルーティングでは、ルートは上から順にマッチするため、GET /orders/createがapiResourceのGET /ordersルートによって処理され、正しくcreateメソッドに到達しない
-// Route::get('/orders/create', [OrderController::class, 'create'])->name('orders.create');
-Route::apiResource('orders', OrderController::class);
-Route::apiResource('products', ProductController::class);
 Route::patch('/orders/{order}/dispatch', [OrderController::class, 'dispatch']);
 Route::patch('/orders/{order}/undispatch', [OrderController::class, 'undispatch']);
+Route::get('orders/{order_id}/inventories', [ProductInventoryController::class, 'byOrder']);
+Route::get('orders/pagenate', [OrderController::class, 'pagenate']);
+Route::apiResource('orders', OrderController::class);
+// NOTE: 遺言 順番変えたら死にます。laravleは上から舐めていくのでgetでproductsを呼ぶとshowが呼ばれてしまう
+Route::get('products/pagenate', [ProductController::class, 'pagenate']);
+Route::get('products/{product_id}/inventories', [ProductInventoryController::class, 'byProduct']);
+Route::apiResource('products', ProductController::class);
+Route::get('companies/pagenate', [CompanyController::class, 'pagenate']);
 Route::apiResource('companies', CompanyController::class);
 Route::apiResource('product_inventories', ProductInventoryController::class);
-Route::get('products/{product_id}/inventories', [ProductInventoryController::class, 'byProduct']);
-Route::get('orders/{order_id}/inventories', [ProductInventoryController::class, 'byOrder']);

@@ -123,4 +123,12 @@ class ProductInventoryService
     {
         return $productInventory->order()->exists();
     }
+
+    /**
+     * すべてのProductInventoryを取得する
+     */
+    public static function getAll(): Collection
+    {
+        return ProductInventory::all();
+    }
 }

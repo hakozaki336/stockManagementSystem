@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Order;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
 
@@ -67,5 +68,13 @@ class OrderService
     {
         $order->dispatched = false;
         $order->save();
+    }
+
+    /**
+     * すべてのOrderを取得する
+     */
+    public function getAll(): Collection
+    {
+        return Order::all();
     }
 }
