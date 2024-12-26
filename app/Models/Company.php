@@ -21,4 +21,14 @@ class Company extends Model
     {
         return $this->hasMany(Order::class);
     }
+
+    public function hasOrders(): bool
+    {
+        return $this->orders()->exists();
+    }
+
+    public function pagenate(int $perpage)
+    {
+        return $this->paginate($perpage);
+    }
 }

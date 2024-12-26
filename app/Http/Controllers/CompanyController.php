@@ -7,26 +7,22 @@ use App\Http\Requests\CompanyStoreRequest;
 use App\Http\Requests\CompanyUpdateRequest;
 use App\Http\Resources\CompanyResource;
 use App\Models\Company;
-use App\Services\CompanyService;
+use App\UseCases\Company\DestroyAction;
+use App\UseCases\Company\IndexAction;
+use App\UseCases\Company\PaginateAction;
+use App\UseCases\Company\StoreAction;
+use App\UseCases\Company\UpdateAction;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 
 class CompanyController extends Controller
 {
-    private CompanyService $companyService;
-
-    public function __construct()
-    {
-        $this->companyService = new CompanyService();
-    }
-
     /**
      * Display a listing of the resource.
      */
-    public function index(): JsonResponse
+    public function index(IndexAction $indexAction): JsonResponse
     {
-        $companies = CompanyService::getAllCompanies();
+        $companies = $indexAction();
 
         return response()->json([
             'data' => CompanyResource::collection($companies),
@@ -36,9 +32,9 @@ class CompanyController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(CompanyStoreRequest $request): Response
+    public function store(CompanyStoreRequest $request, StoreAction $storeAction): Response
     {
-        $this->companyService->create($request->validated());
+        $storeAction($request->validated());
 
         return response()->noContent(Response::HTTP_CREATED);
     }
@@ -46,19 +42,17 @@ class CompanyController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(int $id): CompanyResource
+    public function show(Company $company): CompanyResource
     {
-        $company = $this->companyService->getCompany($id);
-
         return new CompanyResource($company);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(CompanyUpdateRequest $request, Company $company): Response
+    public function update(CompanyUpdateRequest $request, Company $company, UpdateAction $updateAction): Response
     {
-        $this->companyService->update($company, $request->validated());
+        $updateAction($company, $request->validated());
 
         return response()->noContent();
     }
@@ -67,10 +61,10 @@ class CompanyController extends Controller
      * Remove the specified resource from storage.
      */
 
-    public function destroy(Company $company): Response | JsonResponse
+    public function destroy(Company $company, DestroyAction $destroyAction): Response | JsonResponse
     {
         try {
-            $this->companyService->delete($company);
+            $destroyAction($company);
         } catch (CompanyHasOrdersException $e) {
             return response()->json(['message' => $e->getMessage()], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
@@ -81,9 +75,9 @@ class CompanyController extends Controller
     /**
      * pagenateされた企業データを取得する
      */
-    public function pagenate(int $perpage = 5): JsonResponse
+    public function pagenate(int $perpage = 5, PaginateAction $paginateAction): JsonResponse
     {
-        $companies = CompanyService::getPaginatedCompaneis($perpage);
+        $companies = $paginateAction($perpage);
 
         // MEMO: リソースを直接返さないのはaddtionalでリンク情報を追加するとprevとnextがnullにならないため
         return response()->json([
