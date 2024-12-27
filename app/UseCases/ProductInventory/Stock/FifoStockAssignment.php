@@ -1,13 +1,12 @@
 <?php
 
-namespace App\UseCases;
+namespace App\UseCases\ProductInventory\Stock;
 
 use App\Exceptions\OutOfStockException;
 use App\Exceptions\StockLogicException;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Support\Facades\Log;
 
-class FifoStockManagement implements StockManagementInterface
+class FifoStockAssignment implements StockAssignmentInterface
 {
     /**
      * 在庫を割り当て済みにする

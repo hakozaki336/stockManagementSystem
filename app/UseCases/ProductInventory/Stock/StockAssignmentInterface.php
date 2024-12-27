@@ -1,10 +1,10 @@
 <?php
 
-namespace App\UseCases;
+namespace App\UseCases\ProductInventory\Stock;
 
 use Illuminate\Database\Eloquent\Collection;
 
-interface StockManagementInterface
+interface StockAssignmentInterface
 {
     /**
      * 在庫をカウント分割り当て済みにする

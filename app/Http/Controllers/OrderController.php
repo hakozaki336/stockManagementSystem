@@ -7,25 +7,21 @@ use App\Exceptions\StockLogicException;
 use App\Http\Requests\OrderStoreRequest;
 use App\Http\Resources\OrderResource;
 use App\Models\Order;
-use App\Services\OrderService;
+use App\UseCases\Order\DestroyAction;
+use App\UseCases\Order\IndexAction;
+use App\UseCases\Order\PaginateAction;
+use App\UseCases\Order\StoreAction;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 
 class OrderController extends Controller
 {
-    protected $orderService;
-
-    public function __construct(OrderService $orderService)
-    {
-        $this->orderService = $orderService;
-    }
-
     /**
      * Display a listing of the resource.
      */
-    public function index(): JsonResponse
+    public function index(IndexAction $indexAction): JsonResponse
     {
-        $orders = $this->orderService->getAll();
+        $orders = $indexAction();
 
         return response()->json([
             'data' => OrderResource::collection($orders),
@@ -35,12 +31,12 @@ class OrderController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(OrderStoreRequest $request): Response
+    public function store(OrderStoreRequest $request, StoreAction $storeAction): Response | JsonResponse
     {
         try {
-            $this->orderService->store($request->validated());
+            $storeAction($request->validated());
         } catch (OutOfStockException $e) {
-            return response()->json(['message' => $e->getMessage(), Response::HTTP_UNPROCESSABLE_ENTITY]);
+            return response()->json(['message' => $e->getMessage()], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
         return response()->noContent(Response::HTTP_CREATED);
@@ -57,12 +53,12 @@ class OrderController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Order $order): Response
+    public function destroy(Order $order, DestroyAction $destroyAction): Response
     {
         try {
-            $this->orderService->delete($order);
+            $destroyAction($order);
         } catch (StockLogicException $e) {
-            return response()->json(['message' => $e->getMessage(), Response::HTTP_UNPROCESSABLE_ENTITY]);
+            return response()->json(['message' => $e->getMessage()], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
         return response()->noContent();
@@ -70,21 +66,21 @@ class OrderController extends Controller
 
     public function dispatch(Order $order): Response
     {
-        $this->orderService->dispatch($order);
+        $order->dispatch();
 
         return response()->noContent();
     }
 
     public function undispatch(Order $order): Response
     {
-        $this->orderService->undispatch($order);
+        $order->undispatch();
 
         return response()->noContent();
     }
 
-    public function pagenate(int $perpage = 5): JsonResponse
+    public function pagenate(PaginateAction $paginateAction, int $perpage = 5): JsonResponse
     {
-        $orders = $this->orderService->getPaginatedOrders($perpage);
+        $orders = $paginateAction($perpage);
 
         return response()->json([
             'data' => OrderResource::collection($orders),
