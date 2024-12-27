@@ -5,7 +5,7 @@ namespace App\UseCases\ProductInventory;
 use App\Models\ProductInventory;
 use Illuminate\Pagination\LengthAwarePaginator;
 
-class PaginateByProductAction
+class PaginateByOrderAction
 {
     private ProductInventory $productInventory;
 
@@ -14,10 +14,10 @@ class PaginateByProductAction
         $this->productInventory = $productInventory;
     }
 
-    public function __invoke(int $product_id, int $perpage): LengthAwarePaginator
+    public function __invoke(int $order_id, int $perpage): LengthAwarePaginator
     {
         return $this->productInventory
-            ->where('product_id', $product_id)
+            ->where('order_id', $order_id)
             ->paginate($perpage);
     }
 }

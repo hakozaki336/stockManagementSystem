@@ -10,7 +10,8 @@ use App\Models\ProductInventory;
 use App\UseCases\ProductInventory\DestroyAction;
 use App\UseCases\ProductInventory\IndexAction;
 use App\UseCases\ProductInventory\PaginateAction;
-use App\UseCases\ProductInventory\paginateByProductAction;
+use App\UseCases\ProductInventory\PaginateByProductAction;
+use App\UseCases\ProductInventory\PaginateByOrderAction;
 use App\UseCases\ProductInventory\StoreAction;
 use App\UseCases\ProductInventory\UpdateAction;
 use Illuminate\Http\JsonResponse;
@@ -72,9 +73,9 @@ class ProductInventoryController extends Controller
         return response()->noContent();
     }
 
-    public function byProduct(int $product_id, paginateByProductAction $paginateAction, int $perPage = 5): JsonResponse
+    public function byProduct(int $product_id, PaginateByProductAction $paginateByProductAction, int $perPage = 5): JsonResponse
     {
-        $productInventories = $paginateAction($product_id, $perPage);
+        $productInventories = $paginateByProductAction($product_id, $perPage);
 
         return response()->json([
             'data' => ProductInventoryResource::collection($productInventories),
@@ -86,9 +87,9 @@ class ProductInventoryController extends Controller
         ]);
     }
 
-    public function byOrder(int $order_id, PaginateAction $paginateAction): JsonResponse
+    public function byOrder(int $order_id, PaginateByOrderAction $paginateByOrderAction, int $perPage = 5): JsonResponse
     {
-        $productInventories = $paginateAction($order_id);
+        $productInventories = $paginateByOrderAction($order_id, $perPage);
 
         return response()->json([
             'data' => ProductInventoryResource::collection($productInventories),
