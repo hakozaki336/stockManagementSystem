@@ -31,4 +31,9 @@ class ProductInventory extends Model
     {
         return $this->belongsTo(Order::class, 'order_id');
     }
+
+    public function hasOrder(): bool
+    {
+        return $this->order()->exists();
+    }
 }

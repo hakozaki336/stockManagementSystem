@@ -32,4 +32,9 @@ class Product extends Model
     {
         return $this->hasMany(ProductInventory::class);
     }
+
+    public function hasOrders(): bool
+    {
+        return $this->orders()->exists();
+    }
 }

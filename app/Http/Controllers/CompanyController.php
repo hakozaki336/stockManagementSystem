@@ -75,7 +75,7 @@ class CompanyController extends Controller
     /**
      * pagenateされた企業データを取得する
      */
-    public function pagenate(int $perpage = 5, PaginateAction $paginateAction): JsonResponse
+    public function pagenate(PaginateAction $paginateAction, int $perpage = 5): JsonResponse
     {
         $companies = $paginateAction($perpage);
 
