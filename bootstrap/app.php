@@ -34,7 +34,7 @@ return Application::configure(basePath: dirname(__DIR__))
                 'message' => '指定されたリソースが見つかりません。'
             ], Response::HTTP_NOT_FOUND);
         });
-        // NOTE: このエクセプションはモデルバインディング失敗時にもキャッチする
+        // NOTE: このエクセプションはrouteのモデルバインディング失敗時にもキャッチする
         $exceptions->render(function (NotFoundHttpException $e, $request) {
             return response()->json([
                 'message' => '指定されたリソースが見つかりません。',
@@ -49,7 +49,7 @@ return Application::configure(basePath: dirname(__DIR__))
 
         $exceptions->render(function (Exception $e, $request) {
             return response()->json([
-                'message' => 'サーバー側でエラーが発生しました'
+                'message' => 'サーバー側で予期せぬエラーが発生しました。',
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         });
     })->create();
