@@ -18,7 +18,7 @@ class DestroyAction
      * MEMO: これは別クラスに切っても良いかもね
      * 削除のためのドメインルールを検証する
      */
-    private function validateDomainRule(Product $product): void
+    protected function validateDomainRule(Product $product): void
     {
         if ($product->hasOrders()) {
             throw new ProductHasOrdersException();

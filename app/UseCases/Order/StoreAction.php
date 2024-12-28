@@ -37,6 +37,6 @@ class StoreAction
             $stockAssignment->dispatchStock($productInventoryList, $param['order_count'], $this->order->id);
         });
 
-        return $this->order;
+        return new Order();
     }
 }

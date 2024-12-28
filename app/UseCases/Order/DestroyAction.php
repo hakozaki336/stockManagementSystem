@@ -20,7 +20,7 @@ class DestroyAction
         $this->stockAssignmentFactory = $stockAssignmentFactory;
     }
 
-    public function __invoke(Order $order): Order
+    public function __invoke(Order $order): bool
     {
         $stockManagementType = $order->product->stock_management_type;
         $stockAssignment = $this->stockAssignmentFactory->create($stockManagementType);
@@ -32,6 +32,6 @@ class DestroyAction
             $order->delete();
         });
 
-        return $order;
+        return true;
     }
 }
