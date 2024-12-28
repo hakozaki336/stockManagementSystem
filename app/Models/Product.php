@@ -35,6 +35,7 @@ class Product extends Model
 
     public function hasOrders(): bool
     {
-        return $this->orders()->exists();
+        // MEMO: exists()にするとクエリが発行されるのでcount()で判定する
+        return $this->orders->count() > 0;
     }
 }
