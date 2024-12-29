@@ -7,15 +7,8 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 class PaginateAction
 {
-    private Order $order;
-
-    public function __construct(Order $order)
+    public function __invoke(Order $order, int $perpage): LengthAwarePaginator
     {
-        $this->order = $order;
-    }
-
-    public function __invoke(int $perpage): LengthAwarePaginator
-    {
-        return $this->order->paginate($perpage);
+        return $order->paginate($perpage);
     }
 }

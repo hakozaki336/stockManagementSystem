@@ -7,16 +7,9 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 class PaginateByOrderAction
 {
-    private ProductInventory $productInventory;
-
-    public function __construct(ProductInventory $productInventory)
+    public function __invoke(productInventory $productInventory, int $order_id, int $perpage): LengthAwarePaginator
     {
-        $this->productInventory = $productInventory;
-    }
-
-    public function __invoke(int $order_id, int $perpage): LengthAwarePaginator
-    {
-        return $this->productInventory
+        return $productInventory
             ->where('order_id', $order_id)
             ->paginate($perpage);
     }

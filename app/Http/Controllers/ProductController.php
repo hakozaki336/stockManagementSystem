@@ -21,9 +21,9 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(IndexAction $indexAction): JsonResponse
+    public function index(IndexAction $indexAction, Product $product): JsonResponse
     {
-        $products = $indexAction();
+        $products = $indexAction($product);
 
         return response()->json([
             'data' => ProductResource::collection($products),
@@ -33,9 +33,9 @@ class ProductController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(ProductStoreRequest $request, StoreAction $storeAction): Response
+    public function store(ProductStoreRequest $request, StoreAction $storeAction, Product $product): Response
     {
-        $storeAction($request->validated());
+        $storeAction($product, $request->validated());
 
         return response()->noContent(Response::HTTP_CREATED);
     }
@@ -51,7 +51,7 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(ProductUpdateRequest $request, Product $product, UpdateAction $updateAction): Response
+    public function update(ProductUpdateRequest $request, UpdateAction $updateAction, Product $product): Response
     {
         $updateAction($product, $request->validated());
 
@@ -61,7 +61,7 @@ class ProductController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Product $product, DestroyAction $destroyAction): Response | JsonResponse
+    public function destroy(DestroyAction $destroyAction, Product $product): Response | JsonResponse
     {
         try {
             $destroyAction($product);
@@ -77,9 +77,9 @@ class ProductController extends Controller
     /**
      * pagenateされた製品データを取得する
      */
-    public function pagenate(PaginateAction $paginateAction, int $perPage = 5): JsonResponse
+    public function pagenate(PaginateAction $paginateAction, Product $product, int $perPage = 5): JsonResponse
     {
-        $products = $paginateAction($perPage);
+        $products = $paginateAction($product, $perPage);
 
         return response()->json([
             'data' => ProductResource::collection($products),

@@ -6,17 +6,10 @@ use App\Models\Product;
 
 class StoreAction
 {
-    private Product $product;
-
-    public function __construct(Product $product)
+    public function __invoke(Product $product, array $param): Product
     {
-        $this->product = $product;
-    }
+        $product->fill($param)->save();
 
-    public function __invoke(array $param): Product
-    {
-        $this->product->fill($param)->save();
-
-        return $this->product;
+        return $product;
     }
 }

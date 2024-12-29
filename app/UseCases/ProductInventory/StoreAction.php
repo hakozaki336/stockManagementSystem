@@ -6,17 +6,10 @@ use App\Models\ProductInventory;
 
 class StoreAction
 {
-    private ProductInventory $productInventory;
-
-    public function __construct(ProductInventory $productInventory)
+    public function __invoke(productInventory $productInventory, array $param): ProductInventory
     {
-        $this->productInventory = $productInventory;
-    }
+        $productInventory->fill($param)->save();
 
-    public function __invoke(array $param): ProductInventory
-    {
-        $this->productInventory->fill($param)->save();
-
-        return $this->productInventory;
+        return $productInventory;
     }
 }

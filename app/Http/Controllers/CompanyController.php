@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Exceptions\CompanyHasOrdersException;
 use App\Exceptions\DomainValidationException;
 use App\Http\Requests\CompanyStoreRequest;
 use App\Http\Requests\CompanyUpdateRequest;
@@ -21,9 +20,9 @@ class CompanyController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(IndexAction $indexAction): JsonResponse
+    public function index(IndexAction $indexAction, Company $company): JsonResponse
     {
-        $companies = $indexAction();
+        $companies = $indexAction($company);
 
         return response()->json([
             'data' => CompanyResource::collection($companies),
@@ -33,9 +32,9 @@ class CompanyController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(CompanyStoreRequest $request, StoreAction $storeAction): Response
+    public function store(CompanyStoreRequest $request, StoreAction $storeAction, Company $company): Response
     {
-        $storeAction($request->validated());
+        $storeAction($company, $request->validated());
 
         return response()->noContent(Response::HTTP_CREATED);
     }
@@ -76,9 +75,9 @@ class CompanyController extends Controller
     /**
      * pagenateされた企業データを取得する
      */
-    public function pagenate(PaginateAction $paginateAction, int $perpage = 5): JsonResponse
+    public function pagenate(PaginateAction $paginateAction, Company $company, int $perpage = 5): JsonResponse
     {
-        $companies = $paginateAction($perpage);
+        $companies = $paginateAction($company, $perpage);
 
         // MEMO: リソースを直接返さないのはaddtionalでリンク情報を追加するとprevとnextがnullにならないため
         return response()->json([

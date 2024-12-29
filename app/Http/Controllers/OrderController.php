@@ -19,9 +19,9 @@ class OrderController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(IndexAction $indexAction): JsonResponse
+    public function index(IndexAction $indexAction, Order $order): JsonResponse
     {
-        $orders = $indexAction();
+        $orders = $indexAction($order);
 
         return response()->json([
             'data' => OrderResource::collection($orders),
@@ -78,9 +78,9 @@ class OrderController extends Controller
         return response()->noContent();
     }
 
-    public function pagenate(PaginateAction $paginateAction, int $perpage = 5): JsonResponse
+    public function pagenate(PaginateAction $paginateAction, Order $order, int $perpage = 5): JsonResponse
     {
-        $orders = $paginateAction($perpage);
+        $orders = $paginateAction($order, $perpage);
 
         return response()->json([
             'data' => OrderResource::collection($orders),

@@ -7,15 +7,8 @@ use Illuminate\Database\Eloquent\Collection;
 
 class IndexAction
 {
-    private ProductInventory $productInventory;
-
-    public function __construct(ProductInventory $productInventory)
+    public function __invoke(ProductInventory $productInventory): Collection
     {
-        $this->productInventory = $productInventory;
-    }
-
-    public function __invoke(): Collection
-    {
-        return $this->productInventory->all();
+        return $productInventory->all();
     }
 }

@@ -22,9 +22,9 @@ class ProductInventoryController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(IndexAction $indexAction): JsonResponse
+    public function index(IndexAction $indexAction, ProductInventory $productInventory): JsonResponse
     {
-        $productInventories = $indexAction();
+        $productInventories = $indexAction($productInventory);
 
         return response()->json([
             'data' => ProductInventoryResource::collection($productInventories),
@@ -34,9 +34,9 @@ class ProductInventoryController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(ProductInventoryStoreRequest $request, StoreAction $storeAction): Response
+    public function store(ProductInventoryStoreRequest $request, StoreAction $storeAction, ProductInventory $productInventory): Response
     {
-        $storeAction($request->validated());
+        $storeAction($productInventory, $request->validated());
 
         return response()->noContent(Response::HTTP_CREATED);
     }
@@ -52,7 +52,7 @@ class ProductInventoryController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(ProductInventoryUpdateRequest $request, ProductInventory $productInventory, UpdateAction $updateAction): Response
+    public function update(ProductInventoryUpdateRequest $request,UpdateAction $updateAction,  ProductInventory $productInventory): Response
     {
         $updateAction($productInventory, $request->validated());
 
@@ -62,7 +62,7 @@ class ProductInventoryController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(ProductInventory $productInventory, DestroyAction $destroyAction): Response | JsonResponse
+    public function destroy(DestroyAction $destroyAction, ProductInventory $productInventory): Response | JsonResponse
     {
         try {
             $destroyAction($productInventory);
@@ -73,9 +73,9 @@ class ProductInventoryController extends Controller
         return response()->noContent();
     }
 
-    public function byProduct(int $product_id, PaginateByProductAction $paginateByProductAction, int $perPage = 5): JsonResponse
+    public function byProduct(int $product_id, PaginateByProductAction $paginateByProductAction, ProductInventory $productInventory, int $perPage = 5): JsonResponse
     {
-        $productInventories = $paginateByProductAction($product_id, $perPage);
+        $productInventories = $paginateByProductAction($productInventory, $product_id, $perPage);
 
         return response()->json([
             'data' => ProductInventoryResource::collection($productInventories),
@@ -87,9 +87,9 @@ class ProductInventoryController extends Controller
         ]);
     }
 
-    public function byOrder(int $order_id, PaginateByOrderAction $paginateByOrderAction, int $perPage = 5): JsonResponse
+    public function byOrder(int $order_id, PaginateByOrderAction $paginateByOrderAction, productInventory $productInventory, int $perPage = 5): JsonResponse
     {
-        $productInventories = $paginateByOrderAction($order_id, $perPage);
+        $productInventories = $paginateByOrderAction($productInventory, $order_id, $perPage);
 
         return response()->json([
             'data' => ProductInventoryResource::collection($productInventories),
@@ -101,9 +101,9 @@ class ProductInventoryController extends Controller
         ]);
     }
 
-    public function pagenate(int $product_id, int $perpage = 5, PaginateAction $paginateAction): JsonResponse
+    public function pagenate(PaginateAction $paginateAction, productInventory $productInventory, int $perpage = 5): JsonResponse
     {
-        $productInventories = $paginateAction($perpage, $product_id);
+        $productInventories = $paginateAction($productInventory, $perpage);
 
         return response()->json([
             'data' => ProductInventoryResource::collection($productInventories),
