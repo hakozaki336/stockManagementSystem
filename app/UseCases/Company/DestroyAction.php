@@ -3,13 +3,18 @@
 namespace App\UseCases\Company;
 
 use App\Exceptions\CompanyHasOrdersException;
+use App\Exceptions\DomainValidationException;
 use App\Models\Company;
 
 class DestroyAction
 {
     public function __invoke(Company $company): void
     {
-        $this->validateDomainRule($company);
+        try {
+            $this->validateDomainRule($company);
+        } catch (CompanyHasOrdersException $e) {
+            throw new DomainValidationException($e->getMessage());
+        }
 
         $company->delete();
     }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exceptions\CompanyHasOrdersException;
+use App\Exceptions\DomainValidationException;
 use App\Http\Requests\CompanyStoreRequest;
 use App\Http\Requests\CompanyUpdateRequest;
 use App\Http\Resources\CompanyResource;
@@ -65,7 +66,7 @@ class CompanyController extends Controller
     {
         try {
             $destroyAction($company);
-        } catch (CompanyHasOrdersException $e) {
+        } catch (DomainValidationException $e) {
             return response()->json(['message' => $e->getMessage()], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
