@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\DomainValidationException;
 use App\Exceptions\OutOfStockException;
 use App\Exceptions\StockLogicException;
 use App\Http\Requests\OrderStoreRequest;
@@ -35,7 +36,7 @@ class OrderController extends Controller
     {
         try {
             $storeAction($request->validated());
-        } catch (OutOfStockException $e) {
+        } catch (DomainValidationException $e) {
             return response()->json(['message' => $e->getMessage()], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
@@ -57,7 +58,7 @@ class OrderController extends Controller
     {
         try {
             $destroyAction($order);
-        } catch (StockLogicException $e) {
+        } catch (DomainValidationException $e) {
             return response()->json(['message' => $e->getMessage()], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 

@@ -2,8 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Exceptions\ProductHasOrdersException;
-use App\Exceptions\ProductHasProductInventoriesException;
+use App\Exceptions\DomainValidationException;
 use App\Http\Requests\ProductStoreRequest;
 use App\Http\Requests\ProductUpdateRequest;
 use App\Http\Resources\ProductResource;
@@ -65,9 +64,7 @@ class ProductController extends Controller
     {
         try {
             $destroyAction($product);
-        } catch (ProductHasOrdersException $e) {
-            return response()->json(['message' => $e->getMessage()], Response::HTTP_UNPROCESSABLE_ENTITY);
-        } catch (ProductHasProductInventoriesException $e) {
+        } catch (DomainValidationException $e) {
             return response()->json(['message' => $e->getMessage()], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 

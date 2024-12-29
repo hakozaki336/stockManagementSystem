@@ -2,6 +2,7 @@
 
 namespace App\UseCases\ProductInventory;
 
+use App\Exceptions\DomainValidationException;
 use App\Exceptions\ProductInventoryHasOrdersException;
 use App\Models\ProductInventory;
 
@@ -9,7 +10,11 @@ class DestroyAction
 {
     public function __invoke(ProductInventory $productInventory): void
     {
-        $this->validateDomainRule($productInventory);
+        try {
+            $this->validateDomainRule($productInventory);
+        } catch (ProductInventoryHasOrdersException $e) {
+            throw new DomainValidationException($e->getMessage());
+        }
 
         $productInventory->delete();
     }

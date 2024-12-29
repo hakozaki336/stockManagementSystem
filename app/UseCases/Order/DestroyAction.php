@@ -2,12 +2,15 @@
 
 namespace App\UseCases\Order;
 
+use App\Exceptions\DomainValidationException;
 use App\Exceptions\OrderHasProductsException;
+use App\Exceptions\StockLogicException;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\ProductInventory;
 use App\UseCases\ProductInventory\Stock\StockAssignmentFactory;
 use Illuminate\Support\Facades\DB;
+use InvalidArgumentException;
 
 class DestroyAction
 {
@@ -23,14 +26,21 @@ class DestroyAction
     public function __invoke(Order $order): bool
     {
         $stockManagementType = $order->product->stock_management_type;
-        $stockAssignment = $this->stockAssignmentFactory->create($stockManagementType);
 
         $productInventoryList = $this->productInventory->getByProductId($order->product_id);
 
-        DB::transaction(function () use ($stockAssignment, $productInventoryList, $order) {
-            $stockAssignment->undispatchStock($productInventoryList, $order->order_count, $order->id);
-            $order->delete();
-        });
+        try {
+            DB::transaction(function () use ($stockManagementType, $productInventoryList, $order) {
+                $stockAssignment = $this->stockAssignmentFactory->create($stockManagementType);
+                $stockAssignment->undispatchStock($productInventoryList, $order->order_count, $order->id);
+                $order->delete();
+            });
+        } catch (InvalidArgumentException $e) {
+            throw new DomainValidationException($e->getMessage());
+        } catch (StockLogicException $e) {
+            throw new DomainValidationException($e->getMessage());
+        }
+
 
         return true;
     }
