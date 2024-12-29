@@ -54,7 +54,6 @@ laravelにおいて、デフォルトで作成される値(idやcreate_atなど)
 ![在庫管理システム(ぴゅう太)ユースケース図](https://github.com/user-attachments/assets/34fb28dd-cb82-4903-addf-495b425142dc)
 
 # ユースケース記述
-# ユースケース記述
 
 # 会社を管理する
 - 概要: 取引契約が締結された顧客(会社)名を管理する
