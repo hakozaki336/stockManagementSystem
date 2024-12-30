@@ -68,14 +68,21 @@ const Create = () => {
         changeDisplayStock(event);
     }
 
-    const changeDisplayStock = (event) => {
-        const targetProduct = products.find((product) => product.id === parseInt(event.target.value));
-        if (!targetProduct) {
-            setCurrentStock(0);
-            return;
-        }
+    const changeDisplayStock = async (event) => {
+        try {
+            const response = await axios.get(`http://localhost:8000/api/products/${event.target.value}/unassigned-productInventories`);
+            const stock = response.data.stock;
 
-        setCurrentStock(targetProduct.stock);
+
+            if (!stock) {
+                setCurrentStock(0);
+                return;
+            }
+            setCurrentStock(stock);
+
+        } catch (error) {
+            setErrorMessages('情報の取得に失敗しました');
+        }
     }
 
     const createOrder = async () => {
