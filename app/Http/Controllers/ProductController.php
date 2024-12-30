@@ -7,11 +7,13 @@ use App\Http\Requests\ProductStoreRequest;
 use App\Http\Requests\ProductUpdateRequest;
 use App\Http\Resources\ProductResource;
 use App\Models\Product;
+use App\Models\ProductInventory;
 use App\UseCases\Product\DestroyAction;
 use App\UseCases\Product\IndexAction;
 use App\UseCases\Product\PaginateAction;
 use App\UseCases\Product\StoreAction;
 use App\UseCases\Product\UpdateAction;
+use App\UseCases\ProductInventory\UnassignedProductsAction;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 
@@ -85,6 +87,15 @@ class ProductController extends Controller
                 'next' => $products->nextPageUrl(),
                 'current' => $products->url($products->currentPage()),
             ],
+        ]);
+    }
+
+    public function unassignedProductInventories(int $product_id, UnassignedProductsAction $unassignedProductsAction, ProductInventory $productInventory): JsonResponse
+    {
+        $productInventories = $unassignedProductsAction($productInventory, $product_id);
+
+        return response()->json([
+                'stock' => $productInventories->count() ?? 0,
         ]);
     }
 }

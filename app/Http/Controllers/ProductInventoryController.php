@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Exceptions\DomainValidationException;
-use App\Exceptions\ProductInventoryHasOrdersException;
 use App\Http\Requests\ProductInventoryStoreRequest;
 use App\Http\Requests\ProductInventoryUpdateRequest;
 use App\Http\Resources\ProductInventoryResource;
@@ -74,7 +73,8 @@ class ProductInventoryController extends Controller
         return response()->noContent();
     }
 
-    public function byProduct(int $product_id, PaginateByProductAction $paginateByProductAction, ProductInventory $productInventory, int $perPage = 5): JsonResponse
+    // MEMO: 複数を返すのでProductsじゃね
+    public function paginateByProduct(int $product_id, PaginateByProductAction $paginateByProductAction, ProductInventory $productInventory, int $perPage = 5): JsonResponse
     {
         $productInventories = $paginateByProductAction($productInventory, $product_id, $perPage);
 
