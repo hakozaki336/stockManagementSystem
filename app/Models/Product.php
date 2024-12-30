@@ -32,4 +32,16 @@ class Product extends Model
     {
         return $this->hasMany(ProductInventory::class);
     }
+
+    public function hasOrders(): bool
+    {
+        // MEMO: exists()にするとクエリが発行されるのでcount()で判定する
+        return $this->orders->count() > 0;
+    }
+
+    public function hasProductInventories(): bool
+    {
+        // MEMO: exists()にするとクエリが発行されるのでcount()で判定する
+        return $this->productInventories->count() > 0;
+    }
 }

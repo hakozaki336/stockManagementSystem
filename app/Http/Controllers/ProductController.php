@@ -2,13 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Exceptions\ProductHasOrdersException;
+use App\Exceptions\DomainValidationException;
 use App\Http\Requests\ProductStoreRequest;
 use App\Http\Requests\ProductUpdateRequest;
 use App\Http\Resources\ProductResource;
-use App\Services\ProductService;
+use App\Models\Product;
+use App\Models\ProductInventory;
+use App\UseCases\Product\DestroyAction;
+use App\UseCases\Product\IndexAction;
+use App\UseCases\Product\PaginateAction;
+use App\UseCases\Product\StoreAction;
+use App\UseCases\Product\UpdateAction;
+use App\UseCases\ProductInventory\UnassignedProductsAction;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 
 class ProductController extends Controller
@@ -16,9 +22,9 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(): JsonResponse
+    public function index(IndexAction $indexAction, Product $product): JsonResponse
     {
-        $products = ProductService::getAll();
+        $products = $indexAction($product);
 
         return response()->json([
             'data' => ProductResource::collection($products),
@@ -28,9 +34,9 @@ class ProductController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(ProductStoreRequest $request): Response
+    public function store(ProductStoreRequest $request, StoreAction $storeAction, Product $product): Response
     {
-        ProductService::create($request->validated());
+        $storeAction($product, $request->validated());
 
         return response()->noContent(Response::HTTP_CREATED);
     }
@@ -38,21 +44,17 @@ class ProductController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(int $id): ProductResource
+    public function show(Product $product): ProductResource
     {
-        $product = new ProductService($id);
-
-        return new ProductResource($product->getProduct());
+        return new ProductResource($product);
     }
 
     /**
      * Update the specified resource in storage.
      */
-  
-    public function update(ProductUpdateRequest $request, int $id): Response
+    public function update(ProductUpdateRequest $request, UpdateAction $updateAction, Product $product): Response
     {
-        $productService = new ProductService($id);
-        $productService->update($request->all());
+        $updateAction($product, $request->validated());
 
         return response()->noContent();
     }
@@ -60,13 +62,11 @@ class ProductController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-
-    public function destroy(int $id): Response | JsonResponse
+    public function destroy(DestroyAction $destroyAction, Product $product): Response | JsonResponse
     {
-        $productService = new ProductService($id);
         try {
-            $productService->delete();
-        } catch (ProductHasOrdersException $e) {
+            $destroyAction($product);
+        } catch (DomainValidationException $e) {
             return response()->json(['message' => $e->getMessage()], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
@@ -74,11 +74,11 @@ class ProductController extends Controller
     }
 
     /**
-     * pagenateされた企業データを取得する
+     * pagenateされた製品データを取得する
      */
-    public function pagenate($perPage = 5): JsonResponse
+    public function pagenate(PaginateAction $paginateAction, Product $product, int $perPage = 5): JsonResponse
     {
-        $products = ProductService::getPaginatedProducts($perPage);
+        $products = $paginateAction($product, $perPage);
 
         return response()->json([
             'data' => ProductResource::collection($products),
@@ -87,6 +87,15 @@ class ProductController extends Controller
                 'next' => $products->nextPageUrl(),
                 'current' => $products->url($products->currentPage()),
             ],
+        ]);
+    }
+
+    public function unassignedProductInventories(int $product_id, UnassignedProductsAction $unassignedProductsAction, ProductInventory $productInventory): JsonResponse
+    {
+        $productInventories = $unassignedProductsAction($productInventory, $product_id);
+
+        return response()->json([
+                'stock' => $productInventories->count() ?? 0,
         ]);
     }
 }

@@ -19,7 +19,8 @@ Route::get('orders/pagenate', [OrderController::class, 'pagenate']);
 Route::apiResource('orders', OrderController::class);
 // NOTE: 遺言 順番変えたら死にます。laravleは上から舐めていくのでgetでproductsを呼ぶとshowが呼ばれてしまう
 Route::get('products/pagenate', [ProductController::class, 'pagenate']);
-Route::get('products/{product_id}/inventories', [ProductInventoryController::class, 'byProduct']);
+Route::get('products/{product_id}/inventories', [ProductInventoryController::class, 'paginateByProduct']);
+Route::get('products/{product_id}/unassigned-productInventories', [ProductController::class, 'unassignedProductInventories']);
 Route::apiResource('products', ProductController::class);
 Route::get('companies/pagenate', [CompanyController::class, 'pagenate']);
 Route::apiResource('companies', CompanyController::class);

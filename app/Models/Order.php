@@ -52,4 +52,22 @@ class Order extends Model
             ->setTimezone('Asia/Tokyo')
             ->format('Y-m-d H:i:s');
     }
+
+    /**
+     * Order.dispatchを割り当て済みにする
+     */
+    public function dispatch(): void
+    {
+        $this->dispatched = true;
+        $this->save();
+    }
+
+    /**
+     * Order.dispatchを未割り当てにする
+     */
+    public function undispatch(): void
+    {
+        $this->dispatched = false;
+        $this->save();
+    }
 }

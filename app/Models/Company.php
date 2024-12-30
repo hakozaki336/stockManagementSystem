@@ -21,4 +21,10 @@ class Company extends Model
     {
         return $this->hasMany(Order::class);
     }
+
+    public function hasOrders(): bool
+    {
+        // MEMO: exists()にするとクエリが発行されるのでcount()で判定する
+        return $this->orders->count() > 0;
+    }
 }
