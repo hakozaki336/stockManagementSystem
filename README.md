@@ -51,7 +51,7 @@ laravelにおいて、デフォルトで作成される値(idやcreate_atなど)
     - X: `getProductsWithRelations`
 
 # ユースケース図
-[在庫管理システム(ぴゅう太)ユースケース図](https://github.com/user-attachments/assets/ce18e5b4-b224-4622-a83b-55862acb498c)
+![在庫管理システム(ぴゅう太)ユースケース図](https://github.com/user-attachments/assets/bc7f44c5-7996-49e7-a87b-44c4838f0a8c)
 
 
 # ユースケース記述
