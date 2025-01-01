@@ -6,19 +6,11 @@
 - フロントエンドのスタイルにはテールウィンド cssを使用する
 
 # DB
-DBの構成情報を記述する。
-laravelにおいて、デフォルトで作成される値(idやcreate_atなど)は記載しない。
-- 商品(Products)
-    - 名前
-    - 価格
-    - 個数
-- 会社(Companies)
-    - 名前
-- 注文(Orders)
-    - 商品id
-    - 企業id
-    - 注文数
-    - 出荷フラグ
+ER図
+※laravelにおいて、デフォルトで作成される値(idやcreate_atなど)は記載しない。
+![ER図(ぴゅう太) drawio](https://github.com/user-attachments/assets/e168f6f2-fe49-475a-94ae-59f80a78b604)
+
+
  # 環境構築方法
  - `php artisan db:seed`を実行
 # フォルダ構成
