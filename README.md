@@ -7,6 +7,7 @@
 
 # DB
 ER図
+
 ※laravelにおいて、デフォルトで作成される値(idやcreate_atなど)は記載しない。
 ![ER図(ぴゅう太) drawio](https://github.com/user-attachments/assets/e168f6f2-fe49-475a-94ae-59f80a78b604)
 
