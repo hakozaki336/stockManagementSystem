@@ -74,9 +74,9 @@ class ProductController extends Controller
     }
 
     /**
-     * pagenateされた製品データを取得する
+     * paginateされた製品データを取得する
      */
-    public function pagenate(PaginateAction $paginateAction, Product $product, int $perPage = 5): JsonResponse
+    public function paginate(PaginateAction $paginateAction, Product $product, int $perPage = 5): JsonResponse
     {
         $products = $paginateAction($product, $perPage);
 

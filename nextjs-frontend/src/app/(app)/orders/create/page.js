@@ -70,9 +70,8 @@ const Create = () => {
 
     const changeDisplayStock = async (event) => {
         try {
-            const response = await axios.get(`http://localhost:8000/api/products/${event.target.value}/unassigned-productInventories`);
+            const response = await axios.get(`http://localhost:8000/api/products/${event.target.value}/unassigned-product-inventories`);
             const stock = response.data.stock;
-
 
             if (!stock) {
                 setCurrentStock(0);

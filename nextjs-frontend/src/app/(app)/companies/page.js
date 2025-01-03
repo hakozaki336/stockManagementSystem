@@ -12,7 +12,7 @@ const Companies = () => {
     const [previousPage, setPreviousPage] = useState('');
     const [currentPage, setCurrentPage] = useState('');
     const [errorMessages, setErrorMessages] = useState('');
-    const defaultUrl = 'http://localhost:8000/api/companies/pagenate';
+    const defaultUrl = 'http://localhost:8000/api/companies/paginate';
 
     const fetchCompanies = async (url) => {
         if (!url) {

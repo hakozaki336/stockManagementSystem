@@ -102,7 +102,7 @@ class ProductInventoryController extends Controller
         ]);
     }
 
-    public function pagenate(PaginateAction $paginateAction, productInventory $productInventory, int $perpage = 5): JsonResponse
+    public function paginate(PaginateAction $paginateAction, productInventory $productInventory, int $perpage = 5): JsonResponse
     {
         $productInventories = $paginateAction($productInventory, $perpage);
 
