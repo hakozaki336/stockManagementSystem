@@ -84,11 +84,11 @@ const Inventories = ({ params }) => {
                 <tbody className="bg-white">
                     {inventories && inventories.map((inventory) => (
                         <tr key={inventory.id} className="text-center border">
-                            <td>{inventory.id}</td>
-                            <td>{inventory.serial_number}</td>
-                            <td>{inventory.location}</td>
-                            <td>{inventory.expiration_date}</td>
-                            <td>{inventory.dispatched ? '割り当て済み' : '未割り当て'}</td>
+                            <td className='py-4'>{inventory.id}</td>
+                            <td className='py-4'>{inventory.serial_number}</td>
+                            <td className='py-4'>{inventory.location}</td>
+                            <td className='py-4'>{inventory.expiration_date}</td>
+                            <td className='py-4'>{inventory.dispatched ? '割り当て済み' : '未割り当て'}</td>
                         </tr>
                     ))}
                 </tbody>
