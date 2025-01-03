@@ -79,7 +79,7 @@ class OrderController extends Controller
         return response()->noContent();
     }
 
-    public function pagenate(PaginateAction $paginateAction, Order $order, int $perpage = 5): JsonResponse
+    public function paginate(PaginateAction $paginateAction, Order $order, int $perpage = 5): JsonResponse
     {
         $orders = $paginateAction($order, $perpage);
 

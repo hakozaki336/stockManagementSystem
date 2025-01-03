@@ -12,16 +12,16 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 });
 
 // NOTE:　Laravelのルーティングでは、ルートは上から順にマッチするため、GET /orders/createがapiResourceのGET /ordersルートによって処理され、正しくcreateメソッドに到達しない
-Route::patch('/orders/{order}/dispatch', [OrderController::class, 'dispatch']);
-Route::patch('/orders/{order}/undispatch', [OrderController::class, 'undispatch']);
+Route::patch('orders/{order}/dispatch', [OrderController::class, 'dispatch']);
+Route::patch('orders/{order}/undispatch', [OrderController::class, 'undispatch']);
 Route::get('orders/{order_id}/inventories', [ProductInventoryController::class, 'byOrder']);
-Route::get('orders/pagenate', [OrderController::class, 'pagenate']);
+Route::get('orders/paginate', [OrderController::class, 'paginate']);
 Route::apiResource('orders', OrderController::class);
-// NOTE: 遺言 順番変えたら死にます。laravleは上から舐めていくのでgetでproductsを呼ぶとshowが呼ばれてしまう
-Route::get('products/pagenate', [ProductController::class, 'pagenate']);
+// NOTE: 遺言 順番変えたら死にます。laravelは上から舐めていくのでgetでproductsを呼ぶとshowが呼ばれてしまう
+Route::get('products/paginate', [ProductController::class, 'paginate']);
 Route::get('products/{product_id}/inventories', [ProductInventoryController::class, 'paginateByProduct']);
 Route::get('products/{product_id}/unassigned-productInventories', [ProductController::class, 'unassignedProductInventories']);
 Route::apiResource('products', ProductController::class);
-Route::get('companies/pagenate', [CompanyController::class, 'pagenate']);
+Route::get('companies/paginate', [CompanyController::class, 'paginate']);
 Route::apiResource('companies', CompanyController::class);
-Route::apiResource('product_inventories', ProductInventoryController::class);
+Route::apiResource('product-inventories', ProductInventoryController::class);
