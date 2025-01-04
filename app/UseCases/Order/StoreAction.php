@@ -37,7 +37,7 @@ class StoreAction
             DB::transaction(function () use ($stockManagementType, $productInventoryList, $param) {
                 $this->order->fill($param)->save();
                 $stockAssignment = $this->stockAssignmentFactory->create($stockManagementType);
-                $stockAssignment->dispatchStock($productInventoryList, $param['order_count'], $this->order->id);
+                $stockAssignment->assignStock($productInventoryList, $param['order_count'], $this->order->id);
             });
         } catch (InvalidArgumentException $e) {
             throw new DomainValidationException($e->getMessage());

@@ -61,9 +61,9 @@ const Orders = () => {
             setErrorMessages(message);
         }
     }
-    const dispatchOrder = async (id) => {
+    const assignOrder = async (id) => {
         try {
-            await axios.patch(`http://localhost:8000/api/orders/${id}/dispatch`);
+            await axios.patch(`http://localhost:8000/api/orders/${id}/assign`);
 
             fetchOrders(currentPage);
         } catch (error) {
@@ -72,9 +72,9 @@ const Orders = () => {
         }
     }
 
-    const undispatchOrder = async (id) => {
+    const unAssignOrder = async (id) => {
         try {
-            await axios.patch(`http://localhost:8000/api/orders/${id}/undispatch`);
+            await axios.patch(`http://localhost:8000/api/orders/${id}/unassign`);
 
             fetchOrders(currentPage);
         } catch (error) {
@@ -122,15 +122,15 @@ const Orders = () => {
                             <td>{order.order_count}</td>
                             <td>{order.order_date}</td>
                             {/* 未出荷であればボタンを表示、出荷済みであれば「出荷済み」と表示 */}
-                            <td>{order.dispatched ? (
+                            <td>{order.assign ? (
                                     <button className="bg-gray-200 hover:bg-gray-300 text-white font-medium px-3 py-1 my-2 mx-1 font-semibold rounded"
-                                        onClick={() => undispatchOrder(order.id)}
+                                        onClick={() => unAssignOrder(order.id)}
                                     >
                                         未出荷
                                     </button>
                                 ) : (
                                     <button className="bg-green-500 hover:bg-green-600 text-white font-medium px-3 py-1 my-2 mx-1 font-semibold rounded"
-                                        onClick={() => dispatchOrder(order.id)}
+                                        onClick={() => assignOrder(order.id)}
                                     >
                                         出荷
                                     </button>
@@ -142,17 +142,17 @@ const Orders = () => {
                                     className="bg-blue-500 hover:bg-blue-600 text-white font-medium px-3 py-1 my-2 mx-1 font-semibold rounded"
                                 >在庫一覧</button>
                             </td>
-                            <td>{order.dispatched ? (
+                            <td>{order.assign ? (
                                     <button
                                         onClick={() => clickDelete(order.id)}
                                         className="bg-gray-500 text-white font-medium px-3 py-1 my-2 mx-1 font-semibold rounded"
-                                        disabled={order.dispatched}
+                                        disabled={order.assign}
                                     >削除</button>
                                 ) : (
                                     <button
                                         onClick={() => clickDelete(order.id)}
                                         className="bg-red-600 hover:bg-red-600 text-white font-medium px-3 py-1 my-2 mx-1 font-semibold rounded"
-                                        disabled={order.dispatched}
+                                        disabled={order.assign}
                                     >削除</button>
                                 )}
                             </td>

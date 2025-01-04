@@ -11,7 +11,7 @@ class LifoStockAssignment implements StockAssignmentInterface
     /**
      * 在庫を割り当て済みにする
      */
-    public function dispatchStock(Collection $productInventoryList, int $count, int $orderId): void
+    public function assignStock(Collection $productInventoryList, int $count, int $orderId): void
     {
         // 作成日を基準にして昇順にソート
         $productInventoryList = $productInventoryList->sortBy('created_at', SORT_REGULAR, true);
@@ -36,7 +36,7 @@ class LifoStockAssignment implements StockAssignmentInterface
     /**
      * 在庫を非割り当てにする
      */
-    public function undispatchStock(Collection $productInventoryList, int $count, int $orderId): void
+    public function unassignStock(Collection $productInventoryList, int $count, int $orderId): void
     {
         // 作成日を基準にして昇順にソート
         // NOTE: そもそもnullのみを取得すれば良いのでは？

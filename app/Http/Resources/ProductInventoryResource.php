@@ -21,7 +21,7 @@ class ProductInventoryResource extends JsonResource
             'serial_number' => $this->serial_number,
             'location' => $this->location,
             'expiration_date' => $this->expiration_date,
-            'dispatched' => $this->order_id ? true : false,
+            'assign' => $this->order_id ? true : false,
         ];
     }
 }
