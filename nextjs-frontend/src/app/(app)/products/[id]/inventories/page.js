@@ -95,7 +95,7 @@ const Inventories = ({ params }) => {
                             <td>{inventory.serial_number}</td>
                             <td>{inventory.location}</td>
                             <td>{inventory.expiration_date}</td>
-                            <td>{inventory.dispatched ? '割り当て済み' : '未割り当て'}</td>
+                            <td>{inventory.assign ? '割り当て済み' : '未割り当て'}</td>
                             <td>
                                 <button
                                     onClick={() => router.push(`inventories/edit/${inventory.id}`)}

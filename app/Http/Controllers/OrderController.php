@@ -65,16 +65,16 @@ class OrderController extends Controller
         return response()->noContent();
     }
 
-    public function dispatch(Order $order): Response
+    public function assign(Order $order): Response
     {
-        $order->dispatch();
+        $order->assign();
 
         return response()->noContent();
     }
 
-    public function undispatch(Order $order): Response
+    public function unassign(Order $order): Response
     {
-        $order->undispatch();
+        $order->unassign();
 
         return response()->noContent();
     }

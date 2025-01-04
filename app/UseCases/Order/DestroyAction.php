@@ -32,7 +32,7 @@ class DestroyAction
         try {
             DB::transaction(function () use ($stockManagementType, $productInventoryList, $order) {
                 $stockAssignment = $this->stockAssignmentFactory->create($stockManagementType);
-                $stockAssignment->undispatchStock($productInventoryList, $order->order_count, $order->id);
+                $stockAssignment->unAssignStock($productInventoryList, $order->order_count, $order->id);
                 $order->delete();
             });
         } catch (InvalidArgumentException $e) {

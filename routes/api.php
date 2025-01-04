@@ -16,8 +16,8 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 
 // Orders関連ルート
 Route::prefix('orders')->group(function () {
-    Route::patch('{order}/dispatch', [OrderController::class, 'dispatch']);
-    Route::patch('{order}/undispatch', [OrderController::class, 'undispatch']);
+    Route::patch('{order}/assign', [OrderController::class, 'assign']);
+    Route::patch('{order}/unassign', [OrderController::class, 'unassign']);
     Route::get('{order_id}/inventories', [ProductInventoryController::class, 'byOrder']);
     Route::get('paginate', [OrderController::class, 'paginate']);
     Route::apiResource('', OrderController::class);

@@ -88,7 +88,7 @@ const Inventories = ({ params }) => {
                             <td className='py-4'>{inventory.serial_number}</td>
                             <td className='py-4'>{inventory.location}</td>
                             <td className='py-4'>{inventory.expiration_date}</td>
-                            <td className='py-4'>{inventory.dispatched ? '割り当て済み' : '未割り当て'}</td>
+                            <td className='py-4'>{inventory.assign ? '割り当て済み' : '未割り当て'}</td>
                         </tr>
                     ))}
                 </tbody>

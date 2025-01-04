@@ -54,20 +54,20 @@ class Order extends Model
     }
 
     /**
-     * Order.dispatchを割り当て済みにする
+     * Order.assignを割り当て済みにする
      */
-    public function dispatch(): void
+    public function assign(): void
     {
-        $this->dispatched = true;
+        $this->assign = true;
         $this->save();
     }
 
     /**
-     * Order.dispatchを未割り当てにする
+     * Order.assignを未割り当てにする
      */
-    public function undispatch(): void
+    public function unassign(): void
     {
-        $this->dispatched = false;
+        $this->assign = false;
         $this->save();
     }
 }
