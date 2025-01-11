@@ -6,10 +6,18 @@ use App\Models\Company;
 
 class UpdateAction
 {
-    public function __invoke(Company $company, array $param): Company
+    public function __invoke(Company $company, array $param): bool
     {
-        $company->fill($param)->save();
+        return $this->updateCompany($company, $param);
 
         return $company;
+    }
+
+    /**
+     * 企業を更新する
+     */
+    private function updateCompany($company, array $param): bool
+    {
+        return $company->fill($param)->save();
     }
 }

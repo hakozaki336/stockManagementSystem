@@ -8,7 +8,7 @@ use App\Models\Company;
 
 class DestroyAction
 {
-    public function __invoke(Company $company): void
+    public function __invoke(Company $company): bool
     {
         try {
             $this->validateDomainRule($company);
@@ -16,7 +16,7 @@ class DestroyAction
             throw new DomainValidationException($e->getMessage());
         }
 
-        $company->delete();
+        return $company->delete();
     }
 
     /**

@@ -23,7 +23,7 @@ class DestroyAction
         $this->stockAssignmentFactory = $stockAssignmentFactory;
     }
 
-    public function __invoke(Order $order): bool
+    public function __invoke(Order $order): void
     {
         $stockManagementType = $order->product->stock_management_type;
 
@@ -40,8 +40,5 @@ class DestroyAction
         } catch (StockLogicException $e) {
             throw new DomainValidationException($e->getMessage());
         }
-
-
-        return true;
     }
 }

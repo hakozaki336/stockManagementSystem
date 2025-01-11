@@ -6,10 +6,16 @@ use App\Models\Company;
 
 class StoreAction
 {
-    public function __invoke($company, array $param): Company
+    public function __invoke($company, array $param): bool
     {
-        $company->fill($param)->save();
+        return $this->createCompany($company, $param);
+    }
 
-        return $company;
+    /**
+     * 企業を作成する
+     */
+    private function createCompany($company, array $param): bool
+    {
+        return $company->fill($param)->save();
     }
 }

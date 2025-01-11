@@ -9,6 +9,7 @@ class PaginateByOrderAction
 {
     public function __invoke(productInventory $productInventory, int $order_id, int $perpage): LengthAwarePaginator
     {
+        //　これはない(usecaseちゃうやん) scopeでやるべき
         return $productInventory
             ->where('order_id', $order_id)
             ->paginate($perpage);

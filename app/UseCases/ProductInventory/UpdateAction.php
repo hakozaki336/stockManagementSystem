@@ -6,10 +6,16 @@ use App\Models\ProductInventory;
 
 class UpdateAction
 {
-    public function __invoke(ProductInventory $productInventory, array $param): ProductInventory
+    public function __invoke(ProductInventory $productInventory, array $param): bool
     {
-        $productInventory->fill($param)->save();
+        return $this->updateProductInventory($productInventory, $param);
+    }
 
-        return $productInventory;
+    /**
+     * 商品在庫を更新する
+     */
+    private function updateProductInventory($productInventory, array $param): bool
+    {
+        return $productInventory->fill($param)->save();
     }
 }

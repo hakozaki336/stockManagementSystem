@@ -6,10 +6,16 @@ use App\Models\Product;
 
 class UpdateAction
 {
-    public function __invoke(Product $product, array $param): Product
+    public function __invoke(Product $product, array $param): bool
     {
-        $product->fill($param)->save();
+        return $this->updateProduct($product, $param);
+    }
 
-        return $product;
+    /**
+     * 商品を更新する
+     */
+    private function updateProduct($product, array $param): bool
+    {
+        return $product->fill($param)->save();
     }
 }

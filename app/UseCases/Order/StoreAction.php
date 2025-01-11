@@ -13,7 +13,6 @@ use InvalidArgumentException;
 
 class StoreAction
 {
-    // MEMO: この引数の多さは何か。。技術的な敗北を感じる
     private Order $order;
     private Product $product;
     private ProductInventory $productInventory;
@@ -27,25 +26,39 @@ class StoreAction
         $this->stockAssignmentFactory = $stockAssignmentFactory;
     }
 
-    public function __invoke(array $param): Order
+    public function __invoke(array $param): void
     {
-        $stockManagementType = $this->product->findOrFail($param['product_id'])->stock_management_type;
-
-        $productInventoryList = $this->productInventory->getByProductId($param['product_id']);
+        $stockManagementType = $this->getStockManagementType($param['product_id']);
+        $productInventoryList = $this->getProductInventoryList($param['product_id']);
 
         try {
             DB::transaction(function () use ($stockManagementType, $productInventoryList, $param) {
-                $this->order->fill($param)->save();
-                $stockAssignment = $this->stockAssignmentFactory->create($stockManagementType);
-                $stockAssignment->assignStock($productInventoryList, $param['order_count'], $this->order->id);
+                $this->createOrder($param);
+                $this->assignStock($stockManagementType, $productInventoryList, $param['order_count']);
             });
-        } catch (InvalidArgumentException $e) {
-            throw new DomainValidationException($e->getMessage());
-        } catch (OutOfStockException $e) {
+        } catch (InvalidArgumentException | OutOfStockException $e) {
             throw new DomainValidationException($e->getMessage());
         }
+    }
 
+    private function getStockManagementType(int $productId): string
+    {
+        return $this->product->findOrFail($productId)->stock_management_type;
+    }
 
-        return new Order();
+    private function getProductInventoryList(int $productId)
+    {
+        return $this->productInventory->getByProductId($productId);
+    }
+
+    private function createOrder(array $param): void
+    {
+        $this->order->fill($param)->save();
+    }
+
+    private function assignStock(string $stockManagementType, $productInventoryList, int $orderCount): void
+    {
+        $stockAssignment = $this->stockAssignmentFactory->create($stockManagementType);
+        $stockAssignment->assignStock($productInventoryList, $orderCount, $this->order->id);
     }
 }

@@ -9,18 +9,16 @@ use App\Models\Product;
 
 class DestroyAction
 {
-    public function __invoke(Product $product): void
+    public function __invoke(Product $product): bool
     {
         try {
             $this->validateDomainRule($product);
-        } catch (ProductHasOrdersException $e) {
-            throw new DomainValidationException($e->getMessage());
-        } catch (ProductHasProductInventoriesException $e) {
+        } catch (ProductHasOrdersException | ProductHasProductInventoriesException $e) {
             throw new DomainValidationException($e->getMessage());
         }
         $this->validateDomainRule($product);
 
-        $product->delete();
+        return $product->delete();
     }
 
     /**

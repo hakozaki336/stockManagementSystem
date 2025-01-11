@@ -8,7 +8,7 @@ use App\Models\ProductInventory;
 
 class DestroyAction
 {
-    public function __invoke(ProductInventory $productInventory): void
+    public function __invoke(ProductInventory $productInventory): bool
     {
         try {
             $this->validateDomainRule($productInventory);
@@ -16,7 +16,7 @@ class DestroyAction
             throw new DomainValidationException($e->getMessage());
         }
 
-        $productInventory->delete();
+        return $productInventory->delete();
     }
 
     /**
