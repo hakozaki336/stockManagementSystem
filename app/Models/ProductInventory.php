@@ -2,11 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class ProductInventory extends Model
 {
@@ -42,8 +41,50 @@ class ProductInventory extends Model
     /**
      * productに紐づく複数のproductInventoryを取得する
      */
-    public function getByProductId(int $product_id) : Collection
+    public function scopeByProductId($query, int $productId): Builder
     {
-        return $this->where('product_id', $product_id)->get();
+        return $query->where('product_id', $productId);
+    }
+
+    /**
+     * orderに紐づく複数のproductInventoryを取得する
+     */
+    public function scopeByOrderId($query, int $orderId): Builder
+    {
+        return $query->where('order_id', $orderId);
+    }
+
+    /**
+     * 割り当てられていない在庫を取得する
+     */
+    public function scopeUnAssigned($query): Builder
+    {
+        return $query->whereNull('order_id');
+    }
+
+    /**
+     * 在庫を割り当てる
+     */
+    public function assign(int $orderId): self
+    {
+        $this->order_id = $orderId;
+        return $this;
+    }
+
+    /**
+     * 在庫を非割り当てにする
+     */
+    public function unAssign(): self
+    {
+        $this->order_id = null;
+        return $this;
+    }
+
+    /**
+     * 注文と一致するかどうかを確認する
+     */
+    public function isAssignedToOrder(int $orderId): bool
+    {
+        return $this->order_id === $orderId;
     }
 }

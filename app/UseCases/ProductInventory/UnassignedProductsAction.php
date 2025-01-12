@@ -7,12 +7,11 @@ use Illuminate\Database\Eloquent\Collection;
 
 class UnassignedProductsAction
 {
-    public function __invoke(productInventory $productInventory, int $product_id): Collection
+    public function __invoke(productInventory $productInventory, int $productId): Collection
     {
-        // これはスコープにあるべき
         return $productInventory
-            ->where('product_id', $product_id)
-            ->whereNull('order_id')
+            ->byProductId($productId)
+            ->unAssigned()
             ->get();
     }
 }

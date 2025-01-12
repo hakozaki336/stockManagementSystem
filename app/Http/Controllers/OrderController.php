@@ -67,14 +67,14 @@ class OrderController extends Controller
 
     public function assign(Order $order): Response
     {
-        $order->assign();
+        $order->assign()->save();
 
         return response()->noContent();
     }
 
     public function unassign(Order $order): Response
     {
-        $order->unassign();
+        $order->unassign()->save();
 
         return response()->noContent();
     }

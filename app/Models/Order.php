@@ -38,6 +38,7 @@ class Order extends Model
      */
     public function productInventory(): HasOne
     {
+        // TODO: camelになってないのはなぜか調べる
         return $this->HasOne(ProductInventory::class);
     }
 
@@ -56,18 +57,18 @@ class Order extends Model
     /**
      * Order.assignを割り当て済みにする
      */
-    public function assign(): void
+    public function assign(): self
     {
         $this->assign = true;
-        $this->save();
+        return $this;
     }
 
     /**
      * Order.assignを未割り当てにする
      */
-    public function unassign(): void
+    public function unassign(): self
     {
         $this->assign = false;
-        $this->save();
+        return $this;
     }
 }

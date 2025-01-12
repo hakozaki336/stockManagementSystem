@@ -74,9 +74,9 @@ class ProductInventoryController extends Controller
     }
 
     // MEMO: 複数を返すのでProductsじゃね
-    public function paginateByProduct(int $product_id, PaginateByProductAction $paginateByProductAction, ProductInventory $productInventory, int $perPage = 5): JsonResponse
+    public function paginateByProduct(int $productId, PaginateByProductAction $paginateByProductAction, ProductInventory $productInventory, int $perPage = 5): JsonResponse
     {
-        $productInventories = $paginateByProductAction($productInventory, $product_id, $perPage);
+        $productInventories = $paginateByProductAction($productInventory, $productId, $perPage);
 
         return response()->json([
             'data' => ProductInventoryResource::collection($productInventories),
@@ -88,9 +88,9 @@ class ProductInventoryController extends Controller
         ]);
     }
 
-    public function byOrder(int $order_id, PaginateByOrderAction $paginateByOrderAction, productInventory $productInventory, int $perPage = 5): JsonResponse
+    public function byOrder(int $orderId, PaginateByOrderAction $paginateByOrderAction, productInventory $productInventory, int $perPage = 5): JsonResponse
     {
-        $productInventories = $paginateByOrderAction($productInventory, $order_id, $perPage);
+        $productInventories = $paginateByOrderAction($productInventory, $orderId, $perPage);
 
         return response()->json([
             'data' => ProductInventoryResource::collection($productInventories),

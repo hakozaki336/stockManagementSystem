@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Collection;
 
 class IndexAction
 {
-    public function __invoke($company): Collection
+    public function __invoke(Company $company): Collection
     {
         return $company->all();
     }
