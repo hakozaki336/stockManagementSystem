@@ -11,8 +11,9 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
     return $request->user();
 });
 
+
 // NOTE: ルートは上から順にマッチするため、順序に注意
-// 例: GET orders/{order_id}/inventories が apiResource の GET /orders/show より上にあるとマッチしてしまう。
+// 例: GET orders/{order_id}/inventories が apiResource の GET /orders/show より上にないとshowとマッチしてしまう。
 
 // Orders関連ルート
 Route::prefix('orders')->group(function () {
@@ -20,7 +21,7 @@ Route::prefix('orders')->group(function () {
     Route::patch('{order}/unassign', [OrderController::class, 'unassign']);
     Route::get('{order_id}/inventories', [ProductInventoryController::class, 'byOrder']);
     Route::get('paginate', [OrderController::class, 'paginate']);
-    Route::apiResource('', OrderController::class);
+    Route::apiResource('', OrderController::class)->parameters(['' => 'order']);
 });
 
 // Products関連ルート
@@ -28,14 +29,16 @@ Route::prefix('products')->group(function () {
     Route::get('paginate', [ProductController::class, 'paginate']);
     Route::get('{product_id}/inventories', [ProductInventoryController::class, 'paginateByProduct']);
     Route::get('{product_id}/unassigned-product-inventories', [ProductController::class, 'unassignedProductInventories']);
-    Route::apiResource('', ProductController::class);
+    Route::apiResource('', ProductController::class)->parameters(['' => 'product']);
 });
 
 // Companies関連ルート
 Route::prefix('companies')->group(function () {
     Route::get('paginate', [CompanyController::class, 'paginate']);
-    Route::apiResource('', CompanyController::class);
+    Route::apiResource('', CompanyController::class)->parameters(['' => 'company']);
 });
 
 // Product Inventories関連ルート
-Route::apiResource('product-inventories', ProductInventoryController::class);
+Route::prefix('product_inventories')->group(function () {
+    Route::apiResource('', ProductInventoryController::class)->parameters(['' => 'product_inventory']);
+});

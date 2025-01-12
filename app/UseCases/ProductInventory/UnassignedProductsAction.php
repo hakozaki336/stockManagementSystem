@@ -9,6 +9,7 @@ class UnassignedProductsAction
 {
     public function __invoke(productInventory $productInventory, int $product_id): Collection
     {
+        // これはスコープにあるべき
         return $productInventory
             ->where('product_id', $product_id)
             ->whereNull('order_id')

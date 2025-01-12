@@ -6,10 +6,16 @@ use App\Models\Order;
 
 class UpdateAction
 {
-    public function __invoke(Order $order, array $param): Order
+    public function __invoke(Order $order, array $param): bool
     {
-        $order->fill($param)->save();
+        return $this->updateOrder($order, $param);
+    }
 
-        return $order;
+    /**
+     * 注文を更新する
+     */
+    private function updateOrder($order, array $param): bool
+    {
+        return $order->fill($param)->save();
     }
 }

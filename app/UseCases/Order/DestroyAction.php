@@ -9,6 +9,7 @@ use App\Models\Order;
 use App\Models\Product;
 use App\Models\ProductInventory;
 use App\UseCases\ProductInventory\Stock\StockAssignmentFactory;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
 use InvalidArgumentException;
 
@@ -23,25 +24,43 @@ class DestroyAction
         $this->stockAssignmentFactory = $stockAssignmentFactory;
     }
 
-    public function __invoke(Order $order): bool
+    public function __invoke(Order $order): void
     {
-        $stockManagementType = $order->product->stock_management_type;
-
-        $productInventoryList = $this->productInventory->getByProductId($order->product_id);
+        $stockManagementType = $this->getStockManagementType($order);
+        $productInventoryList = $this->getProductInventoryList($order->product_id);
 
         try {
             DB::transaction(function () use ($stockManagementType, $productInventoryList, $order) {
-                $stockAssignment = $this->stockAssignmentFactory->create($stockManagementType);
-                $stockAssignment->unAssignStock($productInventoryList, $order->order_count, $order->id);
+                $this->unAssignStock($stockManagementType, $productInventoryList, $order);
                 $order->delete();
             });
-        } catch (InvalidArgumentException $e) {
-            throw new DomainValidationException($e->getMessage());
-        } catch (StockLogicException $e) {
+        } catch (InvalidArgumentException | StockLogicException $e) {
             throw new DomainValidationException($e->getMessage());
         }
+    }
 
+    /**
+     * 在庫管理タイプを取得する
+     */
+    private function getStockManagementType(Order $order): string
+    {
+        return $order->product->stock_management_type;
+    }
 
-        return true;
+    /**
+     * 商品の在庫リストを取得する
+     */
+    private function getProductInventoryList(int $productId): Collection
+    {
+        return $this->productInventory->getByProductId($productId);
+    }
+
+    /**
+     * 在庫を返却する
+     */
+    private function unAssignStock(string $stockManagementType, $productInventoryList, Order $order): void
+    {
+        $stockAssignment = $this->stockAssignmentFactory->create($stockManagementType);
+        $stockAssignment->unAssignStock($productInventoryList, $order->order_count, $order->id);
     }
 }

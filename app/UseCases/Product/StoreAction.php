@@ -6,10 +6,16 @@ use App\Models\Product;
 
 class StoreAction
 {
-    public function __invoke(Product $product, array $param): Product
+    public function __invoke(Product $product, array $param): bool
     {
-        $product->fill($param)->save();
+        return $this->createProduct($product, $param);
+    }
 
-        return $product;
+    /**
+     * 商品を作成する
+     */
+    private function createProduct($product, array $param): bool
+    {
+        return $product->fill($param)->save();
     }
 }
