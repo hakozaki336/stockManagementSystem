@@ -16,7 +16,7 @@ class UpdateAction
     /**
      * 企業を更新する
      */
-    private function updateCompany($company, array $param): bool
+    private function updateCompany(Company $company, array $param): bool
     {
         return $company->fill($param)->save();
     }

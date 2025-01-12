@@ -21,9 +21,8 @@ class FifoStockAssignment implements StockAssignmentInterface
                 break;
             }
 
-            if ($productInventory->order_id === null) {
-                $productInventory->order_id = $orderId;
-                $productInventory->save();
+            if (!$productInventory->hasOrder()) {
+                $productInventory->assign($orderId)->save();
                 $count--;
             }
         }
@@ -46,9 +45,8 @@ class FifoStockAssignment implements StockAssignmentInterface
                 break;
             }
 
-            if ($productInventory->order_id === $orderId) {
-                $productInventory->order_id = null;
-                $productInventory->save();
+            if ($productInventory->isAssignedToOrder($orderId)) {
+                $productInventory->unAssign()->save();
                 $count--;
             }
         }

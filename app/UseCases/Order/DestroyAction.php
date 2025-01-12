@@ -52,7 +52,7 @@ class DestroyAction
      */
     private function getProductInventoryList(int $productId): Collection
     {
-        return $this->productInventory->getByProductId($productId);
+        return $this->productInventory->byProductId($productId)->get();
     }
 
     /**

@@ -21,9 +21,8 @@ class LifoStockAssignment implements StockAssignmentInterface
                 break;
             }
 
-            if ($productInventory->order_id === null) {
-                $productInventory->order_id = $orderId;
-                $productInventory->save();
+            if (!$productInventory->hasOrder()) {
+                $productInventory->assign($orderId)->save();
                 $count--;
             }
         }
@@ -39,7 +38,7 @@ class LifoStockAssignment implements StockAssignmentInterface
     public function unassignStock(Collection $productInventoryList, int $count, int $orderId): void
     {
         // 作成日を基準にして昇順にソート
-        // NOTE: そもそもnullのみを取得すれば良いのでは？
+        // NOTE: これscopeにできないか
         $productInventoryList = $productInventoryList->sortBy('created_at', SORT_REGULAR, false);
 
         foreach ($productInventoryList as $productInventory) {
@@ -47,9 +46,8 @@ class LifoStockAssignment implements StockAssignmentInterface
                 break;
             }
 
-            if ($productInventory->order_id === $orderId) {
-                $productInventory->order_id = null;
-                $productInventory->save();
+            if ($productInventory->isAssignedToOrder($orderId)) {
+                $productInventory->unAssign()->save();
                 $count--;
             }
         }
