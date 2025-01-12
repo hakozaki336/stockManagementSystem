@@ -36,7 +36,7 @@ class ProductInventory extends Model
     public function hasOrder(): bool
     {
         // MEMO: exists()にするとクエリが発行されるのでcount()で判定する
-        return $this->order->count() > 0;
+        return $this->order_id !== null;
     }
 
     /**
