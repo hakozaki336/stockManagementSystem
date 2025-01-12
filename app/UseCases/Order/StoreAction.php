@@ -9,6 +9,7 @@ use App\Models\Product;
 use App\Models\ProductInventory;
 use Illuminate\Support\Facades\DB;
 use App\UseCases\ProductInventory\Stock\StockAssignmentFactory;
+use Illuminate\Database\Eloquent\Collection;
 use InvalidArgumentException;
 
 class StoreAction
@@ -41,21 +42,33 @@ class StoreAction
         }
     }
 
+    /**
+     * 在庫管理タイプを取得する
+     */
     private function getStockManagementType(int $productId): string
     {
         return $this->product->findOrFail($productId)->stock_management_type;
     }
 
-    private function getProductInventoryList(int $productId)
+    /**
+     * 商品の在庫リストを取得する
+     */
+    private function getProductInventoryList(int $productId): Collection
     {
         return $this->productInventory->getByProductId($productId);
     }
 
-    private function createOrder(array $param): void
+    /**
+     * 注文を作成する
+     */
+    private function createOrder(array $param): bool
     {
-        $this->order->fill($param)->save();
+        return $this->order->fill($param)->save();
     }
 
+    /**
+     * 在庫を割り当てる
+     */
     private function assignStock(string $stockManagementType, $productInventoryList, int $orderCount): void
     {
         $stockAssignment = $this->stockAssignmentFactory->create($stockManagementType);
