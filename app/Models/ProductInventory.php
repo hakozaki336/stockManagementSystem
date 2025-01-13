@@ -65,7 +65,7 @@ class ProductInventory extends Model
     /**
      * 在庫を割り当てる
      */
-    public function assign(int $orderId): self
+    public function assign(int $orderId): static
     {
         $this->order_id = $orderId;
         return $this;
@@ -74,7 +74,7 @@ class ProductInventory extends Model
     /**
      * 在庫を非割り当てにする
      */
-    public function unAssign(): self
+    public function unAssign(): static
     {
         $this->order_id = null;
         return $this;
