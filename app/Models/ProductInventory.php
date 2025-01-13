@@ -56,6 +56,7 @@ class ProductInventory extends Model
 
     /**
      * 割り当てられていない在庫を取得する
+     * MEMO: リレーションで取得できるが、単体で取得するケースが存在するためscopeを作成
      */
     public function scopeUnassigned($query): Builder
     {
