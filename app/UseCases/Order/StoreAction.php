@@ -43,7 +43,7 @@ class StoreAction
     /**
      * 在庫管理タイプを取得する
      */
-    private function getStockManagementType(int $productId): string
+    protected function getStockManagementType(int $productId): string
     {
         return $this->product->findOrFail($productId)->stock_management_type;
     }
@@ -51,7 +51,7 @@ class StoreAction
     /**
      * 商品の在庫リストを取得する
      */
-    private function getProductInventoryList(int $productId): Collection
+    protected function getProductInventoryList(int $productId): Collection
     {
         return $this->product->findOrFail($productId)->productInventories;
     }
@@ -59,7 +59,7 @@ class StoreAction
     /**
      * 注文を作成する
      */
-    private function createOrder(array $param): bool
+    protected function createOrder(array $param): bool
     {
         return $this->order->fill($param)->save();
     }
@@ -67,7 +67,7 @@ class StoreAction
     /**
      * 在庫を割り当てる
      */
-    private function assignStock(string $stockManagementType, $productInventoryList, int $orderCount): void
+    protected function assignStock(string $stockManagementType, $productInventoryList, int $orderCount): void
     {
         $stockAssignment = $this
             ->stockAssignmentFactory

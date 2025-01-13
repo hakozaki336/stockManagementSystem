@@ -14,7 +14,7 @@ class UpdateAction
     /**
      * 商品を更新する
      */
-    private function updateProduct($product, array $param): bool
+    protected function updateProduct($product, array $param): bool
     {
         return $product->fill($param)->save();
     }

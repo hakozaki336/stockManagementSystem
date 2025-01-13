@@ -14,7 +14,7 @@ class StoreAction
     /**
      * 商品在庫を作成する
      */
-    private function createProductInventory($productInventory, array $param): bool
+    protected function createProductInventory($productInventory, array $param): bool
     {
         return $productInventory->fill($param)->save();
     }

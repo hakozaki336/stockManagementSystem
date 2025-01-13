@@ -14,7 +14,7 @@ class UpdateAction
     /**
      * 注文を更新する
      */
-    private function updateOrder($order, array $param): bool
+    protected function updateOrder($order, array $param): bool
     {
         return $order->fill($param)->save();
     }

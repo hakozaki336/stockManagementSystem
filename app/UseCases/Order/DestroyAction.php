@@ -42,7 +42,7 @@ class DestroyAction
     /**
      * 在庫管理タイプを取得する
      */
-    private function getStockManagementType(Order $order): string
+    protected function getStockManagementType(Order $order): string
     {
         return $order->product->stock_management_type;
     }
@@ -50,7 +50,7 @@ class DestroyAction
     /**
      * 商品の在庫リストを取得する
      */
-    private function getProductInventoryList(int $productId): Collection
+    protected function getProductInventoryList(int $productId): Collection
     {
         return $this->product->find($productId)->productInventories;
     }
@@ -58,7 +58,7 @@ class DestroyAction
     /**
      * 在庫を返却する
      */
-    private function unassignStock(string $stockManagementType, $productInventoryList, Order $order): void
+    protected function unassignStock(string $stockManagementType, $productInventoryList, Order $order): void
     {
         $stockAssignment = $this
             ->stockAssignmentFactory
