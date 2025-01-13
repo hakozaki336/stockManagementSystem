@@ -16,14 +16,12 @@ class StoreAction
 {
     private Order $order;
     private Product $product;
-    private ProductInventory $productInventory;
     private StockAssignmentFactory $stockAssignmentFactory;
 
-    public function __construct(Order $order, Product $product, ProductInventory $productInventory, StockAssignmentFactory $stockAssignmentFactory)
+    public function __construct(Order $order, Product $product, StockAssignmentFactory $stockAssignmentFactory)
     {
         $this->order = $order;
         $this->product = $product;
-        $this->productInventory = $productInventory;
         $this->stockAssignmentFactory = $stockAssignmentFactory;
     }
 
@@ -55,7 +53,7 @@ class StoreAction
      */
     private function getProductInventoryList(int $productId): Collection
     {
-        return $this->productInventory->byProductId($productId);
+        return $this->product->findOrFail($productId)->productInventories;
     }
 
     /**
@@ -71,7 +69,15 @@ class StoreAction
      */
     private function assignStock(string $stockManagementType, $productInventoryList, int $orderCount): void
     {
-        $stockAssignment = $this->stockAssignmentFactory->create($stockManagementType);
-        $stockAssignment->assignStock($productInventoryList, $orderCount, $this->order->id);
+        $stockAssignment = $this
+            ->stockAssignmentFactory
+            ->create($stockManagementType);
+        
+        $stockAssignment
+            ->assignStock(
+                $productInventoryList,
+                $orderCount,
+                $this->order->id
+            );
     }
 }

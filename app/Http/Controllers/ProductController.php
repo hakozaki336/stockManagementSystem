@@ -90,9 +90,9 @@ class ProductController extends Controller
         ]);
     }
 
-    public function unassignedProductInventories(int $product_id, UnassignedProductsAction $unassignedProductsAction, ProductInventory $productInventory): JsonResponse
+    public function unassignedProductInventories(Product $product, UnassignedProductsAction $unassignedProductsAction): JsonResponse
     {
-        $productInventories = $unassignedProductsAction($productInventory, $product_id);
+        $productInventories = $unassignedProductsAction($product);
 
         return response()->json([
                 'stock' => $productInventories->count() ?? 0,

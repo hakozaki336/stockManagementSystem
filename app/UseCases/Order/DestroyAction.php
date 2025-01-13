@@ -15,12 +15,12 @@ use InvalidArgumentException;
 
 class DestroyAction
 {
-    private ProductInventory $productInventory;
+    private Product $product;
     private StockAssignmentFactory $stockAssignmentFactory;
 
-    public function __construct(ProductInventory $productInventory, StockAssignmentFactory $stockAssignmentFactory)
+    public function __construct(Product $product, StockAssignmentFactory $stockAssignmentFactory)
     {
-        $this->productInventory = $productInventory;
+        $this->product = $product;
         $this->stockAssignmentFactory = $stockAssignmentFactory;
     }
 
@@ -52,7 +52,7 @@ class DestroyAction
      */
     private function getProductInventoryList(int $productId): Collection
     {
-        return $this->productInventory->byProductId($productId)->get();
+        return $this->product->find($productId)->productInventories;
     }
 
     /**
@@ -60,7 +60,15 @@ class DestroyAction
      */
     private function unassignStock(string $stockManagementType, $productInventoryList, Order $order): void
     {
-        $stockAssignment = $this->stockAssignmentFactory->create($stockManagementType);
-        $stockAssignment->unassignStock($productInventoryList, $order->order_count, $order->id);
+        $stockAssignment = $this
+            ->stockAssignmentFactory
+            ->create($stockManagementType);
+        
+        $stockAssignment
+            ->unassignStock(
+                $productInventoryList,
+                $order->order_count,
+                $order->id
+            );
     }
 }

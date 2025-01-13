@@ -39,22 +39,6 @@ class ProductInventory extends Model
     }
 
     /**
-     * productに紐づく複数のproductInventoryを取得する
-     */
-    public function scopeByProductId($query, int $productId): Builder
-    {
-        return $query->where('product_id', $productId);
-    }
-
-    /**
-     * orderに紐づく複数のproductInventoryを取得する
-     */
-    public function scopeByOrderId($query, int $orderId): Builder
-    {
-        return $query->where('order_id', $orderId);
-    }
-
-    /**
      * 割り当てられていない在庫を取得する
      * MEMO: リレーションで取得できるが、単体で取得するケースが存在するためscopeを作成
      */

@@ -6,6 +6,8 @@ use App\Exceptions\DomainValidationException;
 use App\Http\Requests\ProductInventoryStoreRequest;
 use App\Http\Requests\ProductInventoryUpdateRequest;
 use App\Http\Resources\ProductInventoryResource;
+use App\Models\Order;
+use App\Models\Product;
 use App\Models\ProductInventory;
 use App\UseCases\ProductInventory\DestroyAction;
 use App\UseCases\ProductInventory\IndexAction;
@@ -74,9 +76,10 @@ class ProductInventoryController extends Controller
     }
 
     // MEMO: 複数を返すのでProductsじゃね
-    public function paginateByProduct(int $productId, PaginateByProductAction $paginateByProductAction, ProductInventory $productInventory, int $perPage = 5): JsonResponse
+    // MEMO これはここに書くべきか？
+    public function paginateByProduct(Product $product, PaginateByProductAction $paginateByProductAction, int $perPage = 5): JsonResponse
     {
-        $productInventories = $paginateByProductAction($productInventory, $productId, $perPage);
+        $productInventories = $paginateByProductAction($product, $perPage);
 
         return response()->json([
             'data' => ProductInventoryResource::collection($productInventories),
@@ -87,10 +90,10 @@ class ProductInventoryController extends Controller
             ],
         ]);
     }
-
-    public function byOrder(int $orderId, PaginateByOrderAction $paginateByOrderAction, productInventory $productInventory, int $perPage = 5): JsonResponse
+    // MEMO これはここに書くべきか？
+    public function byOrder(Order $order, PaginateByOrderAction $paginateByOrderAction, int $perPage = 5): JsonResponse
     {
-        $productInventories = $paginateByOrderAction($productInventory, $orderId, $perPage);
+        $productInventories = $paginateByOrderAction($order, $perPage);
 
         return response()->json([
             'data' => ProductInventoryResource::collection($productInventories),
