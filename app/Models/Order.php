@@ -39,6 +39,7 @@ class Order extends Model
     public function productInventory(): HasOne
     {
         // TODO: camelになってないのはなぜか調べる
+        // MEMO: 気のせいやと思うけどこれリレーション間違ってね？
         return $this->HasOne(ProductInventory::class);
     }
 

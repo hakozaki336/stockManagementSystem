@@ -11,6 +11,7 @@ class PaginateByOrderAction
     {
         return $order
             ->productInventory()
+            ->with('product')
             ->paginate($perpage);
     }
 }
