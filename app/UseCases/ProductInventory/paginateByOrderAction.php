@@ -10,7 +10,7 @@ class PaginateByOrderAction
     public function __invoke(Order $order, int $perpage): LengthAwarePaginator
     {
         return $order
-            ->productInventories()
+            ->productInventory()
             ->paginate($perpage);
     }
 }
