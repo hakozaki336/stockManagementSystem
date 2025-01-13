@@ -72,7 +72,7 @@ const Orders = () => {
         }
     }
 
-    const unAssignOrder = async (id) => {
+    const unassignOrder = async (id) => {
         try {
             await axios.patch(`http://localhost:8000/api/orders/${id}/unassign`);
 
@@ -124,7 +124,7 @@ const Orders = () => {
                             {/* 未出荷であればボタンを表示、出荷済みであれば「出荷済み」と表示 */}
                             <td>{order.assign ? (
                                     <button className="bg-gray-200 hover:bg-gray-300 text-white font-medium px-3 py-1 my-2 mx-1 font-semibold rounded"
-                                        onClick={() => unAssignOrder(order.id)}
+                                        onClick={() => unassignOrder(order.id)}
                                     >
                                         未出荷
                                     </button>

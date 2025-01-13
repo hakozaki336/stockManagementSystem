@@ -57,7 +57,7 @@ class Order extends Model
     /**
      * Order.assignを割り当て済みにする
      */
-    public function assign(): self
+    public function assign(): static
     {
         $this->assign = true;
         return $this;
@@ -66,7 +66,7 @@ class Order extends Model
     /**
      * Order.assignを未割り当てにする
      */
-    public function unassign(): self
+    public function unassign(): static
     {
         $this->assign = false;
         return $this;

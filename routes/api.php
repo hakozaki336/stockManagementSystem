@@ -19,7 +19,7 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 Route::prefix('orders')->group(function () {
     Route::patch('{order}/assign', [OrderController::class, 'assign']);
     Route::patch('{order}/unassign', [OrderController::class, 'unassign']);
-    Route::get('{order_id}/inventories', [ProductInventoryController::class, 'byOrder']);
+    Route::get('{order}/inventories', [ProductInventoryController::class, 'byOrder']);
     Route::get('paginate', [OrderController::class, 'paginate']);
     Route::apiResource('', OrderController::class)->parameters(['' => 'order']);
 });
@@ -27,8 +27,8 @@ Route::prefix('orders')->group(function () {
 // Products関連ルート
 Route::prefix('products')->group(function () {
     Route::get('paginate', [ProductController::class, 'paginate']);
-    Route::get('{product_id}/inventories', [ProductInventoryController::class, 'paginateByProduct']);
-    Route::get('{product_id}/unassigned-product-inventories', [ProductController::class, 'unassignedProductInventories']);
+    Route::get('{product}/inventories', [ProductInventoryController::class, 'paginateByProduct']);
+    Route::get('{product}/unassigned-product-inventories', [ProductController::class, 'unassignedProductInventories']);
     Route::apiResource('', ProductController::class)->parameters(['' => 'product']);
 });
 

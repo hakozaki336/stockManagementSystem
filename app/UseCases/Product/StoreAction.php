@@ -14,7 +14,7 @@ class StoreAction
     /**
      * 商品を作成する
      */
-    private function createProduct($product, array $param): bool
+    protected function createProduct($product, array $param): bool
     {
         return $product->fill($param)->save();
     }

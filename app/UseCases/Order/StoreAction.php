@@ -16,14 +16,12 @@ class StoreAction
 {
     private Order $order;
     private Product $product;
-    private ProductInventory $productInventory;
     private StockAssignmentFactory $stockAssignmentFactory;
 
-    public function __construct(Order $order, Product $product, ProductInventory $productInventory, StockAssignmentFactory $stockAssignmentFactory)
+    public function __construct(Order $order, Product $product, StockAssignmentFactory $stockAssignmentFactory)
     {
         $this->order = $order;
         $this->product = $product;
-        $this->productInventory = $productInventory;
         $this->stockAssignmentFactory = $stockAssignmentFactory;
     }
 
@@ -45,7 +43,7 @@ class StoreAction
     /**
      * 在庫管理タイプを取得する
      */
-    private function getStockManagementType(int $productId): string
+    protected function getStockManagementType(int $productId): string
     {
         return $this->product->findOrFail($productId)->stock_management_type;
     }
@@ -53,15 +51,15 @@ class StoreAction
     /**
      * 商品の在庫リストを取得する
      */
-    private function getProductInventoryList(int $productId): Collection
+    protected function getProductInventoryList(int $productId): Collection
     {
-        return $this->productInventory->byProductId($productId);
+        return $this->product->findOrFail($productId)->productInventories;
     }
 
     /**
      * 注文を作成する
      */
-    private function createOrder(array $param): bool
+    protected function createOrder(array $param): bool
     {
         return $this->order->fill($param)->save();
     }
@@ -69,9 +67,17 @@ class StoreAction
     /**
      * 在庫を割り当てる
      */
-    private function assignStock(string $stockManagementType, $productInventoryList, int $orderCount): void
+    protected function assignStock(string $stockManagementType, $productInventoryList, int $orderCount): void
     {
-        $stockAssignment = $this->stockAssignmentFactory->create($stockManagementType);
-        $stockAssignment->assignStock($productInventoryList, $orderCount, $this->order->id);
+        $stockAssignment = $this
+            ->stockAssignmentFactory
+            ->create($stockManagementType);
+        
+        $stockAssignment
+            ->assignStock(
+                $productInventoryList,
+                $orderCount,
+                $this->order->id
+            );
     }
 }

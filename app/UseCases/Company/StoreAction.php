@@ -14,7 +14,7 @@ class StoreAction
     /**
      * 企業を作成する
      */
-    private function createCompany(Company $company, array $param): bool
+    protected function createCompany(Company $company, array $param): bool
     {
         return $company->fill($param)->save();
     }

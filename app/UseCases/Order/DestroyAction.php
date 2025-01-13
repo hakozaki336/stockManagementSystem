@@ -15,12 +15,12 @@ use InvalidArgumentException;
 
 class DestroyAction
 {
-    private ProductInventory $productInventory;
+    private Product $product;
     private StockAssignmentFactory $stockAssignmentFactory;
 
-    public function __construct(ProductInventory $productInventory, StockAssignmentFactory $stockAssignmentFactory)
+    public function __construct(Product $product, StockAssignmentFactory $stockAssignmentFactory)
     {
-        $this->productInventory = $productInventory;
+        $this->product = $product;
         $this->stockAssignmentFactory = $stockAssignmentFactory;
     }
 
@@ -31,7 +31,7 @@ class DestroyAction
 
         try {
             DB::transaction(function () use ($stockManagementType, $productInventoryList, $order) {
-                $this->unAssignStock($stockManagementType, $productInventoryList, $order);
+                $this->unassignStock($stockManagementType, $productInventoryList, $order);
                 $order->delete();
             });
         } catch (InvalidArgumentException | StockLogicException $e) {
@@ -42,7 +42,7 @@ class DestroyAction
     /**
      * 在庫管理タイプを取得する
      */
-    private function getStockManagementType(Order $order): string
+    protected function getStockManagementType(Order $order): string
     {
         return $order->product->stock_management_type;
     }
@@ -50,17 +50,25 @@ class DestroyAction
     /**
      * 商品の在庫リストを取得する
      */
-    private function getProductInventoryList(int $productId): Collection
+    protected function getProductInventoryList(int $productId): Collection
     {
-        return $this->productInventory->byProductId($productId)->get();
+        return $this->product->find($productId)->productInventories;
     }
 
     /**
      * 在庫を返却する
      */
-    private function unAssignStock(string $stockManagementType, $productInventoryList, Order $order): void
+    protected function unassignStock(string $stockManagementType, $productInventoryList, Order $order): void
     {
-        $stockAssignment = $this->stockAssignmentFactory->create($stockManagementType);
-        $stockAssignment->unAssignStock($productInventoryList, $order->order_count, $order->id);
+        $stockAssignment = $this
+            ->stockAssignmentFactory
+            ->create($stockManagementType);
+        
+        $stockAssignment
+            ->unassignStock(
+                $productInventoryList,
+                $order->order_count,
+                $order->id
+            );
     }
 }

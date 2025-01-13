@@ -14,7 +14,7 @@ class UpdateAction
     /**
      * 商品在庫を更新する
      */
-    private function updateProductInventory($productInventory, array $param): bool
+    protected function updateProductInventory($productInventory, array $param): bool
     {
         return $productInventory->fill($param)->save();
     }
