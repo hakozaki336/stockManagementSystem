@@ -14,5 +14,5 @@ interface StockAssignmentInterface
     /**
      * 在庫をカウント分非割り当てにする
      */
-    public function unAssignStock(Collection $productInventoryList, int $count, int $orderId): void;
+    public function unassignStock(Collection $productInventoryList, int $count, int $orderId): void;
 }

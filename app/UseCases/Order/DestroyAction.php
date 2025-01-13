@@ -31,7 +31,7 @@ class DestroyAction
 
         try {
             DB::transaction(function () use ($stockManagementType, $productInventoryList, $order) {
-                $this->unAssignStock($stockManagementType, $productInventoryList, $order);
+                $this->unassignStock($stockManagementType, $productInventoryList, $order);
                 $order->delete();
             });
         } catch (InvalidArgumentException | StockLogicException $e) {
@@ -58,9 +58,9 @@ class DestroyAction
     /**
      * 在庫を返却する
      */
-    private function unAssignStock(string $stockManagementType, $productInventoryList, Order $order): void
+    private function unassignStock(string $stockManagementType, $productInventoryList, Order $order): void
     {
         $stockAssignment = $this->stockAssignmentFactory->create($stockManagementType);
-        $stockAssignment->unAssignStock($productInventoryList, $order->order_count, $order->id);
+        $stockAssignment->unassignStock($productInventoryList, $order->order_count, $order->id);
     }
 }

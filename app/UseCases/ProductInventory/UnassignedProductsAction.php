@@ -11,7 +11,7 @@ class UnassignedProductsAction
     {
         return $productInventory
             ->byProductId($productId)
-            ->unAssigned()
+            ->unassigned()
             ->get();
     }
 }

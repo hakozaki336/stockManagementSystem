@@ -57,7 +57,7 @@ class ProductInventory extends Model
     /**
      * 割り当てられていない在庫を取得する
      */
-    public function scopeUnAssigned($query): Builder
+    public function scopeUnassigned($query): Builder
     {
         return $query->whereNull('order_id');
     }
@@ -74,7 +74,7 @@ class ProductInventory extends Model
     /**
      * 在庫を非割り当てにする
      */
-    public function unAssign(): static
+    public function unassign(): static
     {
         $this->order_id = null;
         return $this;

@@ -35,7 +35,7 @@ class FifoStockAssignment implements StockAssignmentInterface
     /**
      * 在庫を非割り当てにする
      */
-    public function unAssignStock(Collection $productInventoryList, int $count, int $orderId): void
+    public function unassignStock(Collection $productInventoryList, int $count, int $orderId): void
     {
         // 作成日を基準にして降順にソート
         $productInventoryList = $productInventoryList->sortBy('created_at', SORT_REGULAR, true);
@@ -46,7 +46,7 @@ class FifoStockAssignment implements StockAssignmentInterface
             }
 
             if ($productInventory->isAssignedToOrder($orderId)) {
-                $productInventory->unAssign()->save();
+                $productInventory->unassign()->save();
                 $count--;
             }
         }

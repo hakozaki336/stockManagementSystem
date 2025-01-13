@@ -47,7 +47,7 @@ class LifoStockAssignment implements StockAssignmentInterface
             }
 
             if ($productInventory->isAssignedToOrder($orderId)) {
-                $productInventory->unAssign()->save();
+                $productInventory->unassign()->save();
                 $count--;
             }
         }
