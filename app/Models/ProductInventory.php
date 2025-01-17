@@ -11,6 +11,12 @@ class ProductInventory extends Model
 {
     use HasFactory;
 
+    protected $guarded = [
+        'id',
+        'created_at',
+        'updated_at'
+    ];
+
     protected $fillable = [
         'product_id',
         'serial_number',

@@ -9,6 +9,11 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Company extends Model
 {
     use HasFactory;
+    protected $guarded = [
+        'id',
+        'created_at',
+        'updated_at'
+    ];
 
     protected $fillable = [
         'name',
