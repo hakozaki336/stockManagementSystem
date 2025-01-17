@@ -11,7 +11,6 @@ class PaginateByProductAction
     {
         return $product
             ->productInventories()
-            ->with('product')
             ->paginate($perpage);
     }
 }
