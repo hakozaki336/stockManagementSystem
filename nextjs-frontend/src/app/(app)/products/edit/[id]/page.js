@@ -48,10 +48,10 @@ const Edit = ({ params }) => {
             const response = await axios.get(`http://localhost:8000/api/products/${params.id}`);
             const responseData = response.data;
 
-            setName(responseData.name);
-            setPrice(responseData.price);
-            setArea(responseData.area);
-            setStockManagemntType(responseData.stock_management_type);
+            setName(responseData.data.name);
+            setPrice(responseData.data.price);
+            setArea(responseData.data.area);
+            setStockManagemntType(responseData.data.stock_management_type);
         } catch (error) {
             const message = error.response.data.message
             setErrorMessages(message);

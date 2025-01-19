@@ -7,8 +7,6 @@ use App\Http\Requests\CompanyStoreRequest;
 use App\Http\Requests\CompanyUpdateRequest;
 use App\Http\Resources\CompanyCollection;
 use App\Http\Resources\CompanyResource;
-use App\Http\Resources\PaginationCompanyResource;
-use App\Http\Resources\PaginationResourceBase;
 use App\Models\Company;
 use App\UseCases\Company\DestroyAction;
 use App\UseCases\Company\IndexAction;
@@ -16,6 +14,7 @@ use App\UseCases\Company\PaginateAction;
 use App\UseCases\Company\StoreAction;
 use App\UseCases\Company\UpdateAction;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 
 class CompanyController extends Controller
@@ -23,13 +22,11 @@ class CompanyController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(IndexAction $indexAction, Company $company): JsonResponse
+    public function index(IndexAction $indexAction, Company $company): AnonymousResourceCollection
     {
         $companies = $indexAction($company);
 
-        return response()->json([
-            'data' => CompanyResource::collection($companies),
-        ]);
+        return CompanyResource::collection($companies);
     }
 
     /**
@@ -82,6 +79,6 @@ class CompanyController extends Controller
     {
         $companies = $paginateAction($company, $perpage);
 
-        return  new CompanyCollection($companies);
+        return new CompanyCollection($companies);
     }
 }

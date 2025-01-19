@@ -3,9 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Exceptions\DomainValidationException;
-use App\Exceptions\OutOfStockException;
-use App\Exceptions\StockLogicException;
 use App\Http\Requests\OrderStoreRequest;
+use App\Http\Resources\OrderCollection;
 use App\Http\Resources\OrderResource;
 use App\Models\Order;
 use App\UseCases\Order\DestroyAction;
@@ -13,6 +12,7 @@ use App\UseCases\Order\IndexAction;
 use App\UseCases\Order\PaginateAction;
 use App\UseCases\Order\StoreAction;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 
 class OrderController extends Controller
@@ -20,13 +20,11 @@ class OrderController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(IndexAction $indexAction, Order $order): JsonResponse
+    public function index(IndexAction $indexAction, Order $order): AnonymousResourceCollection
     {
         $orders = $indexAction($order);
 
-        return response()->json([
-            'data' => OrderResource::collection($orders),
-        ]);
+        return OrderResource::collection($orders);
     }
 
     /**
@@ -79,17 +77,10 @@ class OrderController extends Controller
         return response()->noContent();
     }
 
-    public function paginate(PaginateAction $paginateAction, Order $order, int $perpage = 5): JsonResponse
+    public function paginate(PaginateAction $paginateAction, Order $order, int $perpage = 5): OrderCollection
     {
         $orders = $paginateAction($order, $perpage);
 
-        return response()->json([
-            'data' => OrderResource::collection($orders),
-            'links' => [
-                'prev' => $orders->previousPageUrl(),
-                'next' => $orders->nextPageUrl(),
-                'current' => $orders->url($orders->currentPage()),
-            ],
-        ]);
+        return new OrderCollection($orders);
     }
 }
