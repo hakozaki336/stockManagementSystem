@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use App\Exceptions\DomainValidationException;
 use App\Http\Requests\CompanyStoreRequest;
 use App\Http\Requests\CompanyUpdateRequest;
+use App\Http\Resources\CompanyCollection;
 use App\Http\Resources\CompanyResource;
+use App\Http\Resources\PaginationCompanyResource;
+use App\Http\Resources\PaginationResourceBase;
 use App\Models\Company;
 use App\UseCases\Company\DestroyAction;
 use App\UseCases\Company\IndexAction;
@@ -75,18 +78,10 @@ class CompanyController extends Controller
     /**
      * paginateされた企業データを取得する
      */
-    public function paginate(PaginateAction $paginateAction, Company $company, int $perpage = 5): JsonResponse
+    public function paginate(PaginateAction $paginateAction, Company $company, int $perpage = 5): CompanyCollection
     {
         $companies = $paginateAction($company, $perpage);
 
-        // MEMO: リソースを直接返さないのはaddtionalでリンク情報を追加するとprevとnextがnullにならないため
-        return response()->json([
-            'data' => CompanyResource::collection($companies),
-            'links' => [
-                'prev' => $companies->previousPageUrl(),
-                'next' => $companies->nextPageUrl(),
-                'current' => $companies->url($companies->currentPage()),
-            ],
-        ]);
+        return  new CompanyCollection($companies);
     }
 }
