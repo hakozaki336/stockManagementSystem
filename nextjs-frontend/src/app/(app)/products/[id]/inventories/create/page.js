@@ -43,7 +43,7 @@ const Create = ({ params }) => {
             const response = await axios.get(`http://localhost:8000/api/products/${params.id}`);
             const responseData = response.data;
 
-            setProduct(responseData);
+            setProduct(responseData.data);
         } catch (error) {
             setErrorMessages('情報の取得に失敗しました');
         }

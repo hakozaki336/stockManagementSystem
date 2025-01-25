@@ -17,20 +17,20 @@ use App\UseCases\ProductInventory\PaginateByOrderAction;
 use App\UseCases\ProductInventory\StoreAction;
 use App\UseCases\ProductInventory\UpdateAction;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
+use App\Http\Resources\ProductInventoryCollection;
 
 class ProductInventoryController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(IndexAction $indexAction, ProductInventory $productInventory): JsonResponse
+    public function index(IndexAction $indexAction, ProductInventory $productInventory): AnonymousResourceCollection
     {
         $productInventories = $indexAction($productInventory);
 
-        return response()->json([
-            'data' => ProductInventoryResource::collection($productInventories),
-        ]);
+        return ProductInventoryResource::collection($productInventories);
     }
 
     /**
@@ -77,45 +77,25 @@ class ProductInventoryController extends Controller
 
     // MEMO: 複数を返すのでProductsじゃね
     // MEMO これはここに書くべきか？
-    public function paginateByProduct(Product $product, PaginateByProductAction $paginateByProductAction, int $perPage = 5): JsonResponse
+    public function paginateByProduct(Product $product, PaginateByProductAction $paginateByProductAction, int $perPage = 5): ProductInventoryCollection
     {
         $productInventories = $paginateByProductAction($product, $perPage);
 
-        return response()->json([
-            'data' => ProductInventoryResource::collection($productInventories),
-            'links' => [
-                'prev' => $productInventories->previousPageUrl(),
-                'next' => $productInventories->nextPageUrl(),
-                'current' => $productInventories->url($productInventories->currentPage()),
-            ],
-        ]);
+        return new ProductInventoryCollection($productInventories);
     }
+
     // MEMO これはここに書くべきか？
-    public function byOrder(Order $order, PaginateByOrderAction $paginateByOrderAction, int $perPage = 5): JsonResponse
+    public function byOrder(Order $order, PaginateByOrderAction $paginateByOrderAction, int $perPage = 5): ProductInventoryCollection
     {
         $productInventories = $paginateByOrderAction($order, $perPage);
 
-        return response()->json([
-            'data' => ProductInventoryResource::collection($productInventories),
-            'links' => [
-                'prev' => $productInventories->previousPageUrl(),
-                'next' => $productInventories->nextPageUrl(),
-                'current' => $productInventories->url($productInventories->currentPage()),
-            ],
-        ]);
+        return new ProductInventoryCollection($productInventories);
     }
 
-    public function paginate(PaginateAction $paginateAction, productInventory $productInventory, int $perpage = 5): JsonResponse
+    public function paginate(PaginateAction $paginateAction, productInventory $productInventory, int $perpage = 5): ProductInventoryCollection
     {
         $productInventories = $paginateAction($productInventory, $perpage);
 
-        return response()->json([
-            'data' => ProductInventoryResource::collection($productInventories),
-            'links' => [
-                'prev' => $productInventories->previousPageUrl(),
-                'next' => $productInventories->nextPageUrl(),
-                'current' => $productInventories->url($productInventories->currentPage()),
-            ],
-        ]);
+        return new ProductInventoryCollection($productInventories);
     }
 }

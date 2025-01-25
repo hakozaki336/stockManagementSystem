@@ -41,9 +41,9 @@ const Edit = ({ params }) => {
             const response = await axios.get(`http://localhost:8000/api/product_inventories/${params.inventory_id}`);
             const responseData = response.data;
 
-            setSerialNumber(responseData.serial_number);
-            setLocation(responseData.location);
-            setExpirationDate(responseData.expiration_date);
+            setSerialNumber(responseData.data.serial_number);
+            setLocation(responseData.data.location);
+            setExpirationDate(responseData.data.expiration_date);
         } catch (error) {
             const message = error.response.data.message
             setErrorMessages(message);

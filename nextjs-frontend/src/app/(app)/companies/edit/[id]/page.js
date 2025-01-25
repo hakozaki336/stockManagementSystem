@@ -25,7 +25,7 @@ const Edit = ({ params }) => {
             const response = await axios.get(`http://localhost:8000/api/companies/${params.id}`);
             const responseData = response.data;
 
-            setName(responseData.name);
+            setName(responseData.data.name);
         } catch (error) {
             const message = error.response.data.message
             setErrorMessages(message);
