@@ -6,6 +6,7 @@ use App\Exceptions\DomainValidationException;
 use App\Http\Requests\CompanyStoreRequest;
 use App\Http\Requests\CompanyUpdateRequest;
 use App\Http\Resources\CompanyCollection;
+use App\Http\Resources\CompanyOptionResource;
 use App\Http\Resources\CompanyResource;
 use App\Models\Company;
 use App\UseCases\Company\DestroyAction;
@@ -42,9 +43,9 @@ class CompanyController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Company $company): CompanyResource
+    public function show(Company $company): CompanyOptionResource
     {
-        return new CompanyResource($company);
+        return new CompanyOptionResource($company);
     }
 
     /**

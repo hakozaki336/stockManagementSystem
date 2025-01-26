@@ -7,6 +7,7 @@ use App\Http\Requests\ProductStoreRequest;
 use App\Http\Requests\ProductUpdateRequest;
 use App\Http\Resources\ProductCollection;
 use App\Http\Resources\ProductResource;
+use App\Http\Resources\ProductOptionResource;
 use App\Models\Product;
 use App\UseCases\Product\DestroyAction;
 use App\UseCases\Product\IndexAction;
@@ -43,9 +44,9 @@ class ProductController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Product $product): ProductResource
+    public function show(Product $product): ProductOptionResource
     {
-        return new ProductResource($product);
+        return new ProductOptionResource($product);
     }
 
     /**
