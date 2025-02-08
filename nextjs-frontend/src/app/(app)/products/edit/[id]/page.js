@@ -11,6 +11,7 @@ const Edit = ({ params }) => {
     const [price, setPrice] = useState(0);
     const [area, setArea] = useState('');
     const [stockManagemntType, setStockManagemntType] = useState('');
+    const [productAreas, setProductAreas] = useState([]);
 
     const shouldDisableSubmitButton = (name, price, area, stockManagemntType) => {
         const isCompanyEmpty = !name;
@@ -58,6 +59,18 @@ const Edit = ({ params }) => {
         }
     }
 
+    const getProductAreas = async () => {
+        try {
+            const response = await axios.get(`http://localhost:8000/api/product-areas`);
+            const responseData = response.data;
+
+            setProductAreas(responseData.data);
+        } catch (error) {
+            const message = error.response.data.message
+            setErrorMessages(message);
+        }
+    }
+
     const changeProduct = async () => {
         try {
             await axios.put(`http://localhost:8000/api/products/${params.id}`, 
@@ -77,6 +90,7 @@ const Edit = ({ params }) => {
 
     useEffect(() => {
         getProduct();
+        getProductAreas();
     }, [params.id]);
 
   return (
@@ -105,13 +119,18 @@ const Edit = ({ params }) => {
                     />
                 </div>
                 <div className="flex m-3">
-                    <label className="text-xl mr-3">保管場所:</label>
-                    <input type="text" name="area"
-                        className="w-64"
+                    <label className="text-xl mr-3 ">保存エリア　:</label>
+                    <select name="area" className="w-64"
                         onChange={changeArea}
-                        min="1"
                         value={area}
-                    />
+                    >
+                        <option value="">選択してください</option>
+                        {productAreas.map((productArea) => (
+                            <option key={productArea.value} value={productArea.value}>
+                                {productArea.label}
+                            </option>
+                        ))}
+                    </select>
                 </div>
                 <div className="flex m-3">
                     <label className="text-xl mr-3 ">在庫管理方法:</label>

@@ -44,9 +44,9 @@ class ProductController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Product $product): ProductOptionResource
+    public function show(Product $product): ProductResource
     {
-        return new ProductOptionResource($product);
+        return new ProductResource($product);
     }
 
     /**

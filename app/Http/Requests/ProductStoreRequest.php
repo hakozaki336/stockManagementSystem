@@ -33,7 +33,7 @@ class ProductStoreRequest extends FormRequest
             ],
             'area' => [
                 'required',
-                'string',
+                'integer',
             ],
             'stock_management_type' => [
                 'required',
