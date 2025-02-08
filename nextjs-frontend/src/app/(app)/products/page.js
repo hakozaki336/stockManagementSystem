@@ -97,7 +97,7 @@ const Products = () => {
                             <td>{product.name}</td>
                             <td>{product.price}</td>
                             <td>{product.stock}</td>
-                            <td>{product.area}</td>
+                            <td>{product.area.label}</td>
                             <td>{product.stock_management_type}</td>
                             <td>
                                 <button

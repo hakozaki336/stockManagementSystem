@@ -16,7 +16,7 @@ const Edit = ({ params }) => {
     const shouldDisableSubmitButton = (name, price, area, stockManagemntType) => {
         const isCompanyEmpty = !name;
         const isProductEmpty = !price;
-        const isAreaEmpty = !area;
+        const isAreaEmpty = area === '';
         const isStockManagemntTypeEmpty = !stockManagemntType;
 
         return (isCompanyEmpty || isProductEmpty || isAreaEmpty || isStockManagemntTypeEmpty);
@@ -122,7 +122,7 @@ const Edit = ({ params }) => {
                     <label className="text-xl mr-3 ">保存エリア　:</label>
                     <select name="area" className="w-64"
                         onChange={changeArea}
-                        value={area}
+                        value={area.value}
                     >
                         <option value="">選択してください</option>
                         {productAreas.map((productArea) => (

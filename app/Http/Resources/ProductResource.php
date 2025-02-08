@@ -19,7 +19,10 @@ class ProductResource extends JsonResource
             'name' => $this->name,
             'price' => $this->price,
             'stock' => optional($this->productInventories)->count() ?? 0,
-            'area' => $this->area,
+            'area' => [
+                'value' => $this->area->value,
+                'label' => $this->area->label(),
+            ],
             'stock_management_type' => $this->stock_management_type,
         ];
     }
