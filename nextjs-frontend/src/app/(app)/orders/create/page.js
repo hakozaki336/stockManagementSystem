@@ -65,6 +65,10 @@ const Create = () => {
 
     const handleProduct = (event) => {
         changeProduct(event);
+        if (!event.target.value) {
+            setCurrentStock(0);
+            return;
+        }
         changeDisplayStock(event);
     }
 
