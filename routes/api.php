@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\ProductAreaController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductInventoryController;
 use Illuminate\Http\Request;
@@ -30,6 +31,11 @@ Route::prefix('products')->group(function () {
     Route::get('{product}/inventories', [ProductInventoryController::class, 'paginateByProduct']);
     Route::get('{product}/unassigned-product-inventories', [ProductController::class, 'unassignedProductInventories']);
     Route::apiResource('', ProductController::class)->parameters(['' => 'product']);
+});
+
+// Product Area関連ルート
+Route::prefix('product-areas')->group(function () {
+    Route::apiResource('', ProductAreaController::class)->parameters(['' => 'product_areas']);
 });
 
 // Companies関連ルート

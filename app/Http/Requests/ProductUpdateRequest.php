@@ -31,6 +31,14 @@ class ProductUpdateRequest extends FormRequest
                 'integer',
                 'min:0',
             ],
+            'area' => [
+                'required',
+                'integer',
+            ],
+            'stock_management_type' => [
+                'required',
+                'string',
+            ],
         ];
     }
 }

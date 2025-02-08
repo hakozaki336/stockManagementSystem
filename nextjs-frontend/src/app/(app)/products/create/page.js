@@ -2,7 +2,7 @@
 import axios from "axios";
 import { useRouter } from "next/navigation";
 axios.defaults.withCredentials = true;
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 
 const Create = () => {
@@ -12,6 +12,7 @@ const Create = () => {
     const [price, setPrice] = useState(0);
     const [area, setArea] = useState('');
     const [stockManagemntType, setStockManagemntType] = useState('');
+    const [productAreas, setProductAreas] = useState([]);
 
     const shouldDisableSubmitButton = (name, price, area, stockManagemntType) => {
         const isCompanyEmpty = !name;
@@ -44,6 +45,18 @@ const Create = () => {
         shouldDisableSubmitButton();
     }
 
+    const getProductAreas = async () => {
+        try {
+            const response = await axios.get(`http://localhost:8000/api/product-areas`);
+            const responseData = response.data;
+
+            setProductAreas(responseData.data);
+        } catch (error) {
+            const message = error.response.data.message
+            setErrorMessages(message);
+        }
+    }
+
     const createProduct = async () => {
         try {
             await axios.post('http://localhost:8000/api/products', 
@@ -60,6 +73,10 @@ const Create = () => {
             setErrorMessages(message);
         }
     }
+
+    useEffect(() => {
+        getProductAreas();
+    }, []);
 
   return (
     <div className="bg-white mx-5 my-5">
@@ -86,14 +103,20 @@ const Create = () => {
                 </div>
                 <div className="flex m-3">
                     <label className="text-xl mr-3 ">保存エリア　:</label>
-                    <input type="text" name="area"
-                        className="w-64"
-                        onChange={changeArea} 
-                    />
+                    <select name="area" className="w-64"
+                        onChange={changeArea}
+                    >
+                        <option value="">選択してください</option>
+                        {productAreas.map((productArea) => (
+                            <option key={productArea.value} value={productArea.value}>
+                                {productArea.label}
+                            </option>
+                        ))}
+                    </select>
                 </div>
                 <div className="flex m-3">
                     <label className="text-xl mr-3 ">在庫管理方法:</label>
-                    <select name="company_name" className="w-64"
+                    <select name="stock_management" className="w-64"
                         onChange={changeStockManagemntType}
                     >
                         <option value="">選択してください</option>

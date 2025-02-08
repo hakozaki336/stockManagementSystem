@@ -52,6 +52,7 @@ class Order extends Model
 
     /**
      * created_atを日本時間のフォーマットで返す
+     * NOTE: デフォルトでcarbonじゃなかったけ　あとキャストしたら良くね。
      *
      * @return string
      */

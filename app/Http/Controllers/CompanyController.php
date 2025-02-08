@@ -43,9 +43,9 @@ class CompanyController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Company $company): CompanyOptionResource
+    public function show(Company $company): CompanyResource
     {
-        return new CompanyOptionResource($company);
+        return new CompanyResource($company);
     }
 
     /**
