@@ -24,6 +24,12 @@ class Order extends Model
         'order_count',
         'assign',
     ];
+
+    protected $casts = [
+        'assign' => 'boolean',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+    ];
     /**
      * @return BelongsTo<Product>
      */
@@ -48,19 +54,6 @@ class Order extends Model
         // TODO: camelになってないのはなぜか調べる
         // MEMO: 気のせいやと思うけどこれリレーション間違ってね？
         return $this->HasOne(ProductInventory::class);
-    }
-
-    /**
-     * created_atを日本時間のフォーマットで返す
-     * NOTE: デフォルトでcarbonじゃなかったけ　あとキャストしたら良くね。
-     *
-     * @return string
-     */
-    public function getCreatedAtAttribute(): string
-    {
-        return Carbon::parse($this->attributes['created_at'])
-            ->setTimezone('Asia/Tokyo')
-            ->format('Y-m-d H:i:s');
     }
 
     /**

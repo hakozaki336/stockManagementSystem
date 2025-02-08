@@ -26,6 +26,8 @@ class Product extends Model
 
     protected $casts = [
         'area' => ProductArea::class,
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
     ];
 
     /**

@@ -19,6 +19,11 @@ class Company extends Model
         'name',
     ];
 
+    protected $casts = [
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+    ];
+
     /**
      * @return HasMany<Order>
      */
