@@ -20,7 +20,7 @@ class ProductInventoryResource extends JsonResource
             'product_name' => $this->product?->name,
             'serial_number' => $this->serial_number,
             'location' => $this->location,
-            'expiration_date' => $this->expiration_date,
+            'expiration_date' => $this->expiration_date->format('Y-m-d'),
             'assign' => $this->order_id ? true : false,
         ];
     }

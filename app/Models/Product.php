@@ -28,6 +28,8 @@ class Product extends Model
     protected $casts = [
         'area' => ProductArea::class,
         'stock_management_type' => StockManagementType::class,
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
     ];
 
     /**

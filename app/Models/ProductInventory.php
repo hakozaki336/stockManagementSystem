@@ -25,6 +25,12 @@ class ProductInventory extends Model
         'order_id',
     ];
 
+    protected $casts = [
+        'expiration_date' => 'date',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+    ];
+
     /**
      * @return BelongsTo<Product>
      */
@@ -45,6 +51,7 @@ class ProductInventory extends Model
     }
 
     /**
+     * MEMO: scopeはエロクアントではなくリポジトリにあった方が良いという意見もある
      * 割り当てられていない在庫を取得する
      * MEMO: リレーションで取得できるが、単体で取得するケースが存在するためscopeを作成
      */

@@ -97,7 +97,7 @@ const Edit = ({ params }) => {
                     </div>
                     <div className="flex m-3">
                         <label className="text-xl mr-3 ">有効期限:</label>
-                        <input type="text" name="expirationDate"
+                        <input type="date" name="expirationDate"
                             className="w-64"
                             onChange={changeExpirationDate}
                             value={expirationDate}

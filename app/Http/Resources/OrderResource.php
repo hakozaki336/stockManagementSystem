@@ -23,7 +23,7 @@ class OrderResource extends JsonResource
             'price' => $this->product?->price,
             'order_count' => $this->order_count,
             'assign' => $this->assign,
-            'order_date' => $this->created_at,
+            'order_date' => $this->created_at->format('Y-m-d H:i:s'),
         ];
     }
 }
