@@ -5,6 +5,7 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductAreaController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductInventoryController;
+use App\Http\Controllers\StockManagementTypeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -47,4 +48,9 @@ Route::prefix('companies')->group(function () {
 // Product Inventories関連ルート
 Route::prefix('product_inventories')->group(function () {
     Route::apiResource('', ProductInventoryController::class)->parameters(['' => 'product_inventory']);
+});
+
+// Stock Management Types関連ルート
+Route::prefix('stock-management-types')->group(function () {
+    Route::get('', [StockManagementTypeController::class, 'index']);
 });

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\ProductArea;
+use App\Enums\StockManagementType;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -26,6 +27,7 @@ class Product extends Model
 
     protected $casts = [
         'area' => ProductArea::class,
+        'stock_management_type' => StockManagementType::class,
     ];
 
     /**

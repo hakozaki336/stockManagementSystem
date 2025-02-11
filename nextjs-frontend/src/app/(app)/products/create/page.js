@@ -13,6 +13,7 @@ const Create = () => {
     const [area, setArea] = useState('');
     const [stockManagemntType, setStockManagemntType] = useState('');
     const [productAreas, setProductAreas] = useState([]);
+    const [stockManagemntTypes, setStockManagemntTypes] = useState([]);
 
     const shouldDisableSubmitButton = (name, price, area, stockManagemntType) => {
         const isCompanyEmpty = !name;
@@ -57,6 +58,18 @@ const Create = () => {
         }
     }
 
+    const getStockManagemntTypes = async () => {
+        try {
+            const response = await axios.get(`http://localhost:8000/api/stock-management-types`);
+            const responseData = response.data;
+
+            setStockManagemntTypes(responseData.data);
+        } catch (error) {
+            const message = error.response.data.message
+            setErrorMessages(message);
+        }
+    }
+
     const createProduct = async () => {
         try {
             await axios.post('http://localhost:8000/api/products', 
@@ -76,6 +89,7 @@ const Create = () => {
 
     useEffect(() => {
         getProductAreas();
+        getStockManagemntTypes();
     }, []);
 
   return (
@@ -116,12 +130,15 @@ const Create = () => {
                 </div>
                 <div className="flex m-3">
                     <label className="text-xl mr-3 ">在庫管理方法:</label>
-                    <select name="stock_management" className="w-64"
+                    <select name="stock_management_type" className="w-64"
                         onChange={changeStockManagemntType}
                     >
                         <option value="">選択してください</option>
-                        <option value="FIFO">FIFO</option>
-                        <option value="LIFO">LIFO</option>
+                        {stockManagemntTypes.map((stock_management_type) => (
+                            <option key={stock_management_type.value} value={stock_management_type.value}>
+                                {stock_management_type.label}
+                            </option>
+                        ))}
                     </select>
                 </div>
             </div>
