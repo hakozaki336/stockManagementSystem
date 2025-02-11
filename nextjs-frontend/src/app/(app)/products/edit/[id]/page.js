@@ -12,12 +12,13 @@ const Edit = ({ params }) => {
     const [area, setArea] = useState('');
     const [stockManagemntType, setStockManagemntType] = useState('');
     const [productAreas, setProductAreas] = useState([]);
+    const [stockManagemntTypes, setStockManagemntTypes] = useState([]);
 
     const shouldDisableSubmitButton = (name, price, area, stockManagemntType) => {
         const isCompanyEmpty = !name;
         const isProductEmpty = !price;
         const isAreaEmpty = area === '';
-        const isStockManagemntTypeEmpty = !stockManagemntType;
+        const isStockManagemntTypeEmpty = stockManagemntType === '';
 
         return (isCompanyEmpty || isProductEmpty || isAreaEmpty || isStockManagemntTypeEmpty);
     }
@@ -51,8 +52,8 @@ const Edit = ({ params }) => {
 
             setName(responseData.data.name);
             setPrice(responseData.data.price);
-            setArea(responseData.data.area);
-            setStockManagemntType(responseData.data.stock_management_type);
+            setArea(responseData.data.area.value);
+            setStockManagemntType(responseData.data.stock_management_type.value);
         } catch (error) {
             const message = error.response.data.message
             setErrorMessages(message);
@@ -65,6 +66,18 @@ const Edit = ({ params }) => {
             const responseData = response.data;
 
             setProductAreas(responseData.data);
+        } catch (error) {
+            const message = error.response.data.message
+            setErrorMessages(message);
+        }
+    }
+
+    const getStockManagemntTypes = async () => {
+        try {
+            const response = await axios.get(`http://localhost:8000/api/stock-management-types`);
+            const responseData = response.data;
+
+            setStockManagemntTypes(responseData.data);
         } catch (error) {
             const message = error.response.data.message
             setErrorMessages(message);
@@ -91,6 +104,7 @@ const Edit = ({ params }) => {
     useEffect(() => {
         getProduct();
         getProductAreas();
+        getStockManagemntTypes();
     }, [params.id]);
 
   return (
@@ -122,7 +136,7 @@ const Edit = ({ params }) => {
                     <label className="text-xl mr-3 ">保存エリア　:</label>
                     <select name="area" className="w-64"
                         onChange={changeArea}
-                        value={area.value}
+                        value={area}
                     >
                         <option value="">選択してください</option>
                         {productAreas.map((productArea) => (
@@ -134,13 +148,16 @@ const Edit = ({ params }) => {
                 </div>
                 <div className="flex m-3">
                     <label className="text-xl mr-3 ">在庫管理方法:</label>
-                    <select name="company_name" className="w-64"
+                    <select name="stock_management_type" className="w-64"
                         onChange={changeStockManagemntType}
                         value={stockManagemntType}
                     >
                         <option value="">選択してください</option>
-                        <option value="FIFO">FIFO</option>
-                        <option value="LIFO">LIFO</option>
+                        {stockManagemntTypes.map((stockManagementType) => (
+                            <option key={stockManagementType.value} value={stockManagementType.value}>
+                                {stockManagementType.label}
+                            </option>
+                        ))}
                     </select>
                 </div>
             </div>

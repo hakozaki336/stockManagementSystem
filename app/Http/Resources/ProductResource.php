@@ -23,7 +23,10 @@ class ProductResource extends JsonResource
                 'value' => $this->area->value,
                 'label' => $this->area->label(),
             ],
-            'stock_management_type' => $this->stock_management_type,
+            'stock_management_type' => [
+                'value' => $this->stock_management_type->value,
+                'label' => $this->stock_management_type->label(),
+            ],
         ];
     }
 }

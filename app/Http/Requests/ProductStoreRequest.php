@@ -37,7 +37,7 @@ class ProductStoreRequest extends FormRequest
             ],
             'stock_management_type' => [
                 'required',
-                'string',
+                'integer',
             ],
         ];
     }

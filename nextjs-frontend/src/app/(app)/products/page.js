@@ -98,7 +98,7 @@ const Products = () => {
                             <td>{product.price}</td>
                             <td>{product.stock}</td>
                             <td>{product.area.label}</td>
-                            <td>{product.stock_management_type}</td>
+                            <td>{product.stock_management_type.label}</td>
                             <td>
                                 <button
                                         onClick={() => router.push(`/products/${product.id}/inventories`)}
