@@ -6,14 +6,13 @@ use App\Exceptions\DomainValidationException;
 use App\Http\Requests\CompanyStoreRequest;
 use App\Http\Requests\CompanyUpdateRequest;
 use App\Http\Resources\CompanyCollection;
-use App\Http\Resources\CompanyOptionResource;
 use App\Http\Resources\CompanyResource;
 use App\Models\Company;
-use App\UseCases\Company\DestroyAction;
-use App\UseCases\Company\IndexAction;
-use App\UseCases\Company\PaginateAction;
-use App\UseCases\Company\StoreAction;
-use App\UseCases\Company\UpdateAction;
+use App\Services\ApplicationServices\Company\CompanyCreateService;
+use App\Services\ApplicationServices\Company\CompanyDeleteService;
+use App\Services\ApplicationServices\Company\CompanyListService;
+use App\Services\ApplicationServices\Company\CompanyPaginationService;
+use App\Services\ApplicationServices\Company\CompanyUpdateService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
@@ -23,9 +22,9 @@ class CompanyController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(IndexAction $indexAction, Company $company): AnonymousResourceCollection
+    public function index(CompanyListService $companyListService, Company $company): AnonymousResourceCollection
     {
-        $companies = $indexAction($company);
+        $companies = $companyListService($company);
 
         return CompanyResource::collection($companies);
     }
@@ -33,9 +32,9 @@ class CompanyController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(CompanyStoreRequest $request, StoreAction $storeAction, Company $company): Response
+    public function store(CompanyStoreRequest $request, CompanyCreateService $companyCreateService): Response
     {
-        $storeAction($company, $request->validated());
+        $companyCreateService($request->validated());
 
         return response()->noContent(Response::HTTP_CREATED);
     }
@@ -51,9 +50,9 @@ class CompanyController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(CompanyUpdateRequest $request, Company $company, UpdateAction $updateAction): Response
+    public function update(CompanyUpdateRequest $request, CompanyUpdateService $companyUpdateService, Company $company): Response
     {
-        $updateAction($company, $request->validated());
+        $companyUpdateService($company, $request->validated());
 
         return response()->noContent();
     }
@@ -61,11 +60,10 @@ class CompanyController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-
-    public function destroy(Company $company, DestroyAction $destroyAction): Response | JsonResponse
+    public function destroy(CompanyDeleteService $companyDeleteService, Company $company): Response | JsonResponse
     {
         try {
-            $destroyAction($company);
+            $companyDeleteService($company);
         } catch (DomainValidationException $e) {
             return response()->json(['message' => $e->getMessage()], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
@@ -76,9 +74,9 @@ class CompanyController extends Controller
     /**
      * paginateされた企業データを取得する
      */
-    public function paginate(PaginateAction $paginateAction, Company $company, int $perpage = 5): CompanyCollection
+    public function paginate(CompanyPaginationService $companyPaginationService, int $prePage = 5): CompanyCollection
     {
-        $companies = $paginateAction($company, $perpage);
+        $companies = $companyPaginationService($prePage);
 
         return new CompanyCollection($companies);
     }

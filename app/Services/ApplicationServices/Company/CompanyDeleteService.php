@@ -1,13 +1,21 @@
 <?php
 
-namespace App\UseCases\Company;
+namespace App\Services\ApplicationServices\Company;
 
 use App\Exceptions\CompanyHasOrdersException;
 use App\Exceptions\DomainValidationException;
 use App\Models\Company;
+use App\Repository\CompanyRepository;
 
-class DestroyAction
+class CompanyDeleteService
 {
+    protected CompanyRepository $companyRepository;
+
+    public function __construct(CompanyRepository $companyRepository)
+    {
+        $this->companyRepository = $companyRepository;
+    }
+
     public function __invoke(Company $company): bool
     {
         try {
@@ -16,7 +24,7 @@ class DestroyAction
             throw new DomainValidationException($e->getMessage());
         }
 
-        return $company->delete();
+        return $this->companyRepository->delete($company);
     }
 
     /**
