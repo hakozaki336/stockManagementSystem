@@ -1,14 +1,22 @@
 <?php
 
-namespace App\UseCases\Product;
+namespace App\Services\ApplicationServices\Product;
 
-use App\Exceptions\DomainValidationException;
 use App\Exceptions\ProductHasOrdersException;
+use App\Exceptions\DomainValidationException;
 use App\Exceptions\ProductHasProductInventoriesException;
 use App\Models\Product;
+use App\Repository\ProductRepository;
 
-class DestroyAction
+class ProductDeleteService
 {
+    protected ProductRepository $productRepository;
+
+    public function __construct(ProductRepository $productRepository)
+    {
+        $this->productRepository = $productRepository;
+    }
+
     public function __invoke(Product $product): bool
     {
         try {
@@ -18,7 +26,7 @@ class DestroyAction
         }
         $this->validateDomainRule($product);
 
-        return $product->delete();
+        return $this->productRepository->delete($product);
     }
 
     /**
