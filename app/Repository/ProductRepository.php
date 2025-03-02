@@ -38,4 +38,9 @@ class ProductRepository
     {
         return $product->productInventories()->whereNull('order_id')->get();
     }
+
+    public function getPaginateByProductInventories(Product $product, int $perPage): LengthAwarePaginator
+    {
+        return $product->productInventories()->paginate($perPage);
+    }
 }

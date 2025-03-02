@@ -6,10 +6,12 @@ use App\Exceptions\DomainValidationException;
 use App\Http\Requests\ProductStoreRequest;
 use App\Http\Requests\ProductUpdateRequest;
 use App\Http\Resources\ProductCollection;
+use App\Http\Resources\ProductInventoryResource;
 use App\Http\Resources\ProductResource;
 use App\Models\Product;
 use App\Services\ApplicationServices\Product\ProductCreateService;
 use App\Services\ApplicationServices\Product\ProductDeleteService;
+use App\Services\ApplicationServices\Product\ProductInventoriesByProductPaginateService;
 use App\Services\ApplicationServices\Product\ProductListService;
 use App\Services\ApplicationServices\Product\ProductPaginationService;
 use App\Services\ApplicationServices\Product\ProductUpdateService;
@@ -89,5 +91,12 @@ class ProductController extends Controller
         return response()->json([
             'stock' => $count,
         ]);
+    }
+
+    public function productInventoriesPaginate(ProductInventoriesByProductPaginateService $productInventoriesByProductPaginateService, Product $product, int $perPage = 5): AnonymousResourceCollection
+    {
+        $productInventories = $productInventoriesByProductPaginateService($product, $perPage);
+
+        return ProductInventoryResource::collection($productInventories);
     }
 }

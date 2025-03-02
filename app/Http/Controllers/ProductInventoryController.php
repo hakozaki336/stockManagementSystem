@@ -9,7 +9,6 @@ use App\Http\Resources\ProductInventoryResource;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\ProductInventory;
-use App\UseCases\ProductInventory\PaginateAction;
 use App\UseCases\ProductInventory\PaginateByProductAction;
 use App\UseCases\ProductInventory\PaginateByOrderAction;
 use Illuminate\Http\JsonResponse;
@@ -74,15 +73,6 @@ class ProductInventoryController extends Controller
         }
 
         return response()->noContent();
-    }
-
-    // MEMO: 複数を返すのでProductsじゃね
-    // MEMO これはここに書くべきか？
-    public function paginateByProduct(Product $product, PaginateByProductAction $paginateByProductAction, int $perPage = 5): ProductInventoryCollection
-    {
-        $productInventories = $paginateByProductAction($product, $perPage);
-
-        return new ProductInventoryCollection($productInventories);
     }
 
     // MEMO これはここに書くべきか？
