@@ -7,7 +7,7 @@ use Exception;
 /**
  * 在庫が注文と関連している場合の例外
  */
-class ProductInventoryHasOrdersException extends Exception
+class ProductInventoryHasOrderException extends Exception
 {
     /**
      * 例外を生成する

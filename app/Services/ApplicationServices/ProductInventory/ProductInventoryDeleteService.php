@@ -1,22 +1,30 @@
 <?php
 
-namespace App\UseCases\ProductInventory;
+namespace App\Services\ApplicationServices\ProductInventory;
 
 use App\Exceptions\DomainValidationException;
-use App\Exceptions\ProductInventoryHasOrdersException;
+use App\Exceptions\ProductInventoryHasOrderException;
 use App\Models\ProductInventory;
+use App\Repository\ProductInventoryRepository;
 
-class DestroyAction
+class ProductInventoryDeleteService
 {
+    protected ProductInventoryRepository $productInventoryRepository;
+
+    public function __construct(ProductInventoryRepository $productInventoryRepository)
+    {
+        $this->productInventoryRepository = $productInventoryRepository;
+    }
+
     public function __invoke(ProductInventory $productInventory): bool
     {
         try {
             $this->validateDomainRule($productInventory);
-        } catch (ProductInventoryHasOrdersException $e) {
+        } catch (ProductInventoryHasOrderException $e) {
             throw new DomainValidationException($e->getMessage());
         }
 
-        return $productInventory->delete();
+        return $this->productInventoryRepository->delete($productInventory);
     }
 
     /**
@@ -27,7 +35,7 @@ class DestroyAction
     {
         if ($productInventory->hasOrder()) {
             // TODO: orderは単体なのでこのエクセプションはちょっと違うかも
-            throw new ProductInventoryHasOrdersException();
+            throw new ProductInventoryHasOrderException();
         }
     }
 }

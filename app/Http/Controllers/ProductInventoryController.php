@@ -9,26 +9,27 @@ use App\Http\Resources\ProductInventoryResource;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\ProductInventory;
-use App\UseCases\ProductInventory\DestroyAction;
-use App\UseCases\ProductInventory\IndexAction;
 use App\UseCases\ProductInventory\PaginateAction;
 use App\UseCases\ProductInventory\PaginateByProductAction;
 use App\UseCases\ProductInventory\PaginateByOrderAction;
-use App\UseCases\ProductInventory\StoreAction;
-use App\UseCases\ProductInventory\UpdateAction;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 use App\Http\Resources\ProductInventoryCollection;
+use App\Services\ApplicationServices\ProductInventory\ProductInventoryCreateService;
+use App\Services\ApplicationServices\ProductInventory\ProductInventoryDeleteService;
+use App\Services\ApplicationServices\ProductInventory\ProductInventoryListService;
+use App\Services\ApplicationServices\ProductInventory\ProductInventoryPaginationService;
+use App\Services\ApplicationServices\ProductInventory\ProductInventoryUpdateService;
 
 class ProductInventoryController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(IndexAction $indexAction, ProductInventory $productInventory): AnonymousResourceCollection
+    public function index(ProductInventoryListService $productInventoryListService): AnonymousResourceCollection
     {
-        $productInventories = $indexAction($productInventory);
+        $productInventories = $productInventoryListService();
 
         return ProductInventoryResource::collection($productInventories);
     }
@@ -36,9 +37,9 @@ class ProductInventoryController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(ProductInventoryStoreRequest $request, StoreAction $storeAction, ProductInventory $productInventory): Response
+    public function store(ProductInventoryStoreRequest $request, ProductInventoryCreateService $productInventoryCreateService): Response
     {
-        $storeAction($productInventory, $request->validated());
+        $productInventoryCreateService($request->validated());
 
         return response()->noContent(Response::HTTP_CREATED);
     }
@@ -54,9 +55,9 @@ class ProductInventoryController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(ProductInventoryUpdateRequest $request,UpdateAction $updateAction,  ProductInventory $productInventory): Response
+    public function update(ProductInventoryUpdateRequest $request, ProductInventoryUpdateService $productInventoryUpdateService, ProductInventory $productInventory): Response
     {
-        $updateAction($productInventory, $request->validated());
+        $productInventoryUpdateService($productInventory, $request->validated());
 
         return response()->noContent();
     }
@@ -64,10 +65,10 @@ class ProductInventoryController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(DestroyAction $destroyAction, ProductInventory $productInventory): Response | JsonResponse
+    public function destroy(ProductInventoryDeleteService $productInventoryDeleteService, ProductInventory $productInventory): Response | JsonResponse
     {
         try {
-            $destroyAction($productInventory);
+            $productInventoryDeleteService($productInventory);
         } catch (DomainValidationException $e) {
             return response()->json(['message' => $e->getMessage()], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
@@ -92,9 +93,9 @@ class ProductInventoryController extends Controller
         return new ProductInventoryCollection($productInventories);
     }
 
-    public function paginate(PaginateAction $paginateAction, productInventory $productInventory, int $perpage = 5): ProductInventoryCollection
+    public function paginate(ProductInventoryPaginationService $productInventoryPaginationService, productInventory $productInventory, int $perPage = 5): ProductInventoryCollection
     {
-        $productInventories = $paginateAction($productInventory, $perpage);
+        $productInventories = $productInventoryPaginationService($productInventory, $perPage);
 
         return new ProductInventoryCollection($productInventories);
     }
