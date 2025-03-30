@@ -46,10 +46,4 @@ return Application::configure(basePath: dirname(__DIR__))
                 'message' => 'このアクションは許可されていません。',
             ], Response::HTTP_FORBIDDEN);
         });
-
-        $exceptions->render(function (Exception $e, $request) {
-            return response()->json([
-                'message' => 'サーバー側で予期せぬエラーが発生しました。',
-            ], Response::HTTP_INTERNAL_SERVER_ERROR);
-        });
     })->create();
