@@ -8,7 +8,7 @@ use App\Exceptions\StockLogicException;
 use App\Models\Order;
 use App\Repository\OrderRepository;
 use App\Repository\ProductRepository;
-use App\UseCases\ProductInventory\Stock\StockAssignmentFactory;
+use App\Services\DomainServices\Stock\StockAssignmentFactory;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
