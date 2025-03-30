@@ -1,26 +1,29 @@
 <?php
 
-namespace App\UseCases\Order;
+namespace App\Services\ApplicationServices\Order;
 
+use App\Enums\StockManagementType;
 use App\Exceptions\DomainValidationException;
-use App\Exceptions\OrderHasProductsException;
 use App\Exceptions\StockLogicException;
 use App\Models\Order;
-use App\Models\Product;
-use App\Models\ProductInventory;
+use App\Repository\OrderRepository;
+use App\Repository\ProductRepository;
 use App\UseCases\ProductInventory\Stock\StockAssignmentFactory;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
 use InvalidArgumentException;
 
-class DestroyAction
+class OrderDestroyService
 {
-    private Product $product;
-    private StockAssignmentFactory $stockAssignmentFactory;
+    protected OrderRepository $orderRepository;
+    protected ProductRepository $productRepository;
+    protected StockAssignmentFactory $stockAssignmentFactory;
 
-    public function __construct(Product $product, StockAssignmentFactory $stockAssignmentFactory)
+    public function __construct(OrderRepository $orderRepository, ProductRepository $productRepository, StockAssignmentFactory $stockAssignmentFactory)
     {
-        $this->product = $product;
+        $this->orderRepository = $orderRepository;
+        $this->productRepository = $productRepository;
         $this->stockAssignmentFactory = $stockAssignmentFactory;
     }
 
@@ -42,7 +45,7 @@ class DestroyAction
     /**
      * 在庫管理タイプを取得する
      */
-    protected function getStockManagementType(Order $order): string
+    protected function getStockManagementType(Order $order): StockManagementType
     {
         return $order->product->stock_management_type;
     }
@@ -52,13 +55,13 @@ class DestroyAction
      */
     protected function getProductInventoryList(int $productId): Collection
     {
-        return $this->product->find($productId)->productInventories;
+        return $this->productRepository->find($productId)->productInventories;
     }
 
     /**
      * 在庫を返却する
      */
-    protected function unassignStock(string $stockManagementType, $productInventoryList, Order $order): void
+    protected function unassignStock(StockManagementType $stockManagementType, $productInventoryList, Order $order): void
     {
         $stockAssignment = $this
             ->stockAssignmentFactory

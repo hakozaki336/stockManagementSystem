@@ -13,6 +13,11 @@ class ProductRepository
         return Product::all();
     }
 
+    public function find(int $id): Product
+    {
+        return Product::findOrFail($id);
+    }
+
     public function delete(Product $product): ?bool
     {
         return $product->delete();
