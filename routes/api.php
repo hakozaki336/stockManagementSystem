@@ -21,7 +21,7 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 Route::prefix('orders')->group(function () {
     Route::patch('{order}/assign', [OrderController::class, 'assign']);
     Route::patch('{order}/unassign', [OrderController::class, 'unassign']);
-    Route::get('{order}/inventories', [ProductInventoryController::class, 'byOrder']);
+    Route::get('{order}/inventories', [OrderController::class, 'productInventoriesPaginate']);
     Route::get('paginate', [OrderController::class, 'paginate']);
     Route::apiResource('', OrderController::class)->parameters(['' => 'order']);
 });

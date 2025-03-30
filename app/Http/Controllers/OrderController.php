@@ -6,15 +6,18 @@ use App\Exceptions\DomainValidationException;
 use App\Http\Requests\OrderStoreRequest;
 use App\Http\Resources\OrderCollection;
 use App\Http\Resources\OrderResource;
+use App\Http\Resources\ProductInventoryCollection;
 use App\Models\Order;
 use App\Services\ApplicationServices\Order\OrderCreateService;
 use App\Services\ApplicationServices\Order\OrderDestroyService;
 use App\Services\ApplicationServices\Order\OrderListService;
 use App\Services\ApplicationServices\Order\OrderPaginationService;
+use App\Services\ApplicationServices\Order\ProductInventoriesByOrderPaginateService;
 use App\UseCases\Order\DestroyAction;
 use App\UseCases\Order\IndexAction;
 use App\UseCases\Order\PaginateAction;
 use App\UseCases\Order\StoreAction;
+use App\UseCases\ProductInventory\PaginateByOrderAction;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
@@ -86,5 +89,12 @@ class OrderController extends Controller
         $orders = $orderPaginationService($perpage);
 
         return new OrderCollection($orders);
+    }
+
+    public function productInventoriesPaginate(Order $order, ProductInventoriesByOrderPaginateService $productInventoriesByOrderPaginateService, int $perPage = 5): ProductInventoryCollection
+    {
+        $productInventories = $productInventoriesByOrderPaginateService($order, $perPage);
+
+        return new ProductInventoryCollection($productInventories);
     }
 }

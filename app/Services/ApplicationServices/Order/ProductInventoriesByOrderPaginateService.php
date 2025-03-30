@@ -6,7 +6,7 @@ use App\Models\Order;
 use App\Repository\OrderRepository;
 use Illuminate\Pagination\LengthAwarePaginator;
 
-class OrderPaginationService
+class ProductInventoriesByOrderPaginateService
 {
     protected OrderRepository $orderRepository;
 
@@ -15,8 +15,8 @@ class OrderPaginationService
         $this->orderRepository = $orderRepository;
     }
 
-    public function __invoke(int $perPage): LengthAwarePaginator
+    public function __invoke(Order $order, int $perPage): LengthAwarePaginator
     {
-        return $this->orderRepository->paginate($perPage);
+        return $this->orderRepository->getPaginateByProductInventories($order, $perPage);
     }
 }

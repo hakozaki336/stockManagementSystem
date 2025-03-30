@@ -75,14 +75,6 @@ class ProductInventoryController extends Controller
         return response()->noContent();
     }
 
-    // MEMO これはここに書くべきか？
-    public function byOrder(Order $order, PaginateByOrderAction $paginateByOrderAction, int $perPage = 5): ProductInventoryCollection
-    {
-        $productInventories = $paginateByOrderAction($order, $perPage);
-
-        return new ProductInventoryCollection($productInventories);
-    }
-
     public function paginate(ProductInventoryPaginationService $productInventoryPaginationService, productInventory $productInventory, int $perPage = 5): ProductInventoryCollection
     {
         $productInventories = $productInventoryPaginationService($productInventory, $perPage);

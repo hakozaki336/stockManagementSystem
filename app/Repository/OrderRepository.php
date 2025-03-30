@@ -33,4 +33,12 @@ class OrderRepository
         $order->update($params);
         return $order;
     }
+
+    public function getPaginateByProductInventories(Order $order, int $perPage): LengthAwarePaginator
+    {
+        return $order
+            ->productInventory()
+            ->with('product')
+            ->paginate($perPage);
+    }
 }
