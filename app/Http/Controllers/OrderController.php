@@ -12,13 +12,10 @@ use App\Services\ApplicationServices\Order\OrderCreateService;
 use App\Services\ApplicationServices\Order\OrderDestroyService;
 use App\Services\ApplicationServices\Order\OrderListService;
 use App\Services\ApplicationServices\Order\OrderPaginationService;
+use App\Services\ApplicationServices\Order\OrderShippedService;
 use App\Services\ApplicationServices\Order\ProductInventoriesByOrderPaginateService;
-use App\UseCases\Order\DestroyAction;
-use App\UseCases\Order\IndexAction;
-use App\UseCases\Order\PaginateAction;
-use App\UseCases\Order\StoreAction;
-use App\UseCases\ProductInventory\PaginateByOrderAction;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 
@@ -70,9 +67,9 @@ class OrderController extends Controller
         return response()->noContent();
     }
 
-    public function assign(Order $order): Response
+    public function assign(Order $order, Request $request, OrderShippedService $orderShippedService): Response
     {
-        $order->assign()->save();
+        $orderShippedService($order, $request->user());
 
         return response()->noContent();
     }
