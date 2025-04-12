@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\OrderShippedEvent;
 use App\Exceptions\DomainValidationException;
 use App\Http\Requests\OrderStoreRequest;
 use App\Http\Resources\OrderCollection;
@@ -73,6 +74,7 @@ class OrderController extends Controller
     public function assign(Order $order): Response
     {
         $order->assign()->save();
+        event(new OrderShippedEvent($order));
 
         return response()->noContent();
     }
