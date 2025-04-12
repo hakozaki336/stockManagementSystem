@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\Company;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -15,9 +14,9 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         $users = [
-            ['name' => 'Test User', 'email' => 'test1@example.com', 'company_id' => 1],
-            ['name' => 'Test User', 'email' => 'test2@example.com', 'company_id' => 2],
-            ['name' => 'Test User', 'email' => 'test3@example.com', 'company_id' => 3],
+            ['name' => 'Test User', 'email' => 'test1@example.com', 'password' => bcrypt('password')],
+            ['name' => 'Test User', 'email' => 'test2@example.com', 'password' => bcrypt('password')],
+            ['name' => 'Test User', 'email' => 'test3@example.com', 'password' => bcrypt('password')],
         ];
 
         foreach ($users as $user) {
