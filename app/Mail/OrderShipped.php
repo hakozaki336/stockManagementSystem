@@ -3,25 +3,29 @@
 namespace App\Mail;
 
 use App\Models\Order;
+use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Http\Request;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class OrderShipped extends Mailable
+class OrderShipped extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
     public $order;
+    public $user;
 
     /**
      * Create a new message instance.
      */
-    public function __construct(Order $order)
+    public function __construct(Order $order, User $user)
     {
         $this->order = $order;
+        $this->user = $user;
     }
 
     /**
@@ -40,8 +44,11 @@ class OrderShipped extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'mails.orders.shipped',
-            with: ['order' => $this->order],
+            view: 'mails.order_shipped',
+            with: [
+                'order' => $this->order,
+                'user' => $this->user,
+            ],
         );
     }
 

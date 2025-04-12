@@ -17,6 +17,6 @@ class SendOrderShippedEmail
     public function handle(OrderShippedEvent $event)
     {
         // Send the email using the OrderShipped Mailable
-        Mail::to($event->order->company->user->email)->send(new OrderShipped($event->order));
+        Mail::to($event->user->email)->send(new OrderShipped($event->order, $event->user));
     }
 }
